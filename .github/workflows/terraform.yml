@@ -12,7 +12,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: config/terraform/aws
+    working-directory: server/aws
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
