@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
     paths:
-      - "config/terraform/aws/*"
+      - "server/aws/*"
       - ".github/workflows/*"
 
 defaults:
