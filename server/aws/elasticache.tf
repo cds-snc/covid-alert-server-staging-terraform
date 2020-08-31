@@ -1,10 +1,6 @@
 resource "aws_elasticache_subnet_group" "covidshield" {
   name       = "covidshield"
   subnet_ids = aws_subnet.covidshield_private.*.id
-
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
 }
 
 resource "aws_elasticache_replication_group" "covidshield" {
