@@ -8,7 +8,7 @@ resource "aws_elasticache_replication_group" "covidshield" {
   availability_zones            = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
   replication_group_id          = "covidshield"
   replication_group_description = "covidshield"
-  node_type                     = "cache.t2.small"
+  node_type                     = "cache.t3.small"
   number_cache_clusters         = 3
   parameter_group_name          = "default.redis5.0"
   security_group_ids            = [aws_security_group.covidshield_redis.id]
