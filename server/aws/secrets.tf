@@ -17,7 +17,7 @@ resource "aws_secretsmanager_secret" "server_redis_url" {
 
 resource "aws_secretsmanager_secret_version" "server_redis_url" {
   secret_id     = aws_secretsmanager_secret.server_redis_url.id
-  secret_string = "redis://${aws_elasticache_replication_group.covidshield.configuration_endpoint_address}:${aws_elasticache_replication_group.covidshield.port}"
+  secret_string = "redis://${aws_elasticache_replication_group.covidshield.primary_endpoint_address}:${aws_elasticache_replication_group.covidshield.port}"
 }
 
 ###
