@@ -46,6 +46,10 @@
         {
           "name": "DATABASE_URL",
           "valueFrom": "${database_url}"
+        },
+        {
+          "name": "REDIS_URL",
+          "valueFrom": "${redis_url}"
         }
       ]
     }

@@ -1,3 +1,7 @@
+###
+# AWS Secret Manager - Storage
+###
+
 resource "aws_secretsmanager_secret" "server_database_url" {
   name = "server-database-url-${random_string.random.result}"
 }
@@ -5,6 +9,15 @@ resource "aws_secretsmanager_secret" "server_database_url" {
 resource "aws_secretsmanager_secret_version" "server_database_url" {
   secret_id     = aws_secretsmanager_secret.server_database_url.id
   secret_string = "${var.rds_server_db_user}:${var.rds_server_db_password}@tcp(${aws_rds_cluster.covidshield_server.endpoint})/${var.rds_server_db_name}"
+}
+
+resource "aws_secretsmanager_secret" "server_redis_url" {
+  name = "server-redis-url-${random_string.random.result}"
+}
+
+resource "aws_secretsmanager_secret_version" "server_redis_url" {
+  secret_id     = aws_secretsmanager_secret.server_redis_url.id
+  secret_string = "redis://${aws_elasticache_replication_group.covidshield.configuration_endpoint_address}:${aws_elasticache_replication_group.covidshield.port}"
 }
 
 ###
