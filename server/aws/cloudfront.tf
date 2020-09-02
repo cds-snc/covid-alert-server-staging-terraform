@@ -64,13 +64,13 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
 
   ordered_cache_behavior {
     path_pattern     = "/exposure-configuration/*"
-    allowed_methods  = ["GET", "HEAD"]
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "covid-shield-exposure-config-${var.environment}"
 
     forwarded_values {
       query_string = false
-      headers      = ["Origin"]
+      headers      = ["Access-Control-Request-Headers", "Access-Control-Request-Method", "Origin"]
 
       cookies {
         forward = "none"
