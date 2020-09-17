@@ -12,13 +12,6 @@ resource "aws_s3_bucket" "exposure_config" {
     }
   }
 
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET", "HEAD"]
-    allowed_origins = ["*"]
-    expose_headers  = ["ETag"]
-  }
-
   logging {
     target_bucket = aws_s3_bucket.exposure_config_logs.bucket
   }
