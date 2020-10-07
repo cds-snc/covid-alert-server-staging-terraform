@@ -27,6 +27,8 @@ env:
   TF_VAR_new_key_claim_allow_list: ${{ secrets.TF_VAR_new_key_claim_allow_list }}
   TF_VAR_cloudfront_custom_header: ${{ secrets.TF_VAR_cloudfront_custom_header }}
   TF_VAR_environment: ${{ secrets.TF_VAR_environment }}
+  TF_VAR_metrics_username: ${{ secrets.METRICS_USERNAME}}
+  TF_VAR_metrics_password: ${{ secrets.METRICS_PASSWORD}}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
