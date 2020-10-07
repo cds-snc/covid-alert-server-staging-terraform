@@ -179,10 +179,10 @@ variable "new_key_claim_allow_list" {
 # /events endpoint basic auth
 ###
 
-variable "metrics_username"{
-  type    = string
+variable "metrics_username" {
+  type = string
 }
 
-variable "metrics_password"{
-  type    = string
+variable "metrics_password" {
+  type = string
 }
