@@ -39,6 +39,10 @@
         {
           "name": "ENV",
           "value": "${env}"
+        },
+        {
+          "name": "METRICS_USERNAME",
+          "value": "${metrics_username}"
         }
       ],
       "secrets": [
@@ -49,6 +53,10 @@
         {
           "name": "DATABASE_URL",
           "valueFrom": "${database_url}"
+        },
+        {
+          "name": "METRICS_PASSWORD",
+          "valueFrom": "${metrics_password}"
         }
       ]
     }

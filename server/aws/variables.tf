@@ -174,3 +174,15 @@ variable "new_key_claim_allow_list" {
   type    = list
   default = ["0.0.0.0/1", "128.0.0.0/1"]
 }
+
+###
+# /events endpoint basic auth
+###
+
+variable "metrics_username"{
+  type    = string
+}
+
+variable "metrics_password"{
+  type    = string
+}
