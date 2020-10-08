@@ -238,7 +238,7 @@ resource "aws_lb_listener" "covidshield_key_submission_test" {
 ###
 
 resource "aws_lb_target_group" "covidshield_key_submission_static" {
-  name                 = "covidshield-key-submission-static"
+  name                 = "covidshield-key-submissionStatic"
   port                 = 8000
   protocol             = "HTTP"
   target_type          = "ip"
@@ -255,14 +255,14 @@ resource "aws_lb_target_group" "covidshield_key_submission_static" {
   }
 
   tags = {
-    Name                  = "covidshield-key-submission-static"
+    Name                  = "covidshield-key-submissionStatic"
     (var.billing_tag_key) = var.billing_tag_value
   }
 
 }
 
 resource "aws_lb" "covidshield_key_submission_static" {
-  name               = "covidshield-key-submission-static"
+  name               = "covidshield-key-submissionStatic"
   internal           = false #tfsec:ignore:AWS005
   load_balancer_type = "application"
   security_groups = [
@@ -271,7 +271,7 @@ resource "aws_lb" "covidshield_key_submission_static" {
   subnets = aws_subnet.covidshield_public.*.id
 
   tags = {
-    Name                  = "covidshield-key-submission-static"
+    Name                  = "covidshield-key-submissionStatic"
     (var.billing_tag_key) = var.billing_tag_value
   }
 }
