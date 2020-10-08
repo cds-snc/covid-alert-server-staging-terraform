@@ -175,7 +175,7 @@ data "template_file" "covidshield_key_submission_task" {
     tracer_provider       = var.tracer_provider
     env                   = var.environment
     metrics_username      = var.metrics_username
-    metrics_password      = var.metrics_password
+    metrics_password      = aws_secretsmanager_secret_version.key_submission_metrics_password.arn
   }
 }
 

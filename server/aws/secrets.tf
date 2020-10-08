@@ -41,3 +41,13 @@ resource "aws_secretsmanager_secret_version" "key_submission_env_key_claim_token
   secret_id     = aws_secretsmanager_secret.key_submission_env_key_claim_token.id
   secret_string = var.ecs_task_key_submission_env_key_claim_token
 }
+
+
+resource "aws_secretsmanager_secret" "key_submission_metrics_password" {
+  name = "key-metric-password-${random_string.random.result}"
+}
+
+resource "aws_secretsmanager_secret_version" "key_submission_metrics_password" {
+  secret_id     = aws_secretsmanager_secret.key_submission_metrics_password.id
+  secret_string = var.metrics_password
+}
