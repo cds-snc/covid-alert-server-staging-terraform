@@ -72,6 +72,7 @@ data "aws_iam_policy_document" "covidshield_secrets_manager_key_submission" {
     resources = [
       aws_secretsmanager_secret.key_submission_env_key_claim_token.arn,
       aws_secretsmanager_secret.server_database_url.arn,
+      aws_secretsmanager_secret.key_submission_metrics_password.arn
     ]
   }
 }
