@@ -232,12 +232,6 @@ resource "aws_ecs_service" "covidshield_key_submission" {
     container_port   = 8000
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.covidshield_key_submission_static.arn
-    container_name   = "key-submission-static"
-    container_port   = 8000
-  }
-
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
   }
