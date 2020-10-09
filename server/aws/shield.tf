@@ -20,8 +20,3 @@ resource "aws_shield_protection" "alb_covidshield_key_submission" {
   name         = "alb_covidshield_key_submission"
   resource_arn = aws_lb.covidshield_key_submission.arn
 }
-
-resource "aws_shield_protection" "alb_covidshield_key_submission_static" {
-  name         = "alb_covidshield_key_submissionStatic"
-  resource_arn = aws_lb.covidshield_key_submission_static.arn
-}
