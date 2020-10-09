@@ -102,7 +102,7 @@ resource "aws_route53_health_check" "covidshield_key_submission_healthcheck" {
 
 resource "aws_route53_record" "covidshield_key_submission_static" {
   zone_id = aws_route53_zone.covidshield.zone_id
-  name    = "static.submission.${aws_route53_zone.covidshield.name}"
+  name    = "static-submission.${aws_route53_zone.covidshield.name}"
   type    = "A"
 
   alias {
@@ -113,7 +113,7 @@ resource "aws_route53_record" "covidshield_key_submission_static" {
 }
 
 resource "aws_route53_health_check" "covidshield_key_submission_static_healthcheck" {
-  fqdn              = "static.submission.${var.route53_zone_name}"
+  fqdn              = "static-submission.${var.route53_zone_name}"
   port              = 443
   type              = "HTTPS"
   resource_path     = "/services/ping"
