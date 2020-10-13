@@ -88,13 +88,14 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
     path_pattern     = "/events/*"
     allowed_methods  = ["GET"]
     cached_methods   = []
-    target_origin_id = "covid-shield-exposure-config-${var.environment}"
+    target_origin_id = aws_lb.covidshield_key_retrieval.name
 
     forwarded_values {
-      headers      = ["*"]
-      query_string = false
+      query_string = true
+      headers      = ["Host"]
+
       cookies {
-        forward = "none"
+        forward = "all"
       }
     }
 
