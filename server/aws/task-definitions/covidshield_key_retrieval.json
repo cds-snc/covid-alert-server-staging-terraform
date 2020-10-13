@@ -50,6 +50,10 @@
         {
           "name": "DATABASE_URL",
           "valueFrom": "${database_url}"
+        },
+        {
+          "name": "METRICS_PASSWORD",
+          "valueFrom": "${metrics_password}"
         }
       ]
     }
