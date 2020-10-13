@@ -90,6 +90,14 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
     cached_methods   = []
     target_origin_id = "covid-shield-exposure-config-${var.environment}"
 
+    forwarded_values {
+      headers      = ["*"]
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
     viewer_protocol_policy = "https-only"
     min_ttl                = 0
     max_ttl                = 0
