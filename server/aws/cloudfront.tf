@@ -84,6 +84,19 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
     compress               = true
   }
 
+  ordered_cache_behavior {  // We don't want to cache the events endpoint just pass through 
+    path_pattern = "/events/*"
+    allowed_methods = ["GET"]
+    cached_methods = []
+    target_origin_id = "covid-shield-exposure-config-${var.environment}"
+
+    viewer_protocol_policy = "https-only"
+    min_ttl                = 0
+    max_ttl                = 0
+    compress               = true
+
+  }
+
 
   price_class = "PriceClass_100"
 
