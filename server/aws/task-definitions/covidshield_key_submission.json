@@ -39,10 +39,6 @@
         {
           "name": "ENV",
           "value": "${env}"
-        },
-        {
-          "name": "METRICS_USERNAME",
-          "value": "${metrics_username}"
         }
       ],
       "secrets": [
