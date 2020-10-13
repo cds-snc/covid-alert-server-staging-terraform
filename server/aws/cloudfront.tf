@@ -86,7 +86,7 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
 
   ordered_cache_behavior { // We don't want to cache the events endpoint just pass through 
     path_pattern     = "/events/*"
-    allowed_methods  = ["GET"]
+    allowed_methods  = ["GET", "HEAD"]
     cached_methods   = []
     target_origin_id = aws_lb.covidshield_key_retrieval.name
 

@@ -42,7 +42,7 @@ data "template_file" "covidshield_key_retrieval_task" {
     tracer_provider       = var.tracer_provider
     env                   = var.environment
     metrics_username      = var.metrics_username
-    metrics_password      = aws_secretsmanager_secret_version.key_retrieval_metrics_password.arn
+    metrics_password      = aws_secretsmanager_secret_version.key_submission_metrics_password.arn
   }
 }
 
