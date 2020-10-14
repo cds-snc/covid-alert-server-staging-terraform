@@ -92,7 +92,7 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
 
     forwarded_values {
       query_string = true
-      headers      = ["Host"]
+      headers      = ["Host", "Authorization"]
 
       cookies {
         forward = "all"
@@ -101,6 +101,7 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
 
     viewer_protocol_policy = "https-only"
     min_ttl                = 0
+    default_ttl            = 0
     max_ttl                = 0
     compress               = true
 
