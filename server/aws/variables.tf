@@ -195,3 +195,7 @@ variable "metrics_password" {
 variable "feature_redis" {
   type = bool
 }
+
+variable "feature_shield" {
+  type = bool
+}
