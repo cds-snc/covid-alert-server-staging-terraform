@@ -13,8 +13,8 @@ resource "aws_elasticache_replication_group" "covidshield" {
   node_type                     = "cache.t3.small"
   number_cache_clusters         = 3
   parameter_group_name          = "default.redis5.0"
-  security_group_ids            = [aws_security_group.covidshield_redis.id]
-  subnet_group_name             = aws_elasticache_subnet_group.covidshield.name
+  security_group_ids            = [aws_security_group.covidshield_redis[0].id]
+  subnet_group_name             = aws_elasticache_subnet_group.covidshield[0].name
   apply_immediately             = true
   port                          = 6379
   at_rest_encryption_enabled    = true
