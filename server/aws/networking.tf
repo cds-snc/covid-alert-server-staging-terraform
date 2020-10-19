@@ -233,6 +233,7 @@ resource "aws_security_group_rule" "covidshield_key_retrieval_egress_database" {
 }
 
 resource "aws_security_group_rule" "covidshield_key_retrieval_egress_redis" {
+  count = (var.feature_redis ? 1 : 0)
   description              = "Security group rule for Retrieval Redis egress through privatelink"
   type                     = "egress"
   from_port                = 6379
@@ -295,6 +296,7 @@ resource "aws_security_group_rule" "covidshield_key_submission_egress_database" 
 }
 
 resource "aws_security_group_rule" "covidshield_key_submission_egress_redis" {
+  count = (var.feature_redis ? 1 : 0)
   description              = "Security group rule for Submission Redis egress through privatelink"
   type                     = "egress"
   from_port                = 6379
@@ -380,6 +382,7 @@ resource "aws_security_group" "covidshield_database" {
 }
 
 resource "aws_security_group" "covidshield_redis" {
+  count = (var.feature_redis ? 1 : 0)
   name        = "covidshield-redis"
   description = "Ingress - CovidShield Redis"
   vpc_id      = aws_vpc.covidshield.id

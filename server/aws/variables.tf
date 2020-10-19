@@ -186,3 +186,12 @@ variable "metrics_username" {
 variable "metrics_password" {
   type = string
 }
+
+
+###
+# Feature Flags
+###
+
+variable "feature_redis" {
+  type = bool
+}
