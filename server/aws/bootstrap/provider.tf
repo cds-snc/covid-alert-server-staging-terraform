@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "storage_bucket" {
   bucket = var.storage_bucket
   acl    = "private"
   logging {
-    target_bucket = "${aws_s3_bucket.log_bucket.id}"
+    target_bucket = aws_s3_bucket.log_bucket.id
     target_prefix = "log/"
   }
   server_side_encryption_configuration {

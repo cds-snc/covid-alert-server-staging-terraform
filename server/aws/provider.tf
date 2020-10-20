@@ -1,16 +1,16 @@
 provider "aws" {
-  version = "~> 2.0"
+  version = "~> 3.11"
   region  = var.region
 }
 
 provider "aws" {
-  version = "~> 2.0"
+  version = "~> 3.11"
   alias   = "us-east-1"
   region  = "us-east-1"
 }
 
 terraform {
-  required_version = "> 0.12.0"
+  required_version = "= 0.13.4"
 }
 
 terraform {
