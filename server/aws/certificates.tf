@@ -40,6 +40,7 @@ resource "aws_route53_record" "covidshield_certificate_validation" {
     }
   }
 
+  allow_overwrite = true
   name    = each.value.name
   records = [each.value.record]
   type    = each.value.type
