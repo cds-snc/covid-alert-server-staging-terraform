@@ -31,4 +31,4 @@ override.tf.json
 
 # Staging environments 
 
-env_vars.sh
+secrets.auto.tfvars
