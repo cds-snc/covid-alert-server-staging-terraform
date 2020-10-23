@@ -72,3 +72,19 @@ rds_server_instance_class    = "db.t3.medium"
 ###
 feature_redis  = true
 feature_shield = true
+
+
+###
+# Metrics Alarms
+###
+
+diagnosis_key_total_warn     = 9000
+diagnosis_key_total_critical = 13500
+
+claimed_one_time_code_total_warn     = 3000
+claimed_one_time_code_total_critical = 4500
+
+unclaimed_one_time_code_total_warn     = 250
+unclaimed_one_time_code_total_critical = 400
+
+

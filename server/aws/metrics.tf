@@ -57,7 +57,7 @@ resource "aws_cloudwatch_metric_alarm" "UnclaimedOneTimeCodeTotalWarn" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "250"
+  threshold           = var.unclaimed_one_time_code_total_warn
   alarm_description   = "This metric monitors for total unclaimed codes"
 
   alarm_actions = [aws_sns_topic.alert_warning.arn]
@@ -71,7 +71,7 @@ resource "aws_cloudwatch_metric_alarm" "UnclaimedOneTimeCodeTotalCritical" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "400"
+  threshold           = var.unclaimed_one_time_code_total_critical
   alarm_description   = "This metric monitors for total unclaimed codes"
 
   alarm_actions = [aws_sns_topic.alert_critical.arn]
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_metric_alarm" "ClaimedOneTimeCodeTotalWarn" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "3000"
+  threshold           = var.claimed_one_time_code_total_warn
   alarm_description   = "This metric monitors for total claimed codes"
 
   alarm_actions = [aws_sns_topic.alert_warning.arn]
@@ -113,7 +113,7 @@ resource "aws_cloudwatch_metric_alarm" "ClaimedOneTimeCodeTotalCritical" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "4500"
+  threshold           = var.claimed_one_time_code_total_critical
   alarm_description   = "This metric monitors for total claimed codes"
 
   alarm_actions = [aws_sns_topic.alert_critical.arn]
@@ -141,7 +141,7 @@ resource "aws_cloudwatch_metric_alarm" "DiagnosisKeyTotalWarn" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "9000"
+  threshold           = var.diagnosis_key_total_warn
   alarm_description   = "This metric monitors for total diagnosis keys"
 
   alarm_actions = [aws_sns_topic.alert_warning.arn]
@@ -155,7 +155,7 @@ resource "aws_cloudwatch_metric_alarm" "DiagnosisKeyTotalCritical" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "13500"
+  threshold           = var.diagnosis_key_total_critical
   alarm_description   = "This metric monitors for total diagnosis keys"
 
   alarm_actions = [aws_sns_topic.alert_critical.arn]
