@@ -57,7 +57,7 @@ resource "aws_cloudwatch_metric_alarm" "UnclaimedOneTimeCodeTotalWarn" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = var.unclaimed_one_time_key_code_total_warn
+  threshold           = var.unclaimed_one_time_code_total_warn
   alarm_description   = "This metric monitors for total unclaimed codes"
 
   alarm_actions = [aws_sns_topic.alert_warning.arn]
@@ -71,7 +71,7 @@ resource "aws_cloudwatch_metric_alarm" "UnclaimedOneTimeCodeTotalCritical" {
   namespace           = "CovidShield"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = var.unclaimed_one_time_key_code_total_critical
+  threshold           = var.unclaimed_one_time_code_total_critical
   alarm_description   = "This metric monitors for total unclaimed codes"
 
   alarm_actions = [aws_sns_topic.alert_critical.arn]
