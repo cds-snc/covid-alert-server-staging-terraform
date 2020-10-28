@@ -87,4 +87,4 @@ claimed_one_time_code_total_critical = 4500
 unclaimed_one_time_code_total_warn     = 250
 unclaimed_one_time_code_total_critical = 400
 
-
+enable_test_tools = true
