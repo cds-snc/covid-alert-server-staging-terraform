@@ -199,3 +199,13 @@ variable "feature_redis" {
 variable "feature_shield" {
   type = bool
 }
+
+
+###
+# Testing Tools
+###
+
+variable "enable_test_tools" {
+  type    = bool
+  default = false
+}
