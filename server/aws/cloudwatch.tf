@@ -322,6 +322,36 @@ resource "aws_cloudwatch_metric_alarm" "fatal_logged_warn" {
 }
 
 ###
+# AWS CloudWatch Metrics - Action alarms
+###
+
+resource "aws_cloudwatch_log_metric_filter" "key_clear_called" {
+  name           = "KeyClearCalled"
+  pattern        = "diagnosis_keys was truncated"
+  log_group_name = aws_cloudwatch_log_group.covidshield.name
+
+  metric_transformation {
+    name      = "KeyClearCalled"
+    namespace = "CovidShield"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "key_clear_called_warn" {
+  alarm_name          = "KeyClearCalledWarn"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.key_clear_called.name
+  namespace           = "CovidShield"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = "0"
+  alarm_description   = "This metric monitors for a key clear calls (only be called in staging)"
+
+  alarm_actions = [aws_sns_topic.alert_warning.arn, aws_sns_topic.alert_critical.arn]
+}
+
+###
 # AWS CloudWatch Metrics - DDoS Alarms
 ###
 
