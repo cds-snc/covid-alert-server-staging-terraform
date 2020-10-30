@@ -456,7 +456,7 @@ resource "aws_wafv2_web_acl" "key_submission" {
 
   rule {
     name     = "ClearKeysURI"
-    priority = 201
+    priority = 202
 
     action {
       allow {}
