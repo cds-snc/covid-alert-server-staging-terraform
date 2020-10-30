@@ -107,6 +107,30 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
 
   }
 
+  ordered_cache_behavior { // We don't want to cache the clear keys endpoint and only enable is if test tools is true
+    count            = var.enable_test_tools ? 1 : 0
+    path_pattern     = "/clear-diagnosis-keys"
+    allowed_methods  = ["POST"]
+    cached_methods   = ["POST"]
+    target_origin_id = aws_lb.covidshield_key_retrieval.name
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Host", "Authorization"]
+
+      cookies {
+        forward = "all"
+      }
+    }
+
+    viewer_protocol_policy = "https-only"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = true
+
+  }
+
 
   price_class = "PriceClass_100"
 
