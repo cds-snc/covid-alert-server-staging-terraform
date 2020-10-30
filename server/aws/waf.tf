@@ -454,6 +454,63 @@ resource "aws_wafv2_web_acl" "key_submission" {
     }
   }
 
+  rule {
+    name     = "ClearKeysURI"
+    priority = 202
+
+    action {
+      allow {}
+    }
+
+    statement {
+      and_statement {
+        statement {
+          byte_match_statement {
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              uri_path {}
+            }
+            search_string = "/clear-diagnosis-keys"
+            text_transformation {
+              priority = 1
+              type     = "COMPRESS_WHITE_SPACE"
+            }
+            text_transformation {
+              priority = 2
+              type     = "LOWERCASE"
+            }
+          }
+        }
+        statement {
+          byte_match_statement {
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              single_header {
+                name = "authorization"
+              }
+            }
+            search_string = "Bearer"
+            text_transformation {
+              priority = 1
+              type     = "NONE"
+            }
+          }
+        }
+        statement {
+          ip_set_reference_statement {
+            arn = aws_wafv2_ip_set.new_key_claim.arn
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ClearKeysURI"
+      sampled_requests_enabled   = false
+    }
+  }
+
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
   }

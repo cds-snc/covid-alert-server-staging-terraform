@@ -43,7 +43,6 @@ data "template_file" "covidshield_key_retrieval_task" {
     env                   = var.environment
     metrics_username      = var.metrics_username
     metrics_password      = aws_secretsmanager_secret_version.key_submission_metrics_password.arn
-    enable_test_tools     = var.enable_test_tools
   }
 }
 
@@ -177,6 +176,7 @@ data "template_file" "covidshield_key_submission_task" {
     metric_provider       = var.metric_provider
     tracer_provider       = var.tracer_provider
     env                   = var.environment
+    enable_test_tools     = var.enable_test_tools
   }
 }
 
