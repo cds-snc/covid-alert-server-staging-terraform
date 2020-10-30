@@ -36,10 +36,6 @@
         {
           "name": "METRICS_USERNAME",
           "value": "${metrics_username}"
-        },
-        {
-          "name": "ENABLE_TEST_TOOLS",
-          "value": "${enable_test_tools}"
         }
       ],
       "secrets": [

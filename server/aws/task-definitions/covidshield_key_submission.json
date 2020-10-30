@@ -39,6 +39,10 @@
         {
           "name": "ENV",
           "value": "${env}"
+        },
+        {
+          "name": "ENABLE_TEST_TOOLS",
+          "value": "${enable_test_tools}"
         }
       ],
       "secrets": [
