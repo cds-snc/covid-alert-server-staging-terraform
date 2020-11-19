@@ -38,6 +38,9 @@ ecs_key_submission_name = "KeySubmission"
 
 submission_autoscale_enabled = true
 retrieval_autoscale_enabled  = true
+min_capacity                 = 1
+cpu_units                    = 1024
+memory                       = 1024
 
 ###
 # AWS VPC - networking.tf
