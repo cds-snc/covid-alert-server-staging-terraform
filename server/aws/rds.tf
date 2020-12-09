@@ -23,7 +23,7 @@ resource "aws_rds_cluster_instance" "covidshield_server_instances" {
 
   performance_insights_enabled    = true
   # Use RDS Managed key to encrypt performance insights
-  performance_insights_kms_key_id = "arn:aws:kms:${var.region}:${var.account_id}:alias/aws/rds"
+  performance_insights_kms_key_id = "arn:aws:kms:${var.region}:${aws_caller_identify.current.account_id}:alias/aws/rds"
 
   tags = {
     Name                  = "${var.rds_server_db_name}-instance"
