@@ -1,4 +1,3 @@
-data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "cw" {
   description         = "CloudWatch Log Group Key"
