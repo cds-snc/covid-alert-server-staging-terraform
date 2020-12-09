@@ -24,7 +24,7 @@ resource "aws_rds_cluster_instance" "covidshield_server_instances" {
   performance_insights_enabled    = true
   # Use RDS Managed key to encrypt performance insights
   # Ignoring aws053 due to known issue https://github.com/tfsec/tfsec/issues/506
-  performance_insights_kms_key_id = "arn:aws:kms:${var.region}:${aws_caller_identify.current.account_id}:alias/aws/rds" #tfsec:ignore:aws053
+  performance_insights_kms_key_id = "arn:aws:kms:${var.region}:${aws_caller_identify.current.account_id}:alias/aws/rds" #tfsec:ignore:AWS053
 
   tags = {
     Name                  = "${var.rds_server_db_name}-instance"
