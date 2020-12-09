@@ -15,14 +15,14 @@ resource "aws_db_subnet_group" "covidshield" {
 }
 
 resource "aws_rds_cluster_instance" "covidshield_server_instances" {
-  count                        = 3
-  identifier                   = "${var.rds_server_db_name}-instance-${count.index}"
-  cluster_identifier           = aws_rds_cluster.covidshield_server.id
-  instance_class               = var.rds_server_instance_class
-  db_subnet_group_name         = aws_db_subnet_group.covidshield.name
+  count                = 3
+  identifier           = "${var.rds_server_db_name}-instance-${count.index}"
+  cluster_identifier   = aws_rds_cluster.covidshield_server.id
+  instance_class       = var.rds_server_instance_class
+  db_subnet_group_name = aws_db_subnet_group.covidshield.name
 
   # we are using managed key so safe to ignore this rule
-  performance_insights_enabled    = true #tfsec:ignore:AWS053
+  performance_insights_enabled = true #tfsec:ignore:AWS053
 
   tags = {
     Name                  = "${var.rds_server_db_name}-instance"
@@ -42,7 +42,7 @@ resource "aws_rds_cluster" "covidshield_server" {
   db_subnet_group_name      = aws_db_subnet_group.covidshield.name
 
   # Ignore TFSEC rule as we are using managed KMS
-  storage_encrypted         = true #tfsec:ignore:AWS051
+  storage_encrypted = true #tfsec:ignore:AWS051
 
 
   vpc_security_group_ids = [
