@@ -20,7 +20,10 @@ resource "aws_rds_cluster_instance" "covidshield_server_instances" {
   cluster_identifier           = aws_rds_cluster.covidshield_server.id
   instance_class               = var.rds_server_instance_class
   db_subnet_group_name         = aws_db_subnet_group.covidshield.name
-  performance_insights_enabled = true
+
+  performance_insights_enabled    = true
+  # Use RDS Managed key to encrypt performance insights
+  performance_insights_kms_key_id = "arn:aws:kms:${var.region}:${var.account_id}:alias/aws/rds"
 
   tags = {
     Name                  = "${var.rds_server_db_name}-instance"
@@ -38,7 +41,10 @@ resource "aws_rds_cluster" "covidshield_server" {
   backup_retention_period   = 1
   preferred_backup_window   = "07:00-09:00"
   db_subnet_group_name      = aws_db_subnet_group.covidshield.name
-  storage_encrypted         = true
+
+  kms_key_id = "value"
+  # Ignore TFSEC rule as we are using managed KMS
+  storage_encrypted         = true #tfsec:ignore:AWS051
 
 
   vpc_security_group_ids = [
