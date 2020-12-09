@@ -21,9 +21,8 @@ resource "aws_rds_cluster_instance" "covidshield_server_instances" {
   instance_class               = var.rds_server_instance_class
   db_subnet_group_name         = aws_db_subnet_group.covidshield.name
 
-  performance_insights_enabled    = true
-  # Use RDS Managed key to encrypt performance insights
-  performance_insights_kms_key_id = "arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:alias/aws/rds"
+  # we are using managed key so safe to ignore this rule
+  performance_insights_enabled    = true #tfsec:ignore:AWS053
 
   tags = {
     Name                  = "${var.rds_server_db_name}-instance"
