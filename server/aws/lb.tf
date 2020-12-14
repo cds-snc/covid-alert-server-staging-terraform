@@ -58,9 +58,9 @@ resource "aws_lb" "covidshield_key_retrieval" {
   subnets = aws_subnet.covidshield_public.*.id
 
   access_logs {
-      bucket  = "cbs-satellite-account-bucket005133826942"
-      enabled = true
-      prefix  = "005133826942/elb_logs_v2"
+    bucket  = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
+    enabled = true
+    prefix  = "${data.aws_caller_identity.current.account_id}/elb_logs_v2"
   }
 
   tags = {
@@ -181,10 +181,10 @@ resource "aws_lb" "covidshield_key_submission" {
   ]
   subnets = aws_subnet.covidshield_public.*.id
   access_logs {
-        bucket  = "cbs-satellite-account-bucket005133826942"
-        enabled = true
-        prefix  = "005133826942/elb_logs_v2"
-    }
+    bucket  = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
+    enabled = true
+    prefix  = "${data.aws_caller_identity.current.account_id}/elb_logs_v2"
+  }
   tags = {
     Name                  = "covidshield-key-submission"
     (var.billing_tag_key) = var.billing_tag_value
