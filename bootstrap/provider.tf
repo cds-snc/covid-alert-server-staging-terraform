@@ -14,10 +14,6 @@ resource "aws_s3_bucket" "storage_bucket" {
 
   # CBS is already logging managed outside of TF
   #tfsec:ignore:AWS002
-  logging {
-    target_bucket = "cbs-satellite-account-bucket005133826942"
-    target_prefix = "005133826942/s3_access_logs/covid-shield-server-tfstate/"
-  }
 
   # logging {
   #   target_bucket = aws_s3_bucket.log_bucket.id
