@@ -32,6 +32,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
+
   terraform-plan-security-scan:
     if: github.ref != 'refs/heads/master'
     runs-on: ubuntu-latest
@@ -98,7 +99,7 @@ jobs:
               body: output
             })
       - name: Check Success
-        if: ${{ failure() }}
+        if: ${{ steps.fmt.outcome == "failure" || steps.plan.outcome == "failure" }}
         run: exit 1
 
   terraform-apply:
