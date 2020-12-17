@@ -100,7 +100,10 @@ jobs:
             })
       - name: Check Success
         if: (${{ steps.fmt.outcome }} == 'failure' || ${{ steps.plan.outcome }} == 'failure')
-        run: exit 1
+        run: |
+          echo steps.fmt.outcome ${{ steps.fmt.outcome }}
+          echo steps.plan.outcome ${{ steps.plan.outcome }}
+          exit 1
 
   terraform-apply:
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
