@@ -98,7 +98,8 @@ jobs:
               body: output
             })
       - name: Check Success
-        if: ${{ success() }}
+        if: ${{ failure() }}
+        run: exit 1
 
   terraform-apply:
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
