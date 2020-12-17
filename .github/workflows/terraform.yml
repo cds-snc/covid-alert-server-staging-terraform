@@ -99,7 +99,7 @@ jobs:
               body: output
             })
       - name: Check Success
-        if: ${{ steps.fmt.outcome == "failure" || steps.plan.outcome == "failure" }}
+        if: (${{ steps.fmt.outcome }} == 'failure' || ${{ steps.plan.outcome }} == 'failure')
         run: exit 1
 
   terraform-apply:
