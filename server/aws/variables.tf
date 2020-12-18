@@ -181,7 +181,7 @@ variable "route53_zone_name" {
 # AWS WAF - IPs/CIDRs to allow to /new-key-claim
 ###
 variable "new_key_claim_allow_list" {
-  type    = list
+  type    = list(any)
   default = ["0.0.0.0/1", "128.0.0.0/1"]
 }
 
