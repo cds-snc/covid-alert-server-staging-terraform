@@ -99,7 +99,7 @@ jobs:
               body: output
             })
       - name: Check Success
-        if:  ${{ ( success()  ||  failure() ) && ( steps.fmt.outputs.exit_code  == 1 || steps.plan.outputs.exit_code == 1 )) }}
+        if:  ${{ ( success()  ||  failure() ) && ( steps.fmt.outputs.exit_code  == 1 || steps.plan.outputs.exit_code == 1 ) }}
         run: |
           echo steps.fmt.outcome ${{ steps.fmt.outcome }}
           echo steps.plan.outcome ${{ steps.plan.outcome }}
