@@ -2,16 +2,6 @@
 #  Mectrics Collection Variables File mc-
 ##
 
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
-
-data "aws_caller_identity" "current" {}
-
 variable "service_name" {
   type        = string
   description = "Name of the service"
