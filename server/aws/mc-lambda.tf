@@ -1,16 +1,6 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
-}
-
-data "aws_caller_identity" "current" {}
+##
+#  Mectrics Collection Lambda
+##
 
 resource "aws_lambda_function" "metrics" {
   function_name = var.service_name
@@ -22,7 +12,7 @@ resource "aws_lambda_function" "metrics" {
   role = aws_iam_role.role.arn
   environment {
     variables = {
-      dataBucket = var.s3_raw_metrics_bucket_name
+      dataBucket = "${var.s3_raw_metrics_bucket_name}-${data.aws_caller_identity.current.account_id}"
       dataKey = aws_kms_key.mykey.id
       fileLoca = "metrics"
     }
@@ -42,8 +32,6 @@ resource "aws_lambda_function" "metrics" {
   }
 }
 
-# IAM role which dictates what other AWS services the Lambda function
-# may access.
 resource "aws_iam_role" "role" {
   name = "${var.service_name}.role"
 
@@ -64,14 +52,11 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
-# This is to optionally manage the CloudWatch Log Group for the Lambda Function.
-# If skipping this resource configuration, also add "logs:CreateLogGroup" to the IAM policy below.
 resource "aws_cloudwatch_log_group" "metrics" {
   name = "/aws/lambda/${var.service_name}"
   retention_in_days = 14
 }
 
-# See also the following AWS managed policy: AWSLambdaBasicExecutionRole
 resource "aws_iam_policy" "lambda_logging" {
   name = var.service_name
   path = "/"
@@ -98,7 +83,7 @@ resource "aws_iam_policy" "lambda_logging" {
       "Resource": [
 
         "${aws_kms_key.mykey.arn}",
-        "arn:aws:s3:::${var.s3_raw_metrics_bucket_name}/*"
+        "arn:aws:s3:::${var.s3_raw_metrics_bucket_name}-${data.aws_caller_identity.current.account_id}/*"
       ]
     }
   ]

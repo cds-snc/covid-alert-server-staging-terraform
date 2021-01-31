@@ -1,3 +1,17 @@
+##
+#  Mectrics Collection Variables File mc-
+##
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
+
+data "aws_caller_identity" "current" {}
+
 variable "service_name" {
   type        = string
   description = "Name of the service"
@@ -26,6 +40,12 @@ variable "s3_raw_metrics_bucket_name" {
   type        = string
   description = "S3 bucket that holds the raw mentric counts"
   default     = "cds-covid-alert-bucket-dev"
+}
+
+variable "s3_raw_metrics_bucket_logging_name" {
+  type        = string
+  description = "S3 bucket that holds the logs for the metrics bucket"
+  default     = "cds-covid-alert-bucket-logging-dev"
 }
 
 variable "api-description"{
@@ -63,4 +83,13 @@ variable "waf-description"{
   default     = "WAF for API protection"
 }
 
+variable "apiKeyName" {
+  type        = string
+  description = "API Key Name"
+  default     = "Dev-Key"
+}
 
+variable "apiKeyDescription" {
+  type        = string
+  default     = "API Key for Development"
+}

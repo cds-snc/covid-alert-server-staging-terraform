@@ -1,13 +1,17 @@
+##
+#  Mectrics Collection API Gateway
+##
+
 resource "aws_api_gateway_rest_api" "metrics" {
   name = var.service_name
   description = var.api-description
   tags = {
-    Name                    = var.service_name
-    Environment             = var.environment
-    (var.billing_tag_key)   = var.billing_tag_value
-    Resource                = "API-Gateway"
-    Project                 = var.project
-    Deployment              = "Terraform"
+    Name = var.service_name
+    Environment = var.environment
+    (var.billing_tag_key) = var.billing_tag_value
+    Resource = "API-Gateway"
+    Project = var.project
+    Deployment = "Terraform"
   }
 }
 
@@ -75,7 +79,7 @@ resource "aws_api_gateway_usage_plan" "metrics_usage_plan" {
   ]
   api_stages {
     api_id = aws_api_gateway_rest_api.metrics.id
-    stage  = var.environment
+    stage = var.environment
   }
 }
 
@@ -84,7 +88,7 @@ resource "aws_api_gateway_api_key" "metrics_api_key" {
 }
 
 resource "aws_api_gateway_usage_plan_key" "main" {
-  key_id        = aws_api_gateway_api_key.metrics_api_key.id
-  key_type      = "API_KEY"
+  key_id = aws_api_gateway_api_key.metrics_api_key.id
+  key_type = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.metrics_usage_plan.id
 }

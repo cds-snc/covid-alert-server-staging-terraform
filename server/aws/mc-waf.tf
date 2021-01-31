@@ -1,3 +1,7 @@
+##
+#  Mectrics Collection Dev WAF
+##
+
 resource "aws_wafv2_web_acl" "metrics_collection" {
   name  = "metrics_collection1"
   description = var.waf-description
@@ -133,7 +137,7 @@ resource "aws_wafv2_web_acl" "metrics_collection" {
   }
 }
 
-resource "aws_wafv2_web_acl_association" "example" {
+resource "aws_wafv2_web_acl_association" "waf_association" {
   resource_arn = aws_api_gateway_stage.metrics.arn
   web_acl_arn  = aws_wafv2_web_acl.metrics_collection.arn
 }

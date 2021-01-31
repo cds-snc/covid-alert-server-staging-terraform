@@ -1,7 +1,12 @@
+##
+#  Mectrics Collection AWS KMS mc-
+##
+
 resource "aws_kms_key" "mykey" {
   description               = var.mks-description
   deletion_window_in_days   = 7
   customer_master_key_spec  = "SYMMETRIC_DEFAULT"
+  enable_key_rotation = true
 
   tags = {
     Name                    = var.service_name
@@ -72,3 +77,4 @@ resource "aws_kms_alias" "mykey" {
   name          = "alias/${var.service_name}-key"
   target_key_id = aws_kms_key.mykey.key_id
 }
+
