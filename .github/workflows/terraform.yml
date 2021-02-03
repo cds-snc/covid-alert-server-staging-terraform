@@ -43,7 +43,7 @@ jobs:
       - name: Terraform security scan
         uses: triat/terraform-security-scan@5f54224e1192fa468b93bcaecb5253679b828c8e
         with:
-          tfsec_version: "0.37.1"
+          tfsec_version: "v0.37.1"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: false
