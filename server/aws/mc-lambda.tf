@@ -5,13 +5,13 @@
 resource "aws_lambda_function" "metrics" {
   function_name = var.service_name
   description   = var.lambda-description
-#  filename      = "/tmp/lambda_validate_deploy.rb.zip"
-  s3_bucket     = var.lambda_code
-  s3_key        = var.lambda-function-code
+  #  filename      = "/tmp/lambda_validate_deploy.rb.zip"
+  s3_bucket = var.lambda_code
+  s3_key    = var.lambda-function-code
 
-  handler       = var.lambda-function-handler
-  runtime       = var.lambda-function-runtime
-  role          = aws_iam_role.role.arn
+  handler = var.lambda-function-handler
+  runtime = var.lambda-function-runtime
+  role    = aws_iam_role.role.arn
   environment {
     variables = {
       dataBucket = "${var.s3_raw_metrics_bucket_name}-${data.aws_caller_identity.current.account_id}"
@@ -19,10 +19,10 @@ resource "aws_lambda_function" "metrics" {
     }
   }
 
-    vpc_config {
-      security_group_ids = [aws_security_group.lambda_sg.id]
-      subnet_ids = [aws_subnet.covidshield_private.id]
-    }
+  vpc_config {
+    security_group_ids = [aws_security_group.lambda_sg.id]
+    subnet_ids         = [aws_subnet.covidshield_private.id]
+  }
 
   tags = {
     Name                  = var.service_name
@@ -38,7 +38,7 @@ resource "aws_security_group" "lambda_sg" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_vpc.covidshield.id
-  
+
 
 }
 
