@@ -11,7 +11,7 @@ variable "service_name" {
 variable "owner" {
   type        = string
   description = "Name of the owner"
-  default     = "terraform-lambda-zips"
+  default     = "CDS"
 }
 
 variable "project" {
