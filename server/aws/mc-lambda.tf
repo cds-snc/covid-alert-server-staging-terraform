@@ -62,6 +62,11 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
+resource "aws_cloudwatch_log_group" "metrics" {
+  name              = "/aws/lambda/${var.service_name}"
+  retention_in_days = 14
+}
+
 resource "aws_iam_policy" "lambda_logging" {
   name = var.service_name
   path = "/"
