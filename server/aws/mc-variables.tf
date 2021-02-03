@@ -23,7 +23,7 @@ variable "project" {
 variable "lambda_code" {
   type        = string
   description = "Name of the project"
-  default     = "terraform-lambda-zips"
+  default     = "cds-terraform-lambda-zips"
 }
 
 variable "s3_raw_metrics_bucket_name" {
