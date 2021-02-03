@@ -3,7 +3,7 @@
 ##
 
 resource "aws_api_gateway_rest_api" "metrics" {
-  depends_on = [aws_lambda_function.metrics]
+  depends_on  = [aws_lambda_function.metrics]
   name        = var.service_name
   description = var.api-description
   endpoint_configuration {
