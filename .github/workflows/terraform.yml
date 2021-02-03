@@ -40,16 +40,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.15.2'
-
       - name: Terraform security scan
-        run:  |
-          go get -u github.com/tfsec/tfsec/cmd/tfsec
-          tfsec .
-          
+        uses: triat/terraform-security-scan@5f54224e1192fa468b93bcaecb5253679b828c8e
+        with:
+          tfsec_version: "0.37.1"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: false
 
       - name: Setup Terraform
