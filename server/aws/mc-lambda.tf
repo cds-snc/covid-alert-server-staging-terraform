@@ -5,7 +5,7 @@
 resource "aws_lambda_function" "metrics" {
   function_name = var.service_name
   description   = var.lambda-description
-  #  filename      = "/tmp/lambda_validate_deploy.rb.zip"
+  #  filename      = "/tmp/lambda_validate_deploy.zip"
   s3_bucket = var.lambda_code
   s3_key    = var.lambda-function-code
 
@@ -62,11 +62,6 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
-resource "aws_cloudwatch_log_group" "metrics" {
-  name              = "/aws/lambda/${var.service_name}"
-  retention_in_days = 14
-}
-
 resource "aws_iam_policy" "lambda_logging" {
   name = var.service_name
   path = "/"
@@ -92,6 +87,16 @@ resource "aws_iam_policy" "lambda_logging" {
       "Resource": [
         "arn:aws:s3:::${var.s3_raw_metrics_bucket_name}-${data.aws_caller_identity.current.account_id}/*"
       ]
+    },
+    {
+        "Sid": "VisualEditor1",
+        "Effect": "Allow",
+        "Action": [
+            "ec2:CreateNetworkInterface",
+            "ec2:DescribeNetworkInterfaces",
+            "ec2:DeleteNetworkInterface"
+        ],
+        "Resource": "*"
     }
   ]
 }
