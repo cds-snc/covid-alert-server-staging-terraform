@@ -27,6 +27,21 @@ resource "aws_api_gateway_base_path_mapping" "metrics" {
   domain_name = aws_api_gateway_domain_name.metrics.domain_name
 }
 
+resource "aws_api_gateway_model" "metrics_model" {
+    rest_api_id  = aws_api_gateway_rest_api.metrics.id
+    name         = "${aws_api_gateway_rest_api.metrics.name}-model"
+    description  = "Metrics json schema"
+    content_type = "application/json"
+
+  schema = file("models/metrics.json")
+}
+
+resource "aws_api_gateway_request_validator" "metrics_model" {
+  name         = "${aws_api_gateway_rest_api.metrics.name}-validator"
+  rest_api_id                 = aws_api_gateway_rest_api.metrics.id
+  validate_request_body       = true
+  validate_request_parameters = false
+}
 
 output "base_url" {
   value = aws_api_gateway_deployment.metrics.invoke_url
