@@ -8,7 +8,7 @@ resource "aws_wafv2_web_acl" "metrics_collection" {
   scope       = "REGIONAL"
 
   default_action {
-    block {}
+    allow {}
   }
 
   rule {
@@ -122,7 +122,7 @@ resource "aws_wafv2_web_acl" "metrics_collection" {
   }
 
   rule {
-    name     = "KeyRetrievalRateLimit"
+    name     = "metrics_collection_rate_limit"
     priority = 101
 
     action {
@@ -138,7 +138,7 @@ resource "aws_wafv2_web_acl" "metrics_collection" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "KeyRetrievalRateLimit"
+      metric_name                = "metrics_collection_rate_limit"
       sampled_requests_enabled   = true
     }
   }
