@@ -143,15 +143,6 @@ resource "aws_wafv2_web_acl" "metrics_collection" {
     }
   }
 
-  tags = {
-    Name                  = var.service_name
-    Environment           = var.environment
-    Resource              = "WAF",
-    Project               = var.project,
-    (var.billing_tag_key) = var.billing_tag_value
-    Deployment            = "Terraform"
-  }
-
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name                = "metrics-submission"
