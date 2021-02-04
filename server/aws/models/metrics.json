@@ -1,450 +1,102 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "http://example.com/example.json",
   "type": "object",
-  "title": "The root schema",
-  "description": "The root schema comprises the entire JSON document.",
-  "default": {},
-  "examples": [
-      {
-          "metricstimestamp": 1611324826295,
-          "appversion": "999",
-          "appos": "ios",
-          "payload": [
-              {
-                  "identifier": "installed",
-                  "region": "None",
-                  "timestamp": 1611323998012
-              },
-              {
-                  "identifier": "onboarded",
-                  "region": "QC",
-                  "timestamp": 1611324024314,
-                  "pushnotification": "true",
-                  "frameworkenabled": "true"
-              },
-              {
-                  "identifier": "exposed",
-                  "region": "QC",
-                  "timestamp": 1611324820294
-              },
-              {
-                  "identifier": "otk-no-date",
-                  "region": "QC",
-                  "timestamp": 1611324825778
-              },
-              {
-                  "identifier": "otk-with-date",
-                  "region": "QC",
-                  "timestamp": 1611324825778
-              },
-              {
-                  "identifier": "en-toggle",
-                  "region": "QC",
-                  "timestamp": 1611324825778,
-                  "state": "true"
-              },
-              {
-                  "identifier": "exposed-clear",
-                  "region": "QC",
-                  "timestamp": 1611324825778,
-                  "hoursSinceExposureDetectedAt": "2"
-              },
-              {
-                  "identifier": "background-check",
-                  "region": "QC",
-                  "timestamp": 1611324825778,
-                  "count": "4"
-              }
-          ]
-      }
-  ],
+  "title": "COVID Alert Metrics Schema Version 1.4.2",
   "required": [
-      "metricstimestamp",
-      "appversion",
-      "appos",
-      "payload"
+    "schemaversion",
+    "metricstimestamp",
+    "symptomonset",
+    "appversion",
+    "appos",
+    "payload"
   ],
   "properties": {
-      "metricstimestamp": {
-          "$id": "#/properties/metricstimestamp",
-          "type": "integer",
-          "title": "The metricstimestamp schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": 0,
-          "examples": [
-              1611324826295
-          ]
-      },
-      "appversion": {
-          "$id": "#/properties/appversion",
-          "type": "string",
-          "title": "The appversion schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": "",
-          "examples": [
-              "999"
-          ]
-      },
-      "appos": {
-          "$id": "#/properties/appos",
-          "type": "string",
-          "title": "The appos schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": "",
-          "examples": [
-              "ios"
-          ]
-      },
-      "payload": {
-          "$id": "#/properties/payload",
-          "type": "array",
-          "title": "The payload schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": [],
-          "examples": [
-              [
-                  {
-                      "identifier": "installed",
-                      "region": "None",
-                      "timestamp": 1611323998012
-                  },
-                  {
-                      "identifier": "onboarded",
-                      "region": "QC",
-                      "timestamp": 1611324024314,
-                      "pushnotification": "true",
-                      "frameworkenabled": "true"
-                  }
-              ]
-          ],
-          "additionalItems": true,
-          "items": {
-              "$id": "#/properties/payload/items",
-              "anyOf": [
-                  {
-                      "$id": "#/properties/payload/items/anyOf/0",
-                      "type": "object",
-                      "title": "The first anyOf schema",
-                      "description": "An explanation about the purpose of this instance.",
-                      "default": {},
-                      "examples": [
-                          {
-                              "identifier": "installed",
-                              "region": "None",
-                              "timestamp": 1611323998012
-                          }
-                      ],
-                      "required": [
-                          "identifier",
-                          "region",
-                          "timestamp"
-                      ],
-                      "properties": {
-                          "identifier": {
-                              "$id": "#/properties/payload/items/anyOf/0/properties/identifier",
-                              "type": "string",
-                              "title": "The identifier schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "installed"
-                              ]
-                          },
-                          "region": {
-                              "$id": "#/properties/payload/items/anyOf/0/properties/region",
-                              "type": "string",
-                              "title": "The region schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "None"
-                              ]
-                          },
-                          "timestamp": {
-                              "$id": "#/properties/payload/items/anyOf/0/properties/timestamp",
-                              "type": "integer",
-                              "title": "The timestamp schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": 0,
-                              "examples": [
-                                  1611323998012
-                              ]
-                          }
-                      },
-                      "additionalProperties": true
-                  },
-                  {
-                      "$id": "#/properties/payload/items/anyOf/1",
-                      "type": "object",
-                      "title": "The second anyOf schema",
-                      "description": "An explanation about the purpose of this instance.",
-                      "default": {},
-                      "examples": [
-                          {
-                              "identifier": "onboarded",
-                              "region": "QC",
-                              "timestamp": 1611324024314,
-                              "pushnotification": "true",
-                              "frameworkenabled": "true"
-                          }
-                      ],
-                      "required": [
-                          "identifier",
-                          "region",
-                          "timestamp",
-                          "pushnotification",
-                          "frameworkenabled"
-                      ],
-                      "properties": {
-                          "identifier": {
-                              "$id": "#/properties/payload/items/anyOf/1/properties/identifier",
-                              "type": "string",
-                              "title": "The identifier schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "onboarded"
-                              ]
-                          },
-                          "region": {
-                              "$id": "#/properties/payload/items/anyOf/1/properties/region",
-                              "type": "string",
-                              "title": "The region schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "QC"
-                              ]
-                          },
-                          "timestamp": {
-                              "$id": "#/properties/payload/items/anyOf/1/properties/timestamp",
-                              "type": "integer",
-                              "title": "The timestamp schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": 0,
-                              "examples": [
-                                  1611324024314
-                              ]
-                          },
-                          "pushnotification": {
-                              "$id": "#/properties/payload/items/anyOf/1/properties/pushnotification",
-                              "type": "string",
-                              "title": "The pushnotification schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "true"
-                              ]
-                          },
-                          "frameworkenabled": {
-                              "$id": "#/properties/payload/items/anyOf/1/properties/frameworkenabled",
-                              "type": "string",
-                              "title": "The frameworkenabled schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "true"
-                              ]
-                          }
-                      },
-                      "additionalProperties": true
-                  },
-                  {
-                      "$id": "#/properties/payload/items/anyOf/2",
-                      "type": "object",
-                      "title": "The third anyOf schema",
-                      "description": "An explanation about the purpose of this instance.",
-                      "default": {},
-                      "examples": [
-                          {
-                              "identifier": "en-toggle",
-                              "region": "QC",
-                              "timestamp": 1611324825778,
-                              "state": "true"
-                          }
-                      ],
-                      "required": [
-                          "identifier",
-                          "region",
-                          "timestamp",
-                          "state"
-                      ],
-                      "properties": {
-                          "identifier": {
-                              "$id": "#/properties/payload/items/anyOf/2/properties/identifier",
-                              "type": "string",
-                              "title": "The identifier schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "en-toggle"
-                              ]
-                          },
-                          "region": {
-                              "$id": "#/properties/payload/items/anyOf/2/properties/region",
-                              "type": "string",
-                              "title": "The region schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "QC"
-                              ]
-                          },
-                          "timestamp": {
-                              "$id": "#/properties/payload/items/anyOf/2/properties/timestamp",
-                              "type": "integer",
-                              "title": "The timestamp schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": 0,
-                              "examples": [
-                                  1611324825778
-                              ]
-                          },
-                          "state": {
-                              "$id": "#/properties/payload/items/anyOf/2/properties/state",
-                              "type": "string",
-                              "title": "The state schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "true"
-                              ]
-                          }
-                      },
-                      "additionalProperties": true
-                  },
-                  {
-                      "$id": "#/properties/payload/items/anyOf/3",
-                      "type": "object",
-                      "title": "The fourth anyOf schema",
-                      "description": "An explanation about the purpose of this instance.",
-                      "default": {},
-                      "examples": [
-                          {
-                              "identifier": "exposed-clear",
-                              "region": "QC",
-                              "timestamp": 1611324825778,
-                              "hoursSinceExposureDetectedAt": "2"
-                          }
-                      ],
-                      "required": [
-                          "identifier",
-                          "region",
-                          "timestamp",
-                          "hoursSinceExposureDetectedAt"
-                      ],
-                      "properties": {
-                          "identifier": {
-                              "$id": "#/properties/payload/items/anyOf/3/properties/identifier",
-                              "type": "string",
-                              "title": "The identifier schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "exposed-clear"
-                              ]
-                          },
-                          "region": {
-                              "$id": "#/properties/payload/items/anyOf/3/properties/region",
-                              "type": "string",
-                              "title": "The region schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "QC"
-                              ]
-                          },
-                          "timestamp": {
-                              "$id": "#/properties/payload/items/anyOf/3/properties/timestamp",
-                              "type": "integer",
-                              "title": "The timestamp schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": 0,
-                              "examples": [
-                                  1611324825778
-                              ]
-                          },
-                          "hoursSinceExposureDetectedAt": {
-                              "$id": "#/properties/payload/items/anyOf/3/properties/hoursSinceExposureDetectedAt",
-                              "type": "string",
-                              "title": "The hoursSinceExposureDetectedAt schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "2"
-                              ]
-                          }
-                      },
-                      "additionalProperties": true
-                  },
-                  {
-                      "$id": "#/properties/payload/items/anyOf/4",
-                      "type": "object",
-                      "title": "The fifth anyOf schema",
-                      "description": "An explanation about the purpose of this instance.",
-                      "default": {},
-                      "examples": [
-                          {
-                              "identifier": "background-check",
-                              "region": "QC",
-                              "timestamp": 1611324825778,
-                              "count": "4"
-                          }
-                      ],
-                      "required": [
-                          "identifier",
-                          "region",
-                          "timestamp",
-                          "count"
-                      ],
-                      "properties": {
-                          "identifier": {
-                              "$id": "#/properties/payload/items/anyOf/4/properties/identifier",
-                              "type": "string",
-                              "title": "The identifier schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "background-check"
-                              ]
-                          },
-                          "region": {
-                              "$id": "#/properties/payload/items/anyOf/4/properties/region",
-                              "type": "string",
-                              "title": "The region schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "QC"
-                              ]
-                          },
-                          "timestamp": {
-                              "$id": "#/properties/payload/items/anyOf/4/properties/timestamp",
-                              "type": "integer",
-                              "title": "The timestamp schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": 0,
-                              "examples": [
-                                  1611324825778
-                              ]
-                          },
-                          "count": {
-                              "$id": "#/properties/payload/items/anyOf/4/properties/count",
-                              "type": "string",
-                              "title": "The count schema",
-                              "description": "An explanation about the purpose of this instance.",
-                              "default": "",
-                              "examples": [
-                                  "4"
-                              ]
-                          }
-                      },
-                      "additionalProperties": true
-                  }
-              ]
+    "schemaversion": {
+      "type": "integer",
+      "minLength": 0,
+      "maxLength": 5,
+      "title": "Schema Version Schema",
+      "default": "null"
+    },
+    "metricstimestamp": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 25,
+      "title": "Metrics time stamp Schema",
+      "default": "null"
+    },
+    "symptomonset": {
+      "type": "boolean",
+      "title": "Symptom on set Schema"
+    },
+    "appversion": {
+      "type": "integer",
+      "minLength": 0,
+      "maxLength": 5,
+      "title": "App Version Schema",
+      "default": "null"
+    },
+    "appos": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 20,
+      "title": "App os Schema",
+      "default": "null"
+    },
+    "payload": {
+      "type": "array",
+      "title": "payload Schema",
+      "default": [],
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "title": "payload Schema",
+        "default": {},
+        "required": [
+          "identifier",
+          "region",
+          "timestamp"
+        ],
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "enum": [
+              "installed",
+              "exposed",
+              "onetimekey",
+              "onboarded",
+              "frameworkStatus"
+            ],
+            "minLength": 1,
+            "maxLength": 25,
+            "title": "Identifier Schema",
+            "default": "null"
+          },
+          "region": {
+            "type": "string",
+            "enum": [ "ON", "QC", "NS", "NB", "MB", "AB", "BC", "NL", "PE", "SK", "NT", "NU", "YT" ],
+            "minLength": 1,
+            "maxLength": 3,
+            "title": "Region Schema",
+            "default": "null"
+          },
+          "timestamp": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 25,
+            "title": "Timestamp Schema",
+            "default": "null"
+          },
+          "state": {
+            "type": "boolean"
+          },
+          "pushnotificationson": {
+            "type": "boolean"
+          },
+          "frameworkenabled": {
+            "type": "boolean"
           }
+        }
       }
-  },
-  "additionalProperties": true
+    }
+  }
 }
