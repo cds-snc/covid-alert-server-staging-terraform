@@ -29,6 +29,13 @@ resource "aws_api_gateway_domain_name" "metrics" {
   }
 }
 
+resource "aws_api_gateway_base_path_mapping" "metrics" {
+  api_id      = aws_api_gateway_rest_api.metrics.id
+  stage_name  = aws_api_gateway_stage.metrics.stage_name
+  domain_name = aws_api_gateway_domain_name.metrics.domain_name
+}
+
+
 output "base_url" {
   value = aws_api_gateway_deployment.metrics.invoke_url
 }
