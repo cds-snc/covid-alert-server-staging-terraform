@@ -9,14 +9,6 @@ resource "aws_api_gateway_rest_api" "metrics" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-  tags = {
-    Name                  = var.service_name
-    Environment           = var.environment
-    (var.billing_tag_key) = var.billing_tag_value
-    Resource              = "API-Gateway"
-    Project               = var.project
-    Deployment            = "Terraform"
-  }
 }
 
 resource "aws_api_gateway_domain_name" "metrics" {

@@ -24,14 +24,6 @@ resource "aws_lambda_function" "metrics" {
     subnet_ids         = aws_subnet.covidshield_private.*.id
   }
 
-  tags = {
-    Name                  = var.service_name
-    Resource              = "Lambda"
-    Environment           = var.environment
-    (var.billing_tag_key) = var.billing_tag_value
-    Project               = var.project
-    Deployment            = "Terraform"
-  }
 }
 
 resource "aws_security_group" "lambda_sg" {
