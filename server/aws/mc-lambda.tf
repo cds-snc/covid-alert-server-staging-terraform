@@ -2,16 +2,24 @@
 #  Mectrics Collection Lambda
 ##
 
+data "archive_file" "lambda_create_metric" {
+  type        = "zip"
+  source_file = "lambda/create_metric.js"
+  output_path = "/tmp/create_metric.js.zip"
+}
+
+
 resource "aws_lambda_function" "metrics" {
   function_name = var.service_name
   description   = var.lambda-description
-  #  filename      = "/tmp/lambda_validate_deploy.zip"
-  s3_bucket = var.lambda_code
-  s3_key    = var.lambda-function-code
+  filename      = "/tmp/lambda_create_metric.zip"
+
+  source_code_hash = data.archive_file.lambda_create_metric.output_base64sha256
 
   handler = var.lambda-function-handler
   runtime = var.lambda-function-runtime
   role    = aws_iam_role.role.arn
+
   environment {
     variables = {
       dataBucket = "${var.s3_raw_metrics_bucket_name}-${data.aws_caller_identity.current.account_id}"
