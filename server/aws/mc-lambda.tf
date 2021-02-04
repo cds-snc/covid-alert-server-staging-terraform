@@ -12,7 +12,7 @@ data "archive_file" "lambda_create_metric" {
 resource "aws_lambda_function" "metrics" {
   function_name = var.service_name
   description   = var.lambda-description
-  filename      = "/tmp/lambda_create_metric.zip"
+  filename      = "/tmp/lambda_create_metric.js.zip"
 
   source_code_hash = data.archive_file.lambda_create_metric.output_base64sha256
 
