@@ -5,7 +5,7 @@
 variable "service_name" {
   type        = string
   description = "Name of the service"
-  default     = "cds-covid-alert-create-metric-record"
+  default     = "save-metrics"
 }
 
 variable "owner" {
