@@ -16,7 +16,7 @@ resource "aws_lambda_function" "metrics" {
 
   source_code_hash = data.archive_file.lambda_create_metric.output_base64sha256
 
-  handler = var.lambda-function-handler
+  handler = "create_metric.handler"
   runtime = var.lambda-function-runtime
   role    = aws_iam_role.role.arn
 
