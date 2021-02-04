@@ -60,7 +60,7 @@ variable "lambda-function-code" {
 
 variable "lambda-function-runtime" {
   type    = string
-  default = "nodejs14.x"
+  default = "nodejs12.x"
 }
 
 variable "lambda-function-handler" {
