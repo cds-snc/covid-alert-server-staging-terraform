@@ -19,6 +19,12 @@ resource "aws_api_gateway_rest_api" "metrics" {
   }
 }
 
+resource "aws_api_gateway_domain_name" "metrics" {
+  regional_certificate_arn = aws_acm_certificate.covidshield.arn
+  domain_name              = "metrics.${aws_route53_zone.covidshield.name}"
+  security_policy          = "TLS_1_2"
+}
+
 output "base_url" {
   value = aws_api_gateway_deployment.metrics.invoke_url
 }
