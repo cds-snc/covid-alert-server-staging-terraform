@@ -1,24 +1,16 @@
 {
+  "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "title": "COVID Alert Metrics Schema Version 1.4.2",
   "required": [
-    "schemaversion",
     "metricstimestamp",
-    "symptomonset",
     "appversion",
     "appos",
     "payload"
   ],
   "properties": {
-    "schemaversion": {
-      "type": "integer",
-      "minLength": 0,
-      "maxLength": 5,
-      "title": "Schema Version Schema",
-      "default": "null"
-    },
     "metricstimestamp": {
-      "type": "string",
+      "type": "integer",
       "minLength": 0,
       "maxLength": 25,
       "title": "Metrics time stamp Schema",
@@ -29,7 +21,7 @@
       "title": "Symptom on set Schema"
     },
     "appversion": {
-      "type": "integer",
+      "type": "string",
       "minLength": 0,
       "maxLength": 5,
       "title": "App Version Schema",
@@ -55,47 +47,7 @@
           "identifier",
           "region",
           "timestamp"
-        ],
-        "properties": {
-          "identifier": {
-            "type": "string",
-            "enum": [
-              "installed",
-              "exposed",
-              "onetimekey",
-              "onboarded",
-              "frameworkStatus"
-            ],
-            "minLength": 1,
-            "maxLength": 25,
-            "title": "Identifier Schema",
-            "default": "null"
-          },
-          "region": {
-            "type": "string",
-            "enum": [ "ON", "QC", "NS", "NB", "MB", "AB", "BC", "NL", "PE", "SK", "NT", "NU", "YT" ],
-            "minLength": 1,
-            "maxLength": 3,
-            "title": "Region Schema",
-            "default": "null"
-          },
-          "timestamp": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 25,
-            "title": "Timestamp Schema",
-            "default": "null"
-          },
-          "state": {
-            "type": "boolean"
-          },
-          "pushnotificationson": {
-            "type": "boolean"
-          },
-          "frameworkenabled": {
-            "type": "boolean"
-          }
-        }
+        ]
       }
     }
   }
