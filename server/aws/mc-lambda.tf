@@ -39,9 +39,9 @@ resource "aws_security_group" "lambda_sg" {
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_vpc.covidshield.id
   egress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
   }
 }
 
