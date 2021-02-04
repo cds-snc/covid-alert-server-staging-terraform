@@ -5,7 +5,7 @@
 data "archive_file" "lambda_create_metric" {
   type        = "zip"
   source_file = "lambda/create_metric.js"
-  output_path = "/tmp/create_metric.js.zip"
+  output_path = "/tmp/lambda_create_metric.js.zip"
 }
 
 
