@@ -28,16 +28,16 @@ resource "aws_api_gateway_base_path_mapping" "metrics" {
 }
 
 resource "aws_api_gateway_model" "metrics_model" {
-    rest_api_id  = aws_api_gateway_rest_api.metrics.id
-    name         = "${aws_api_gateway_rest_api.metrics.name}-model"
-    description  = "Metrics json schema"
-    content_type = "application/json"
+  rest_api_id  = aws_api_gateway_rest_api.metrics.id
+  name         = "${aws_api_gateway_rest_api.metrics.name}-model"
+  description  = "Metrics json schema"
+  content_type = "application/json"
 
   schema = file("models/metrics.json")
 }
 
 resource "aws_api_gateway_request_validator" "metrics_model" {
-  name         = "${aws_api_gateway_rest_api.metrics.name}-validator"
+  name                        = "${aws_api_gateway_rest_api.metrics.name}-validator"
   rest_api_id                 = aws_api_gateway_rest_api.metrics.id
   validate_request_body       = true
   validate_request_parameters = false
