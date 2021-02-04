@@ -62,7 +62,7 @@ resource "aws_api_gateway_method" "create_method" {
   request_validator_id = aws_api_gateway_request_validator.metrics_model.id
 
   request_models = {
-    "application/json" =  aws_api_gateway_model.metrics_model.name
+    "application/json" = aws_api_gateway_model.metrics_model.name
   }
 }
 
