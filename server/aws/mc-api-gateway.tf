@@ -96,7 +96,6 @@ resource "aws_api_gateway_integration" "metrics" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.metrics.invoke_arn
-  content_handling        = "CONVERT_TO_TEXT"
 }
 
 resource "aws_api_gateway_integration_response" "metrics_response" {
