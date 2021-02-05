@@ -114,9 +114,10 @@ resource "aws_api_gateway_integration_response" "metrics_response" {
 resource "aws_api_gateway_deployment" "metrics" {
   rest_api_id = aws_api_gateway_rest_api.metrics.id
 
-  # force a deploy
-  variables {
-    deployed_at = timestamp()
+  # Forces a redeploy of the gateway
+  # TODO: use a hash of create_metric.js, mc-*.tf files to trigger redeployment
+  triggers {
+    redeployment = timestamp()
   }
 }
 
