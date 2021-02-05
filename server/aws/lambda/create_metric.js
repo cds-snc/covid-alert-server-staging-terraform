@@ -6,25 +6,25 @@ const
     crypto = require('crypto');
     
 const uuidv4 = () => {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.randomFillSync(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.randomFillSync(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
 }
 
 const todaysDate = () => {
-    let date_ob = new Date();
-    let date = ("0" + date_ob.getDate()).slice(-2);
-    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    let year = date_ob.getFullYear();
-    return `${year}-${month}-${date}`;
+    const today = new Date();
+    return today.toISOString().split('T')[0];
 }
+
 
 exports.handler = async (event, context) => {
 
     const bucket = process.env.dataBucket;
     const filePath = process.env.fileLoca;
     const filename = uuidv4();
-    let transactionStatus;
+    const transactionStatus = {
+        isBase64Encoded:  false
+    };
 
     const bucketParams = {
         Bucket: `${bucket}/${filePath}/${todaysDate()}`,
@@ -36,9 +36,12 @@ exports.handler = async (event, context) => {
     /* The puObject call forces a promise because the result returned may not be a promise.  */
     try {
         const resp = await S3.putObject(bucketParams).promise();
-        transactionStatus = { "status": "RECORD CREATED", "key": filename};
+        transactionStatus.statusCode = 200;
+        transactionStatus.body = JSON.stringify({ "status": "RECORD CREATED", "key": filename});
     } catch (err) {
-        transactionStatus = { "status": "UPLOAD FAILED"};
+        console.log(err);
+        transactionStatus.statusCode = 500;
+        transactionStatus.body= JSON.stringify({"status" : "UPLOAD FAILED"});
     }
 
     return transactionStatus;

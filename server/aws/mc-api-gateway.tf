@@ -3,7 +3,6 @@
 ##
 
 resource "aws_api_gateway_rest_api" "metrics" {
-  depends_on  = [aws_lambda_function.metrics]
   name        = var.service_name
   description = var.api-description
   endpoint_configuration {
@@ -71,6 +70,23 @@ resource "aws_api_gateway_method_response" "response_200" {
   resource_id = aws_api_gateway_resource.create_resource.id
   http_method = aws_api_gateway_method.create_method.http_method
   status_code = "200"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+}
+
+resource "aws_api_gateway_method_response" "response_500" {
+  rest_api_id = aws_api_gateway_rest_api.metrics.id
+  resource_id = aws_api_gateway_resource.create_resource.id
+  http_method = aws_api_gateway_method.create_method.http_method
+  status_code = "500"
+
+  response_models = {
+    "application/json" = "Error"
+  }
+
 }
 
 resource "aws_api_gateway_integration" "metrics" {
@@ -78,22 +94,24 @@ resource "aws_api_gateway_integration" "metrics" {
   resource_id             = aws_api_gateway_method.create_method.resource_id
   http_method             = aws_api_gateway_method.create_method.http_method
   integration_http_method = "POST"
-  type                    = "AWS"
+  type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.metrics.invoke_arn
+  content_handling        = "CONVERT_TO_TEXT"
 }
 
 resource "aws_api_gateway_integration_response" "metrics_response" {
-  depends_on = [
-    aws_api_gateway_integration.metrics
-  ]
   http_method = aws_api_gateway_method.create_method.http_method
   resource_id = aws_api_gateway_resource.create_resource.id
   rest_api_id = aws_api_gateway_rest_api.metrics.id
   status_code = aws_api_gateway_method_response.response_200.status_code
+
+  response_templates = {
+    "application/json" = ""
+  }
+
 }
 
 resource "aws_api_gateway_deployment" "metrics" {
-  depends_on  = [aws_api_gateway_integration.metrics]
   rest_api_id = aws_api_gateway_rest_api.metrics.id
 }
 
@@ -104,7 +122,6 @@ resource "aws_cloudwatch_log_group" "api_log_group" {
 }
 
 resource "aws_api_gateway_stage" "metrics" {
-  depends_on           = [aws_cloudwatch_log_group.api_log_group]
   deployment_id        = aws_api_gateway_deployment.metrics.id
   rest_api_id          = aws_api_gateway_rest_api.metrics.id
   stage_name           = var.environment
@@ -113,9 +130,6 @@ resource "aws_api_gateway_stage" "metrics" {
 
 resource "aws_api_gateway_usage_plan" "metrics_usage_plan" {
   name = "${var.apiKeyName}_usage_plan"
-  depends_on = [
-    aws_api_gateway_stage.metrics
-  ]
   api_stages {
     api_id = aws_api_gateway_rest_api.metrics.id
     stage  = var.environment
