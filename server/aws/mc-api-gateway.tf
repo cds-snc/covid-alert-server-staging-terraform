@@ -84,7 +84,7 @@ resource "aws_api_gateway_method_response" "response_500" {
   status_code = "500"
 
   response_models = {
-    "application/json" = "Error"
+    "application/json" = "Empty"
   }
 
 }
