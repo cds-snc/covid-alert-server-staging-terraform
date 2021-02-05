@@ -39,8 +39,9 @@ exports.handler = async (event, context) => {
         transactionStatus.statusCode = 200;
         transactionStatus.body = JSON.stringify({ "status": "RECORD CREATED", "key": filename});
     } catch (err) {
-        console.log(err)
-        throw new Error("UPLOAD FAILED")
+        console.log(err);
+        transactionStatus.statusCode = 500;
+        transactionStatus.body= JSON.stringify({"status" : "UPLOAD FAILED"});
     }
 
     return transactionStatus;
