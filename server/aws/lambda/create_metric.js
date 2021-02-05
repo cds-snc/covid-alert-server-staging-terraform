@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
     const bucketParams = {
         Bucket: `${bucket}/${filePath}/${todaysDate()}`,
         Key: `${filename}.json`,
-        Body: JSON.stringify(event),
+        Body: JSON.stringify(event.body),
         ServerSideEncryption: 'AES256'
     };
 
