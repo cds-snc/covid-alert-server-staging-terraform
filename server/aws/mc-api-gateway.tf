@@ -116,7 +116,7 @@ resource "aws_api_gateway_deployment" "metrics" {
 
   # Forces a redeploy of the gateway
   # TODO: use a hash of create_metric.js, mc-*.tf files to trigger redeployment
-  triggers {
+  triggers = {
     redeployment = timestamp()
   }
 }
