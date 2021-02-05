@@ -16,6 +16,7 @@ const todaysDate = () => {
     return today.toISOString().split('T')[0];
 }
 
+
 exports.handler = async (event, context) => {
 
     const bucket = process.env.dataBucket;
