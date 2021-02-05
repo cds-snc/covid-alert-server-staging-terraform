@@ -12,11 +12,8 @@ const uuidv4 = () => {
 }
 
 const todaysDate = () => {
-    let date_ob = new Date();
-    let date = ("0" + date_ob.getDate()).slice(-2);
-    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    let year = date_ob.getFullYear();
-    return `${year}-${month}-${date}`;
+    let today = new Date();
+    return today.toISOString().split('T')[0]);
 }
 
 exports.handler = async (event, context) => {
