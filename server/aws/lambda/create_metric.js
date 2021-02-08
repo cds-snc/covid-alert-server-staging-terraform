@@ -26,10 +26,12 @@ exports.handler = async (event, context) => {
         isBase64Encoded:  false
     };
 
+    const body = JSON.parse(event.body)
+
     const bucketParams = {
         Bucket: `${bucket}/${filePath}/${todaysDate()}`,
         Key: `${filename}.json`,
-        Body: JSON.stringify(event.body),
+        Body: JSON.stringify(body),
         ServerSideEncryption: 'AES256'
     };
 
