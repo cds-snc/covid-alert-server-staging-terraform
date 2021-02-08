@@ -98,18 +98,6 @@ resource "aws_api_gateway_integration" "metrics" {
   uri                     = aws_lambda_function.metrics.invoke_arn
 }
 
-resource "aws_api_gateway_integration_response" "metrics_response" {
-  http_method = aws_api_gateway_method.create_method.http_method
-  resource_id = aws_api_gateway_resource.create_resource.id
-  rest_api_id = aws_api_gateway_rest_api.metrics.id
-  status_code = aws_api_gateway_method_response.response_200.status_code
-
-  response_templates = {
-    "application/json" = ""
-  }
-
-}
-
 resource "aws_api_gateway_deployment" "metrics" {
   rest_api_id = aws_api_gateway_rest_api.metrics.id
 
