@@ -9,7 +9,8 @@ resource "aws_dynamodb_table" "raw_metrics" {
     enabled        = true
   }
 
-  stream_enabled = true
+  stream_enabled   = true
+  stream_view_type = "NEW_IMAGE"
 
   server_side_encryption {
     enabled = true
