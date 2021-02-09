@@ -31,14 +31,14 @@ exports.handler = async (event, context) => {
                 N: ttl,
             },
             "raw": {
-                s: event.body,
+                S: event.body,
             },
         },
     }
 
     try {
 
-        const resp = await dynamodb.putItem(params)
+        const resp = await dynamodb.putItem(params).promise()
         transactionStatus.statusCode = 200;
         transactionStatus.body = JSON.stringify({ "status": "RECORD CREATED" });
     } catch (err) {
