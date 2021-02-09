@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "raw_metrics_put" {
 resource "aws_iam_policy" "raw_metrics_put" { 
   name = "CovidAlertRawMetricsPutItem"
   path = "/"
-  policy = data.aws_iam_policy_document.raw_metrics_put
+  policy = data.aws_iam_policy_document.raw_metrics_put.json
 }
 
 resource "aws_iam_role_policy_attachment" "raw_metrics_put" {
