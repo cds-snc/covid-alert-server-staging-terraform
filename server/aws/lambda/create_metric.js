@@ -19,8 +19,7 @@ exports.handler = async (event, context) => {
     };
 
     // expire after 24 hours
-    const ttl = (Date.now() + 86400000)
-    const body = JSON.parse(event.body)
+    const ttl = (Date.now() + 86400000).toString()
 
     const params = {
         TableName: process.env.TABLE_NAME,
@@ -32,7 +31,7 @@ exports.handler = async (event, context) => {
                 N: ttl,
             },
             "raw": {
-                M: body,
+                s: event.body,
             },
         },
     }
