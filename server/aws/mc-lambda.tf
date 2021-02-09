@@ -22,8 +22,7 @@ resource "aws_lambda_function" "metrics" {
 
   environment {
     variables = {
-      dataBucket = "${var.s3_raw_metrics_bucket_name}-${data.aws_caller_identity.current.account_id}"
-      fileLoca   = "metrics"
+      TABLE_NAME = module.in_app_metrics.raw_table_name
     }
   }
 
@@ -42,7 +41,7 @@ resource "aws_security_group" "lambda_sg" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    prefix_list_ids = [aws_vpc_endpoint.s3.prefix_list_id]
+    prefix_list_ids = [module.in_app_metrics.dynamodb_prefix_list_id]
   }
 }
 
