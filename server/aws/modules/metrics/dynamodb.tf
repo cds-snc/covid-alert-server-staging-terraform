@@ -21,9 +21,4 @@ resource "aws_dynamodb_table" "raw_metrics" {
     type = "S"
   }
 
-  attribute {
-    name = "expdate"
-    type = "N"
-  }
-
 }
