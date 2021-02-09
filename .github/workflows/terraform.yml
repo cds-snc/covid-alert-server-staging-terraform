@@ -100,6 +100,13 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+      - name: Print Check Success Results
+        run: | 
+          echo "success ${{ success() }}"
+          echo "failure ${{ failure() }}"
+          echo steps.fmt.outcome ${{ steps.fmt.exit_code }}
+          echo steps.plan.outcome ${{ steps.plan.exit_code }}
+
       - name: Check Success
         if:  ${{ ( success()  ||  failure() ) && ( steps.fmt.outputs.exit_code  == 1 || steps.plan.outputs.exit_code == 1 ) }}
         run: |
