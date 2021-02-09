@@ -2,7 +2,7 @@
 
 const
     AWS = require('aws-sdk'),
-    S3 = new AWS.S3(),
+    dynamodb = new AWS.DynamoDB(),
     crypto = require('crypto');
     
 const uuidv4 = () => {
@@ -11,39 +11,41 @@ const uuidv4 = () => {
     );
 }
 
-const todaysDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-}
-
 
 exports.handler = async (event, context) => {
 
-    const bucket = process.env.dataBucket;
-    const filePath = process.env.fileLoca;
-    const filename = uuidv4();
     const transactionStatus = {
         isBase64Encoded:  false
     };
 
+    // expire after 24 hours
+    const ttl = (Date.now() + 86400000)
     const body = JSON.parse(event.body)
 
-    const bucketParams = {
-        Bucket: `${bucket}/${filePath}/${todaysDate()}`,
-        Key: `${filename}.json`,
-        Body: JSON.stringify(body),
-        ServerSideEncryption: 'AES256'
-    };
+    const params = {
+        TableName: process.env.TABLE_NAME,
+        Item : {
+            "uuid": {
+                S: uuidv4(),
+            },
+            "expdate" : {
+                N: ttl,
+            },
+            "raw": {
+                M: body,
+            },
+        },
+    }
 
-    /* The puObject call forces a promise because the result returned may not be a promise.  */
     try {
-        const resp = await S3.putObject(bucketParams).promise();
+
+        const resp = await dynamodb.putItem(params)
         transactionStatus.statusCode = 200;
-        transactionStatus.body = JSON.stringify({ "status": "RECORD CREATED", "key": filename});
+        transactionStatus.body = JSON.stringify({ "status": "RECORD CREATED" });
     } catch (err) {
         console.log(err);
         transactionStatus.statusCode = 500;
-        transactionStatus.body= JSON.stringify({"status" : "UPLOAD FAILED"});
+        transactionStatus.body= JSON.stringify({ "status" : "UPLOAD FAILED" });
     }
 
     return transactionStatus;
