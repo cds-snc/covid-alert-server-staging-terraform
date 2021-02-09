@@ -10,6 +10,6 @@ variable "region" {
   type = string
 }
 
-variable "role_arn" {
+variable "role_name" {
   type = string
 }
