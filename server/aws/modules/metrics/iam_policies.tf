@@ -119,7 +119,8 @@ data "aws_iam_policy_document" "raw_metrics_stream_processor" {
       "dynamodb:DescribeStream",
       "dynamodb:GetRecords",
       "dynamodb:GetShardIterator",
-      "dynamodb:ListStreams"
+      "dynamodb:ListStreams",
+      "dyanmodb:ListShards"
     ]
     resources = [
       aws_dynamodb_table.raw_metrics.arn
