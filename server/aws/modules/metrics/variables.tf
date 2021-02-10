@@ -13,3 +13,11 @@ variable "region" {
 variable "role_name" {
   type = string
 }
+
+variable "lambda_function_runtime" {
+  type = string
+}
+
+variable "subnet_ids" {
+  type = set(string)
+}
