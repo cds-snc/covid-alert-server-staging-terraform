@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "raw_metrics_stream_processor" {
       "dyanmodb:ListShards"
     ]
     resources = [
-      aws_dynamodb_table.raw_metrics.arn
+      aws_dynamodb_table.raw_metrics.stream_arn
     ]
 
   }
