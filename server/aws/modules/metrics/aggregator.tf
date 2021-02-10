@@ -42,6 +42,6 @@ resource "aws_security_group" "aggregate_metrics_sg" {
 }
 
 resource "aws_cloudwatch_log_group" "metrics" {
-  name              = "/aws/lambda/aggregator"
+  name              = "/aws/lambda/${aws_lambda_function.function_name}"
   retention_in_days = 14
 }
