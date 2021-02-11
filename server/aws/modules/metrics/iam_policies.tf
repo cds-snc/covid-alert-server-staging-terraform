@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "aggregate_metrics_update" {
 }
 
 resource "aws_iam_policy" "aggregate_metrics_update" {
-  name   = "CovidAlertAggregateMetricsPutItem"
+  name   = "CovidAlertAggregateMetricsUpdateItem"
   path   = "/"
   policy = data.aws_iam_policy_document.aggregate_metrics_update.json
 }
