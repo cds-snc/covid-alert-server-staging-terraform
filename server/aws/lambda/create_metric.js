@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
     };
 
     // expire after 24 hours
-    const ttl = (Date.now() + 86400000).toString()
+    const ttl = (Math.floor(Date.now()/1000) + 86400).toString();
 
     const params = {
         TableName: process.env.TABLE_NAME,
@@ -34,11 +34,11 @@ exports.handler = async (event, context) => {
                 S: event.body,
             },
         },
-    }
+    };
 
     try {
 
-        const resp = await dynamodb.putItem(params).promise()
+        await dynamodb.putItem(params).promise();
         transactionStatus.statusCode = 200;
         transactionStatus.body = JSON.stringify({ "status": "RECORD CREATED" });
     } catch (err) {

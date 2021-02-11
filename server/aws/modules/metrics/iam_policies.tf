@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "aggregate_metrics_put" {
     effect = "Allow"
 
     actions = [
-      "dynamodb:PutItem"
+      "dynamodb:UpdateItem"
     ]
 
     resources = [
