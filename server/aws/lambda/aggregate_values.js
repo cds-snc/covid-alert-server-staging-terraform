@@ -3,6 +3,7 @@
 const AWS = require("aws-sdk");
 const documentClient = new AWS.DynamoDB.DocumentClient();
 const crypto = require("crypto")
+const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 function createHash(sk, appversion, appos, pl) {
     return crypto.createHash('md5')
@@ -99,6 +100,30 @@ function aggregateEvents(event){
     return aggregates;
 }
 
+function buildDeadLetterMsg(payload, err){
+    return {
+        DelaySeconds = 1,
+        MessageBody = JSON.stringify(payload),
+        QueueUrl = process.env.DEAD_LETTER_QUEUE_URL,
+        MessageAttributes = {
+            "ErrorMsg": {
+                DataType = "string",
+                StringValue = err
+            }
+        }
+    }
+
+}
+
+function sendToDeadLetterQueue(payload, err) {
+    try{
+        const msg = buildDeadLetterMsg(payload,err);
+        sqs.sendMessage(msg);
+    } catch (sqsErr){
+        console.log(`Error: ${sqsErr}, failed msg: ${msg}`);
+    }
+}
+
 exports.handler = async (event, context, callback) => {
 
     const aggregates = aggregateEvents(event);
@@ -109,7 +134,7 @@ exports.handler = async (event, context, callback) => {
             await documentClient.update(payload).promise();
         }catch(err){
             console.log(err);
-            //TODO: send to dead letter queue
+            sendToDeadLetterQueue(payload);
         }
     }
 };
