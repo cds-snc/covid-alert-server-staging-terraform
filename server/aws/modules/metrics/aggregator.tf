@@ -20,6 +20,11 @@ resource "aws_lambda_function" "aggregate_metrics" {
     subnet_ids         = var.subnet_ids
   }
 
+  environment {
+    variables = {
+      DEAD_LETTER_QUEUE_URL = aws_sqs_queue.aggregation_lambda_dead_letter.id
+    }
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "raw_metric_stream" {
