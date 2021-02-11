@@ -12,26 +12,34 @@ function createHash(sk, appversion, appos, pl) {
 
 function generatePayload(a) {
 
-    const updateCount = parseInt(a.count || 1,10);
+    const updateCount = parseInt(a.count || 1, 10);
 
     return {
         TableName: "aggregate_metrics",
         Key: {
             "pk" : a.pk,
-            "date" : a.date
+            "date" : a.date.getTime()
         },
         UpdateExpression: `
         SET #appversion = :appversion,
             #appos = :appos,
             #region = :region,
             #identifier = :identifier,
-            #count = #count + :count`,
+            #pushnotification = :pushnotification,
+            #frameworkenabled = :frameworkenabled,
+            #state = :state,
+            #hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt
+        ADD #count :count`,
         ExpressionAttributeNames: {
-            '#count' : 'count',
             "#appversion": 'appversion',
             "#appos": 'appos',
             "#region": 'region',
-            "#identifier": 'identifier'
+            "#identifier": 'identifier',
+            '#count' : 'count',
+            '#pushnotification': 'pushnotification',
+            '#frameworkenabled': 'frameworkenabled',
+            '#state': 'state',
+            '#hoursSinceExposureDetectedAt': 'hoursSinceExposureDetectedAt'
         },
         ExpressionAttributeValues: {
             ":appversion": a.appversion,
@@ -39,6 +47,10 @@ function generatePayload(a) {
             ":region": a.region,
             ":identifier": a.identifier,
             ":count": updateCount,
+            ':pushnotification': a.pushnotification || '',
+            ':frameworkenabled': a.frameworkenabled || '',
+            ':state': a.state || '',
+            ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || ''
         }
     };
 }
@@ -54,8 +66,6 @@ function aggregateEvents(event){
     const aggregates = {}; 
     event.Records.forEach((record) => {
 
-        console.log('Stream record: ', JSON.stringify(record, null, 2));
-
         if(record.eventName === 'INSERT') {
 
             const raw = JSON.parse(record.dynamodb.NewImage.raw.S);
@@ -67,17 +77,18 @@ function aggregateEvents(event){
 
                 if (pk in aggregates){
 
-                    aggregates[pk].count += pl.count;
+                    aggregates[pk].count = parseInt(aggregates[pk].count, 10) + parseInt(pl.count || 1,10);
 
                 } else {
 
-                    aggregates[pk] = {
+                    const aggregate =  {
                         ...pl,
-                        pk: raw.pk,
+                        pk: pk,
                         date: sk,
                         appos: raw.appos,
                         appversion: raw.appversion,
                     };
+                    aggregates[pk] =aggregate;
 
                 }
 
@@ -91,7 +102,6 @@ function aggregateEvents(event){
 exports.handler = async (event, context, callback) => {
 
     const aggregates = aggregateEvents(event);
-
     for (const aggregate in aggregates) {
 
         const payload = generatePayload(aggregates[aggregate]);
