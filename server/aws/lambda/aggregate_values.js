@@ -102,23 +102,25 @@ function aggregateEvents(event){
 
 function buildDeadLetterMsg(payload, err){
     return {
-        DelaySeconds = 1,
-        MessageBody = JSON.stringify(payload),
-        QueueUrl = process.env.DEAD_LETTER_QUEUE_URL,
-        MessageAttributes = {
+        DelaySeconds : 1,
+        MessageBody : JSON.stringify(payload),
+        QueueUrl : process.env.DEAD_LETTER_QUEUE_URL,
+       /* MessageAttributes = {
             "ErrorMsg": {
                 DataType = "string",
                 StringValue = err
             }
-        }
+        }*/
     }
-
 }
 
-function sendToDeadLetterQueue(payload, err) {
+async function sendToDeadLetterQueue(payload, err) {
+    let msg;
     try{
-        const msg = buildDeadLetterMsg(payload,err);
-        sqs.sendMessage(msg);
+       msg = buildDeadLetterMsg(payload,err);
+       console.log("preCall");
+       const resp =  await sqs.sendMessage(msg).promise();
+       console.log(resp)
     } catch (sqsErr){
         console.log(`Error: ${sqsErr}, failed msg: ${msg}`);
     }
@@ -131,10 +133,10 @@ exports.handler = async (event, context, callback) => {
 
         const payload = generatePayload(aggregates[aggregate]);
         try {
-            await documentClient.update(payload).promise();
+           await documentClient.update(payload).promise();
         }catch(err){
             console.log(err);
-            sendToDeadLetterQueue(payload);
+            await sendToDeadLetterQueue(payload)
         }
     }
-};
+}
