@@ -3,8 +3,4 @@ resource "aws_sqs_queue" "aggregation_lambda_dead_letter" {
   kms_master_key_id                 = aws_kms_key.metrics_key.arn
   kms_data_key_reuse_period_seconds = 86400
   message_retention_seconds         = 1209600
-
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
 }
