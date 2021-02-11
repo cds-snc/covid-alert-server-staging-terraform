@@ -4,7 +4,7 @@ const AWS = require("aws-sdk");
 const documentClient = new AWS.DynamoDB.DocumentClient();
 const crypto = require("crypto")
 
-function createHash(sk, appversion, appos, pl)
+function createHash(sk, appversion, appos, pl) {
     return crypto.createHash('md5')
         .update(`${sk}_${pl.region}_${appversion}_${appos}_${pl.identifier}`)
         .digest('hex');
