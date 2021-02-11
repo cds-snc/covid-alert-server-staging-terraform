@@ -3,6 +3,11 @@ resource "aws_iam_role" "aggregator" {
   assume_role_policy = data.aws_iam_policy_document.service_principal.json
 }
 
+resource "aws_iam_role_policy_attachment" "aggregator_update" {
+  role       = aws_iam_role.aggregator.name
+  policy_arn = aws_iam_policy.aggregate_metrics_update.arn
+}
+
 resource "aws_iam_role_policy_attachment" "aggregator_log_writer" {
   role       = aws_iam_role.aggregator.name
   policy_arn = aws_iam_policy.write_logs.arn

@@ -1,6 +1,6 @@
 # aggregator_metrics_put
 
-data "aws_iam_policy_document" "aggregate_metrics_put" {
+data "aws_iam_policy_document" "aggregate_metrics_update" {
   statement {
     effect = "Allow"
 
@@ -15,10 +15,10 @@ data "aws_iam_policy_document" "aggregate_metrics_put" {
 
 }
 
-resource "aws_iam_policy" "aggregate_metrics_put" {
+resource "aws_iam_policy" "aggregate_metrics_update" {
   name   = "CovidAlertAggregateMetricsPutItem"
   path   = "/"
-  policy = data.aws_iam_policy_document.aggregate_metrics_put.json
+  policy = data.aws_iam_policy_document.aggregate_metrics_update.json
 }
 
 # raw_metrics_put
