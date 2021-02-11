@@ -53,6 +53,18 @@ resource "aws_vpc_endpoint" "kms" {
   subnet_ids = aws_subnet.covidshield_private.*.id
 }
 
+resource "aws_vpc_endpoint" "sqs" {
+  vpc_id              = aws_vpc.covidshield.id
+  vpc_endpoint_type   = "Interface"
+  service_name        = "com.amazonaws.${var.region}.sqs"
+  private_dns_enabled = true
+  security_group_ids = [
+    aws_security_group.privatelink.id,
+  ]
+  subnet_ids = aws_subnet.covidshield_private.*.id
+}
+
+
 resource "aws_vpc_endpoint" "secretsmanager" {
   vpc_id              = aws_vpc.covidshield.id
   vpc_endpoint_type   = "Interface"
