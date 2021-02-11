@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "write_and_encrypt_deadletter_queue" {
 
     ]
     resources = [
-      aws_kms_key.cw.arn,
+      aws_kms_key.metrics_key.arn,
       aws_sqs_queue.aggregation_lambda_dead_letter.arn
     ]
 
