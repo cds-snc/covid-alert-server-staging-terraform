@@ -135,3 +135,30 @@ resource "aws_iam_policy" "raw_metrics_stream_processor" {
   path   = "/"
   policy = data.aws_iam_policy_document.raw_metrics_stream_processor.json
 }
+
+# Write an encrypt to SQS deadletter queue
+
+data "aws_iam_policy_document" "write_and_encrypt_deadletter_queue" {
+  statement {
+
+    effect = "Allow"
+    actions = [
+      "kms:GenerateDataKey",
+      "kms:Decrypt",
+      "sqs:SendMessage"
+
+    ]
+    resources = [
+      aws_kms_key.cw.arn,
+      aws_sqs_queue.aggregation_lambda_dead_letter.arn
+    ]
+
+  }
+
+}
+
+resource "aws_iam_policy" "write_and_encrypt_deadletter_queue" {
+  name   = "CovidAlertWriteAndEncryptDeadletterQueue"
+  path   = "/"
+  policy = data.aws_iam_policy_document.write_and_encrypt_deadletter_queue.json
+}
