@@ -22,3 +22,8 @@ resource "aws_iam_role_policy_attachment" "aggregator_raw_metrics_stream_process
   role       = aws_iam_role.aggregator.name
   policy_arn = aws_iam_policy.raw_metrics_stream_processor.arn
 }
+
+resource "aws_iam_role_policy_attachment" "aggregator_write_and_encrypt_deadletter_queue" {
+  role       = aws_iam_role.aggregator.name
+  policy_arn = aws_iam_policy.write_and_encrypt_deadletter_queue.arn
+}
