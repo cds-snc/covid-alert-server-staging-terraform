@@ -86,7 +86,7 @@ resource "aws_iam_policy" "write_logs" {
 # vpc_networking
 
 data "aws_iam_policy_document" "vpc_networking" {
-  statement { 
+  statement {
 
     effect = "Allow"
 
@@ -112,7 +112,7 @@ resource "aws_iam_policy" "vpc_networking" {
 # dynamodb_streams
 
 data "aws_iam_policy_document" "raw_metrics_stream_processor" {
-  statement { 
+  statement {
 
     effect = "Allow"
     actions = [

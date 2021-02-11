@@ -1,5 +1,5 @@
 resource "aws_iam_role" "aggregator" {
-  name = "aggregate_lambda_role"
+  name               = "aggregate_lambda_role"
   assume_role_policy = data.aws_iam_policy_document.service_principal.json
 }
 
@@ -18,7 +18,7 @@ resource "aws_iam_role_policy_attachment" "aggregator_vpc_networking" {
   policy_arn = aws_iam_policy.vpc_networking.arn
 }
 
-resource "aws_iam_role_policy_attachment" "aggregator_raw_metrics_stream_processor" { 
+resource "aws_iam_role_policy_attachment" "aggregator_raw_metrics_stream_processor" {
   role       = aws_iam_role.aggregator.name
   policy_arn = aws_iam_policy.raw_metrics_stream_processor.arn
 }
