@@ -13,7 +13,6 @@ function createHash(sk, appversion, appos, pl) {
 
 function generatePayload(a) {
 
-    const updateCount = readCount(a);
 
     return {
         TableName: "aggregate_metrics",
@@ -47,7 +46,7 @@ function generatePayload(a) {
             ":appos": a.appos,
             ":region": a.region,
             ":identifier": a.identifier,
-            ":count": updateCount,
+            ":count": a.count,
             ':pushnotification': a.pushnotification || '',
             ':frameworkenabled': a.frameworkenabled || '',
             ':state': a.state || '',
