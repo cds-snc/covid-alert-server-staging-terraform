@@ -13,7 +13,7 @@ function createHash(sk, appversion, appos, pl) {
 
 function generatePayload(a) {
 
-    const updateCount = parseInt(a.count || 1, 10);
+    const updateCount = readCount(a);
 
     return {
         TableName: "aggregate_metrics",
@@ -75,21 +75,22 @@ function aggregateEvents(event){
                 const sk = pinDate(pl.timestamp);
                 const pk = createHash(sk, raw.appversion, raw.appos, pl);
 
+                // Count should be 1 if not there
+                pl.count = parseInt(pl.count || 1, 10);
 
                 if (pk in aggregates){
 
-                    aggregates[pk].count = parseInt(aggregates[pk].count, 10) + parseInt(pl.count || 1,10);
+                    aggregates[pk].count = aggregates[pk].count + pl.count;
 
                 } else {
 
-                    const aggregate =  {
+                    aggregates[pk] = {
                         ...pl,
                         pk: pk,
                         date: sk,
                         appos: raw.appos,
                         appversion: raw.appversion,
                     };
-                    aggregates[pk] =aggregate;
 
                 }
 
@@ -102,20 +103,24 @@ function aggregateEvents(event){
 
 function buildDeadLetterMsg(payload, err){
     return {
-        DelaySeconds = 1,
-        MessageBody = JSON.stringify(payload),
-        QueueUrl = process.env.DEAD_LETTER_QUEUE_URL,
-        MessageAttributes = {
-            "ErrorMsg": {
-                DataType = "string",
-                StringValue = err
+        DelaySeconds : 1,
+        MessageBody : JSON.stringify(payload),
+        QueueUrl : process.env.DEAD_LETTER_QUEUE_URL,
+        MessageAttributes : {
+            ErrorMsg: {
+                DataType : "String",
+                StringValue : err
+            },
+            DelaySeconds: { 
+                DataType : "Number",
+                StringValue : 1 
             }
         }
     }
 
 }
 
-function sendToDeadLetterQueue(payload, err) {
+function await sendToDeadLetterQueue(payload, err) {
     try{
         const msg = buildDeadLetterMsg(payload,err);
         sqs.sendMessage(msg);
