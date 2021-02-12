@@ -1,4 +1,4 @@
-data "archive_file" "lambda_aggregate_metric" {
+data "archive_file" "lambda_backoff_retry" {
   type        = "zip"
   source_file = "lambda/backoff_retry.js"
   output_path = "/tmp/lambda_backoff_retry.js.zip"
@@ -15,7 +15,7 @@ resource "aws_lambda_function" "backoff_retry" {
   role    = aws_iam_role.aggregator.arn
 
   vpc_config {
-    security_group_ids = [aws_security_group.backoff_retry.id]
+    security_group_ids = [aws_security_group.backoff_retry_sg.id]
     subnet_ids         = var.subnet_ids
   }
 
@@ -59,7 +59,7 @@ resource "aws_security_group_rule" "privatelink_metrics_backoff_egress" {
   from_port                = 443
   to_port                  = 443
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.backoff_aggregator_sg.id
+  security_group_id        = aws_security_group.backoff_retry_sg.id
   source_security_group_id = var.privatelink_sg
 }
 
