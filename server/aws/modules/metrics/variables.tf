@@ -21,3 +21,7 @@ variable "lambda_function_runtime" {
 variable "subnet_ids" {
   type = set(string)
 }
+
+variable "privatelink_sg" {
+  type = string
+}

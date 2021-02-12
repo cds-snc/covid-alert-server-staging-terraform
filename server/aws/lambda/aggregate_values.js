@@ -117,29 +117,38 @@ function buildDeadLetterMsg(payload, err){
             }
         }
     }
-
 }
 
-function await sendToDeadLetterQueue(payload, err) {
+async function sendToDeadLetterQueue(payload, err) {
+    let msg;
     try{
-        const msg = buildDeadLetterMsg(payload,err);
-        sqs.sendMessage(msg);
+
+        msg = buildDeadLetterMsg(payload,err);
+        await sqs.sendMessage(msg).promise();
+
     } catch (sqsErr){
+
         console.log(`Error: ${sqsErr}, failed msg: ${msg}`);
+
     }
 }
 
 exports.handler = async (event, context, callback) => {
 
     const aggregates = aggregateEvents(event);
+
     for (const aggregate in aggregates) {
 
         const payload = generatePayload(aggregates[aggregate]);
         try {
+
             await documentClient.update(payload).promise();
+
         }catch(err){
+
             console.log(err);
-            sendToDeadLetterQueue(payload);
+            await sendToDeadLetterQueue(payload)
+
         }
     }
-};
+}

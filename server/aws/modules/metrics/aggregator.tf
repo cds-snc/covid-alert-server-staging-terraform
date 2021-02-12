@@ -46,6 +46,26 @@ resource "aws_security_group" "aggregate_metrics_sg" {
   }
 }
 
+resource "aws_security_group_rule" "privatelink_metrics_aggregator" {
+  description              = "Security group rule for metricsRetrieval ingress"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = var.privatelink_sg
+  source_security_group_id = aws_security_group.aggregate_metrics_sg.id
+}
+
+resource "aws_security_group_rule" "privatelink_metrics_aggregator_egress" {
+  description              = "Security group rule for metricsRetrieval egress"
+  type                     = "egress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.aggregate_metrics_sg.id
+  source_security_group_id = var.privatelink_sg
+}
+
 resource "aws_cloudwatch_log_group" "metrics" {
   name              = "/aws/lambda/${aws_lambda_function.aggregate_metrics.function_name}"
   retention_in_days = 14

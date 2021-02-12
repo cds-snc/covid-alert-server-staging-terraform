@@ -6,4 +6,5 @@ module "in_app_metrics" {
   role_name               = aws_iam_role.role.name
   lambda_function_runtime = var.lambda-function-runtime
   subnet_ids              = aws_subnet.covidshield_private.*.id
+  privatelink_sg          = aws_security_group.privatelink.id
 }
