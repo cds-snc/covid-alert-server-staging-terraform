@@ -174,7 +174,8 @@ data "aws_iam_policy_document" "read_write_and_encrypt_deadletter_queue" {
       "kms:Decrypt",
       "sqs:SendMessage",
       "sqs:ReceiveMessage",
-      "sqs:DeleteMessage"
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes"
 
     ]
     resources = [
