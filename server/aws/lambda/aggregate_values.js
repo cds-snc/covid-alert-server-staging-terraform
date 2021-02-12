@@ -13,7 +13,7 @@ function createHash(sk, appversion, appos, pl) {
 
 function generatePayload(a) {
 
-    const updateCount = parseInt(a.count || 1, 10);
+    const updateCount = readCount(a);
 
     return {
         TableName: "aggregate_metrics",
@@ -75,21 +75,22 @@ function aggregateEvents(event){
                 const sk = pinDate(pl.timestamp);
                 const pk = createHash(sk, raw.appversion, raw.appos, pl);
 
+                // Count should be 1 if not there
+                pl.count = parseInt(pl.count || 1, 10);
 
                 if (pk in aggregates){
 
-                    aggregates[pk].count = parseInt(aggregates[pk].count, 10) + parseInt(pl.count || 1,10);
+                    aggregates[pk].count = aggregates[pk].count + pl.count;
 
                 } else {
 
-                    const aggregate =  {
+                    aggregates[pk] = {
                         ...pl,
                         pk: pk,
                         date: sk,
                         appos: raw.appos,
                         appversion: raw.appversion,
                     };
-                    aggregates[pk] =aggregate;
 
                 }
 
@@ -105,38 +106,49 @@ function buildDeadLetterMsg(payload, err){
         DelaySeconds : 1,
         MessageBody : JSON.stringify(payload),
         QueueUrl : process.env.DEAD_LETTER_QUEUE_URL,
-       /* MessageAttributes = {
-            "ErrorMsg": {
-                DataType = "string",
-                StringValue = err
+        MessageAttributes : {
+            ErrorMsg: {
+                DataType : "String",
+                StringValue : err
+            },
+            DelaySeconds: { 
+                DataType : "Number",
+                StringValue : 1 
             }
-        }*/
+        }
     }
 }
 
 async function sendToDeadLetterQueue(payload, err) {
     let msg;
     try{
-       msg = buildDeadLetterMsg(payload,err);
-       console.log("preCall");
-       const resp =  await sqs.sendMessage(msg).promise();
-       console.log(resp)
+
+        msg = buildDeadLetterMsg(payload,err);
+        await sqs.sendMessage(msg).promise();
+
     } catch (sqsErr){
+
         console.log(`Error: ${sqsErr}, failed msg: ${msg}`);
+
     }
 }
 
 exports.handler = async (event, context, callback) => {
 
     const aggregates = aggregateEvents(event);
+
     for (const aggregate in aggregates) {
 
         const payload = generatePayload(aggregates[aggregate]);
         try {
-           await documentClient.update(payload).promise();
+
+            await documentClient.update(payload).promise();
+
         }catch(err){
+
             console.log(err);
             await sendToDeadLetterQueue(payload)
+
         }
     }
 }
