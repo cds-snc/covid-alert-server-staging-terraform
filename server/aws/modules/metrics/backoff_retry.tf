@@ -12,7 +12,7 @@ resource "aws_lambda_function" "backoff_retry" {
 
   handler = "backoff_retry.handler"
   runtime = var.lambda_function_runtime
-  role    = aws_iam_role.aggregator.arn
+  role    = aws_iam_role.backoff.arn
 
   vpc_config {
     security_group_ids = [aws_security_group.backoff_retry_sg.id]
