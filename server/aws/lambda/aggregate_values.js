@@ -5,7 +5,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient();
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 function createSK(date, appversion, appos, pl) {
-    return `${pl.region}#${pl.identifier}#${date.toISOString().split('T')[0]}#${appos}#${appversion}`
+    return `${pl.region}#${pl.identifier}#${date}#${appos}#${appversion}`
 }
 
 function generatePayload(a) {
@@ -57,7 +57,7 @@ function pinDate(timestamp) {
     let d = new Date();
     d.setTime(timestamp);
     d.setHours(0,0,0,0);
-    return d;
+    return d.toISOString().split('T')[0];
 }
 
 function aggregateEvents(event){
@@ -79,7 +79,7 @@ function aggregateEvents(event){
                     aggregates[pk].count = aggregates[pk].count + pl.count;
 
                 } else {
-                    const date = pinDate(pl.timestamp)
+                    const date = pinDate(pl.timestamp);
                     aggregates[pk] = {
                         ...pl,
                         pk: pl.region,
