@@ -82,7 +82,7 @@ function aggregateEvents(event){
                     aggregates[pk] = {
                         ...pl,
                         pk: pl.region,
-                        sk: createhash(raw.appversion, raw.appos, pl),
+                        sk: createSK(raw.appversion, raw.appos, pl),
                         date: pinDate(pl.timestamp),
                         appos: raw.appos,
                         appversion: raw.appversion,
