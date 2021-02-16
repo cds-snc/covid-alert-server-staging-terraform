@@ -192,6 +192,10 @@ resource "aws_route_table_association" "covidshield" {
 # AWS Security Groups
 ###
 
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.covidshield.id
+}
+
 resource "aws_security_group" "covidshield_key_retrieval" {
   name        = "covidshield-key-retrieval"
   description = "Ingress - CovidShield Key Retrieval App"
