@@ -2,23 +2,18 @@
 
 const AWS = require("aws-sdk");
 const documentClient = new AWS.DynamoDB.DocumentClient();
-const crypto = require("crypto")
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
-function createHash(sk, appversion, appos, pl) {
-    return crypto.createHash('md5')
-        .update(`${sk}_${pl.region}_${appversion}_${appos}_${pl.identifier}`)
-        .digest('hex');
+function createSK(appversion, appos, pl) {
+    return `${pl.region}#${pl.identifier}#${pl.date}#${appos}#${appversion}`
 }
 
 function generatePayload(a) {
-
-
     return {
         TableName: "aggregate_metrics",
         Key: {
             "pk" : a.pk,
-            "date" : a.date.getTime()
+            "sk" : a.sk
         },
         UpdateExpression: `
         SET #appversion = :appversion,
@@ -39,7 +34,8 @@ function generatePayload(a) {
             '#pushnotification': 'pushnotification',
             '#frameworkenabled': 'frameworkenabled',
             '#state': 'state',
-            '#hoursSinceExposureDetectedAt': 'hoursSinceExposureDetectedAt'
+            '#hoursSinceExposureDetectedAt': 'hoursSinceExposureDetectedAt',
+            '#date': 'date'
         },
         ExpressionAttributeValues: {
             ":appversion": a.appversion,
@@ -50,7 +46,8 @@ function generatePayload(a) {
             ':pushnotification': a.pushnotification || '',
             ':frameworkenabled': a.frameworkenabled || '',
             ':state': a.state || '',
-            ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || ''
+            ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || '',
+            ':date': a.date
         }
     };
 }
@@ -70,9 +67,8 @@ function aggregateEvents(event){
 
             const raw = JSON.parse(record.dynamodb.NewImage.raw.S);
             raw.payload.forEach((pl) => {
-
-                const sk = pinDate(pl.timestamp);
-                const pk = createHash(sk, raw.appversion, raw.appos, pl);
+                
+                const pk = pl.region;
 
                 // Count should be 1 if not there
                 pl.count = parseInt(pl.count || 1, 10);
@@ -85,8 +81,9 @@ function aggregateEvents(event){
 
                     aggregates[pk] = {
                         ...pl,
-                        pk: pk,
-                        date: sk,
+                        pk: pl.region,
+                        sk: createhash(raw.appversion, raw.appos, pl),
+                        date: pinDate(pl.timestamp),
                         appos: raw.appos,
                         appversion: raw.appversion,
                     };
