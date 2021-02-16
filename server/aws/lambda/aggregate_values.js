@@ -4,8 +4,8 @@ const AWS = require("aws-sdk");
 const documentClient = new AWS.DynamoDB.DocumentClient();
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
-function createSK(appversion, appos, pl) {
-    return `${pl.region}#${pl.identifier}#${pl.date}#${appos}#${appversion}`
+function createSK(date, appversion, appos, pl) {
+    return `${pl.region}#${pl.identifier}#${date.toISOString().split('T')[0]}#${appos}#${appversion}`
 }
 
 function generatePayload(a) {
@@ -23,7 +23,8 @@ function generatePayload(a) {
             #pushnotification = :pushnotification,
             #frameworkenabled = :frameworkenabled,
             #state = :state,
-            #hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt
+            #hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
+            #date = :date
         ADD #count :count`,
         ExpressionAttributeNames: {
             "#appversion": 'appversion',
@@ -78,12 +79,12 @@ function aggregateEvents(event){
                     aggregates[pk].count = aggregates[pk].count + pl.count;
 
                 } else {
-
+                    const date = pinDate(pl.timestamp)
                     aggregates[pk] = {
                         ...pl,
                         pk: pl.region,
-                        sk: createSK(raw.appversion, raw.appos, pl),
-                        date: pinDate(pl.timestamp),
+                        sk: createSK(date, raw.appversion, raw.appos, pl),
+                        date: date,
                         appos: raw.appos,
                         appversion: raw.appversion,
                     };
