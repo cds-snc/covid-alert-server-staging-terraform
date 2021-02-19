@@ -37,7 +37,7 @@ async function sendToDeadLetterQueue(payload, record,  err) {
       const msg = buildDeadLetterMsg(payload, record, err);
       await sqs.sendMessage(msg);
   } catch (sqsErr){
-      console.log(`Error: ${sqsErr}, failed msg: ${msg}`);
+      console.error(`Failed sending to dead letter queue: ${sqsErr}, failed msg: ${msg}`);
   }
 }
 
@@ -49,7 +49,7 @@ exports.handler = async function(event, context) {
     try {
         await documentClient.update(payload).promise();
     }catch(err){
-        console.log(err);
+        console.error(`Sending to dead letter queue ${err}`);
         await sendToDeadLetterQueue(payload, record, err);
     }
   });

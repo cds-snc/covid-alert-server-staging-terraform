@@ -125,7 +125,7 @@ async function sendToDeadLetterQueue(payload, err) {
 
     } catch (sqsErr){
 
-        console.log(`Error: ${sqsErr}, failed msg: ${msg}`);
+        console.error(`Failed sending to Dead Letter Queue: ${sqsErr}, failed msg: ${msg}`);
 
     }
 }
@@ -143,7 +143,7 @@ exports.handler = async (event, context, callback) => {
 
         }catch(err){
 
-            console.log(err);
+            console.error(`Failed updating sending to Dead Letter Queue ${err}`);
             await sendToDeadLetterQueue(payload)
 
         }
