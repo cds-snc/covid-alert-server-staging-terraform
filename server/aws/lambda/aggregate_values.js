@@ -3,9 +3,14 @@
 const AWS = require("aws-sdk");
 const documentClient = new AWS.DynamoDB.DocumentClient();
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+const METRIC_VERSION = 2;
+
+function p(val) { 
+    return val || '*';
+}
 
 function createSK(date, appversion, appos, pl) {
-    return `${pl.region}#${pl.identifier}#${date}#${appos}#${appversion}`
+    return `${pl.region}#${pl.identifier}#${date}#${appos}#${appversion}#${p(pl.pushnotification)}#${p(pl.frameworkenabled)}#${p(pl.state)}#${p(pl.hoursSinceExposureDetectedAt)}#${p(pl.count)}`;
 }
 
 function generatePayload(a) {
@@ -16,39 +21,37 @@ function generatePayload(a) {
             "sk" : a.sk
         },
         UpdateExpression: `
-        SET #appversion = :appversion,
-            #appos = :appos,
+        SET appversion = :appversion,
+            appos = :appos,
             #region = :region,
-            #identifier = :identifier,
-            #pushnotification = :pushnotification,
-            #frameworkenabled = :frameworkenabled,
+            identifier = :identifier,
+            version = :version,
+            #count = :count,
+            pushnotification = :pushnotification,
+            frameworkenabled = :frameworkenabled,
             #state = :state,
-            #hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
+            hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt, 
             #date = :date
-        ADD #count :count`,
-        ExpressionAttributeNames: {
-            "#appversion": 'appversion',
-            "#appos": 'appos',
-            "#region": 'region',
-            "#identifier": 'identifier',
-            '#count' : 'count',
-            '#pushnotification': 'pushnotification',
-            '#frameworkenabled': 'frameworkenabled',
-            '#state': 'state',
-            '#hoursSinceExposureDetectedAt': 'hoursSinceExposureDetectedAt',
-            '#date': 'date'
-        },
+        ADD metricCount :metricCount`,
         ExpressionAttributeValues: {
-            ":appversion": a.appversion,
-            ":appos": a.appos,
-            ":region": a.region,
-            ":identifier": a.identifier,
-            ":count": a.count,
+            ':metricCount' : a.metricCount,
+            ':appversion' : a.appversion,
+            ':appos': a.appos,
+            ':region': a.region,
+            ':identifier': a.identifier,
+            ':version': METRIC_VERSION,
+            ':count': a.count || '',
             ':pushnotification': a.pushnotification || '',
             ':frameworkenabled': a.frameworkenabled || '',
             ':state': a.state || '',
             ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || '',
-            ':date': a.date
+            ':date' : a.date || '',
+        },
+        ExpressionAttributeNames: {
+            '#region': 'region',
+            '#count': 'count',
+            '#state': 'state',
+            '#date': 'date',
         }
     };
 }
@@ -65,28 +68,24 @@ function aggregateEvents(event){
     event.Records.forEach((record) => {
 
         if(record.eventName === 'INSERT') {
-
             const raw = JSON.parse(record.dynamodb.NewImage.raw.S);
             raw.payload.forEach((pl) => {
-                
-                const pk = pl.region;
+                const date = pinDate(pl.timestamp);
+                const sk = createSK(date, raw.appversion, raw.appos, pl);
 
-                // Count should be 1 if not there
-                pl.count = parseInt(pl.count || 1, 10);
-
-                if (pk in aggregates){
-
-                    aggregates[pk].count = aggregates[pk].count + pl.count;
+                if (sk in aggregates){
+                    aggregates[sk].metricCount = aggregates[sk].metricCount + 1;
 
                 } else {
-                    const date = pinDate(pl.timestamp);
-                    aggregates[pk] = {
+
+                    aggregates[sk] = {
                         ...pl,
                         pk: pl.region,
                         sk: createSK(date, raw.appversion, raw.appos, pl),
                         date: date,
                         appos: raw.appos,
                         appversion: raw.appversion,
+                        metricCount: 1
                     };
 
                 }
@@ -110,32 +109,27 @@ function buildDeadLetterMsg(payload, err){
             },
             DelaySeconds: { 
                 DataType : "Number",
-                StringValue : 1 
+                StringValue : "1"
             }
         }
-    }
+    };
 }
 
 async function sendToDeadLetterQueue(payload, err) {
     let msg;
+    
     try{
-
         msg = buildDeadLetterMsg(payload,err);
         await sqs.sendMessage(msg).promise();
-
     } catch (sqsErr){
-
         console.error(`Failed sending to Dead Letter Queue: ${sqsErr}, failed msg: ${msg}`);
-
     }
 }
 
 exports.handler = async (event, context, callback) => {
-
     const aggregates = aggregateEvents(event);
 
     for (const aggregate in aggregates) {
-
         const payload = generatePayload(aggregates[aggregate]);
         try {
 
@@ -144,8 +138,8 @@ exports.handler = async (event, context, callback) => {
         }catch(err){
 
             console.error(`Failed updating sending to Dead Letter Queue ${err}`);
-            await sendToDeadLetterQueue(payload)
+            await sendToDeadLetterQueue(payload);
 
         }
     }
-}
+};
