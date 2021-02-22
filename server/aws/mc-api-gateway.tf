@@ -123,6 +123,9 @@ resource "aws_api_gateway_stage" "metrics" {
   rest_api_id          = aws_api_gateway_rest_api.metrics.id
   stage_name           = var.environment
   xray_tracing_enabled = true
+
+  # TODO: implement an access log temp ignore
+  # tfsec:ignore:AWS061
 }
 
 resource "aws_api_gateway_usage_plan" "metrics_usage_plan" {
