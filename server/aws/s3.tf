@@ -117,7 +117,6 @@ resource "aws_s3_bucket" "firehose_waf_logs" {
 ###
 resource "aws_s3_bucket" "cloudfront_logs" {
   bucket = "covid-shield-${var.environment}-cloudfront-logs"
-  acl    = "private"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -131,6 +130,14 @@ resource "aws_s3_bucket" "cloudfront_logs" {
     expiration {
       days = 90
     }
+  }
+
+  # awslogsdelivery account needs full control for cloudfront logging
+  # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html
+  grant {
+    id          = "c4c1ede66af53448b93c283ce9448c4ba468c9432aa01d700d3878632f77d2d0"
+    type        = "CanonicalUser"
+    permissions = ["FULL_CONTROL"]
   }
 
   logging {
