@@ -117,7 +117,6 @@ resource "aws_s3_bucket" "firehose_waf_logs" {
 ###
 resource "aws_s3_bucket" "cloudfront_logs" {
   bucket = "covid-shield-${var.environment}-cloudfront-logs"
-  acl    = "private"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
