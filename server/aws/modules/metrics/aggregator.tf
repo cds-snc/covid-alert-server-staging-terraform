@@ -49,7 +49,7 @@ resource "aws_security_group" "aggregate_metrics_sg" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    prefix_list_ids = [var.privatelink_sg]
+    security_groups = [var.privatelink_sg]
   }
 }
 
