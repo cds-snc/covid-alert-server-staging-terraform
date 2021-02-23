@@ -1,7 +1,15 @@
 'use strict';
 
 const AWS = require("aws-sdk");
-const documentClient = new AWS.DynamoDB.DocumentClient();
+const https = require('https');
+const agent = new https.Agent({
+  keepAlive: true
+});
+const documentClient = new AWS.DynamoDB.DocumentClient({
+  httpOptions: {
+    agent
+  }
+});
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 function calculateDelay(n){ 
@@ -33,24 +41,26 @@ function buildDeadLetterMsg(payload, record, err){
 }
 
 async function sendToDeadLetterQueue(payload, record,  err) {
-  try{
-      const msg = buildDeadLetterMsg(payload, record, err);
-      await sqs.sendMessage(msg);
-  } catch (sqsErr){
+  const msg = buildDeadLetterMsg(payload, record, err);
+  sqs.sendMessage(msg, (sqsErr, data) => {
+    if (sqsErr){
       console.error(`Failed sending to dead letter queue: ${sqsErr}, failed msg: ${msg}`);
-  }
+    }
+  });
+
 }
 
 exports.handler = async function(event, context) {
   event.Records.forEach(record => {
-  //read from dead letter queue
+    //read from dead letter queue
     const payload = JSON.parse(record.body);
 
-    try {
-        await documentClient.update(payload).promise();
-    }catch(err){
+    documentClient.update(payload, (err, data) => {
+      if (err) {
         console.error(`Sending to dead letter queue ${err}`);
         await sendToDeadLetterQueue(payload, record, err);
-    }
+      }
+    });
+
   });
 }

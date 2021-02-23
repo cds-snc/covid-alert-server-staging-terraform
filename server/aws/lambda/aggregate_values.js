@@ -6,13 +6,13 @@ const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 const METRIC_VERSION = 2;
 const https = require('https');
 const agent = new https.Agent({
-  keepAlive: true
+    keepAlive: true
 });
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
-  httpOptions: {
-    agent
-  }
+    httpOptions: {
+        agent
+    }
 });
 
 
