@@ -133,6 +133,14 @@ resource "aws_s3_bucket" "cloudfront_logs" {
     }
   }
 
+  # awslogsdelivery account needs full control for cloudfront logging
+  # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html
+  grant {
+    id          = "c4c1ede66af53448b93c283ce9448c4ba468c9432aa01d700d3878632f77d2d0"
+    type        = "CanonicalUser"
+    permissions = ["FULL_CONTROL"]
+  }
+
   logging {
     target_bucket = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
     target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-staging-cloudfront-logs/"
