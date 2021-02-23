@@ -41,6 +41,13 @@ resource "aws_security_group" "backoff_retry_sg" {
     protocol        = "tcp"
     prefix_list_ids = [aws_vpc_endpoint.dynamodb.prefix_list_id]
   }
+
+  egress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    prefix_list_ids = [var.privatelink_sg]
+  }
 }
 
 resource "aws_security_group_rule" "privatelink_metrics_backoff_ingress" {
@@ -51,16 +58,6 @@ resource "aws_security_group_rule" "privatelink_metrics_backoff_ingress" {
   protocol                 = "tcp"
   security_group_id        = var.privatelink_sg
   source_security_group_id = aws_security_group.backoff_retry_sg.id
-}
-
-resource "aws_security_group_rule" "privatelink_metrics_backoff_egress" {
-  description              = "Security group rule for metricsRetrieval egress"
-  type                     = "egress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.backoff_retry_sg.id
-  source_security_group_id = var.privatelink_sg
 }
 
 resource "aws_cloudwatch_log_group" "backoff_log_group" {
