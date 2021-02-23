@@ -42,7 +42,7 @@ function generatePayload(a) {
             frameworkenabled = :frameworkenabled,
             #state = :state,
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt, 
-            #date = :date
+            #date = :date,
             metricCount = if_not_exists(metricCount, :start) + :metricCount`,
         ExpressionAttributeValues: {
             ':metricCount' : a.metricCount,
