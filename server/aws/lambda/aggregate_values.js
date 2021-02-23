@@ -1,9 +1,20 @@
 'use strict';
 
 const AWS = require("aws-sdk");
-const documentClient = new AWS.DynamoDB.DocumentClient();
+
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 const METRIC_VERSION = 2;
+const https = require('https');
+const agent = new https.Agent({
+    keepAlive: true
+});
+
+const documentClient = new AWS.DynamoDB.DocumentClient({
+    httpOptions: {
+        agent
+    }
+});
+
 
 function p(val) { 
     return val || '*';
@@ -32,7 +43,7 @@ function generatePayload(a) {
             #state = :state,
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt, 
             #date = :date
-        ADD metricCount :metricCount`,
+            metricCount = if_not_exists(metricCount, :start) + :metricCount`,
         ExpressionAttributeValues: {
             ':metricCount' : a.metricCount,
             ':appversion' : a.appversion,
@@ -46,6 +57,7 @@ function generatePayload(a) {
             ':state': a.state || '',
             ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || '',
             ':date' : a.date || '',
+            ':start': 0,
         },
         ExpressionAttributeNames: {
             '#region': 'region',
@@ -115,31 +127,25 @@ function buildDeadLetterMsg(payload, err){
     };
 }
 
-async function sendToDeadLetterQueue(payload, err) {
-    let msg;
-    
-    try{
-        msg = buildDeadLetterMsg(payload,err);
-        await sqs.sendMessage(msg).promise();
-    } catch (sqsErr){
-        console.error(`Failed sending to Dead Letter Queue: ${sqsErr}, failed msg: ${msg}`);
-    }
+function sendToDeadLetterQueue(payload, err) {
+    const msg = buildDeadLetterMsg(payload, err);
+    sqs.sendMessage(msg, (sqsErr, data) => {
+        if (sqsErr) { 
+            console.error(`Failed sending to Dead Letter Queue: ${sqsErr}, failed msg: ${msg}`);
+        }
+    });
 }
 
-exports.handler = async (event, context, callback) => {
+exports.handler =  (event, context, callback) => {
     const aggregates = aggregateEvents(event);
-
     for (const aggregate in aggregates) {
         const payload = generatePayload(aggregates[aggregate]);
-        try {
-
-            await documentClient.update(payload).promise();
-
-        }catch(err){
-
-            console.error(`Failed updating sending to Dead Letter Queue ${err}`);
-            await sendToDeadLetterQueue(payload);
-
-        }
+        documentClient.update(payload, (err, data) => { 
+            if (err){ 
+                console.error(`Failed updating sending to Dead Letter Queue ${err}`);
+                sendToDeadLetterQueue(payload, err);
+            }
+        });
     }
+    callback(null, "Aggregator is complete");
 };

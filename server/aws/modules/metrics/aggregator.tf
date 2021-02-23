@@ -14,6 +14,7 @@ resource "aws_lambda_function" "aggregate_metrics" {
   handler = "aggregate_values.handler"
   runtime = var.lambda_function_runtime
   role    = aws_iam_role.aggregator.arn
+  timeout = 60
 
   vpc_config {
     security_group_ids = [aws_security_group.aggregate_metrics_sg.id]
