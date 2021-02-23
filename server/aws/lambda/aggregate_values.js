@@ -43,7 +43,7 @@ function generatePayload(a) {
             #state = :state,
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt, 
             #date = :date
-        ADD metricCount :metricCount`,
+            metricCount = if_not_exists(metricCount, :start) + :metricCount`,
         ExpressionAttributeValues: {
             ':metricCount' : a.metricCount,
             ':appversion' : a.appversion,
@@ -57,6 +57,7 @@ function generatePayload(a) {
             ':state': a.state || '',
             ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || '',
             ':date' : a.date || '',
+            ':start': 0,
         },
         ExpressionAttributeNames: {
             '#region': 'region',
