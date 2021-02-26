@@ -25,3 +25,27 @@ variable "subnet_ids" {
 variable "privatelink_sg" {
   type = string
 }
+
+variable "warn_topic" {
+  type = string
+}
+
+variable "critical_topic" {
+  type = string
+}
+
+variable "raw_metrics_dynamodb_wcu_max" {
+  type = string
+}
+
+variable "aggregate_metrics_dynamodb_wcu_max" {
+  type = string
+}
+
+variable "aggregate_metrics_max_avg_duration" {
+  type = string
+}
+
+variable "backoff_retry_max_avg_duration" {
+  type = string
+}

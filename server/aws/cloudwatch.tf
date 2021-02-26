@@ -518,3 +518,97 @@ resource "aws_cloudwatch_metric_alarm" "route53_submission_health_check" {
     HealthCheckId = aws_route53_health_check.covidshield_key_submission_healthcheck.id
   }
 }
+
+###
+# AWS API Gateway
+###
+
+resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_errors_above_threshold" {
+  alarm_name          = "metrics-api-gateway-errors-above-threshold"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "5XXError"
+  namespace           = "AWS/ApiGateway"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = var.api_gateway_error_threshold
+  alarm_description   = "This metric monitors 500 errors in the metrics API gateway"
+
+  alarm_actions = [aws_sns_topic.alert_critical.arn]
+  dimensions = {
+    ApiName = aws_api_gateway_rest_api.metrics.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_min_invocations_threshold" {
+  alarm_name          = "metrics-api-gateway-below-minimum-invocations"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Count"
+  namespace           = "AWS/ApiGateway"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = var.api_gateway_min_invocations
+  alarm_description   = "This metric monitors minimum API gateway invocations for the metrics API gateway"
+
+  alarm_actions = [aws_sns_topic.alert_critical.arn]
+  dimensions = {
+    ApiName = aws_api_gateway_rest_api.metrics.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_max_invocations_threshold" {
+  alarm_name          = "metrics-api-gateway-above-maximum-invocations"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Count"
+  namespace           = "AWS/ApiGateway"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = var.api_gateway_max_invocations
+  alarm_description   = "This metric monitors maximum API gateway invocations for the metrics API gateway"
+
+  alarm_actions = [aws_sns_topic.alert_critical.arn]
+  dimensions = {
+    ApiName = aws_api_gateway_rest_api.metrics.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_max_latency_threshold" {
+  alarm_name          = "metrics-api-gateway-above-maximum-latency"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Count"
+  namespace           = "AWS/ApiGateway"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = var.api_gateway_max_latency
+  alarm_description   = "This metric monitors maximum API gateway latency for the metrics API gateway"
+
+  alarm_actions = [aws_sns_topic.alert_critical.arn]
+  dimensions = {
+    ApiName = aws_api_gateway_rest_api.metrics.name
+  }
+}
+
+
+###
+# AWS Lambda
+###
+
+resource "aws_cloudwatch_metric_alarm" "save_metrics_average_duration" {
+  alarm_name          = "save-metrics-average-duration"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Duration"
+  namespace           = "AWS/Lambda"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = var.save_metrics_max_avg_duration
+  alarm_description   = "This metric monitors average duration for the save_metrics lambda"
+
+  alarm_actions = [aws_sns_topic.alert_critical.arn]
+  dimensions = {
+    FunctionName = aws_lambda_function.metrics.function_name
+  }
+}
