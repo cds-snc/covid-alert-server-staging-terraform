@@ -7,4 +7,6 @@ module "in_app_metrics" {
   lambda_function_runtime = var.lambda-function-runtime
   subnet_ids              = aws_subnet.covidshield_private.*.id
   privatelink_sg          = aws_security_group.privatelink.id
+  warn_topic              = aws_sns_topic.alert_warning.arn
+  crticial_topic          = aws_sns_topic.alert_critical.arn
 }

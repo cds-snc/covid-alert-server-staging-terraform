@@ -1,0 +1,4 @@
+raw_metrics_dynamodb_wcu_max = 300
+aggregate_metrics_dynamodb_wcu_max = 300
+aggregate_metrics_max_avg_duration = 3000
+backoff_retry_max_avg_duration = 3000
