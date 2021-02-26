@@ -51,22 +51,37 @@ variable "api_gateway_burst" {
 }
 
 variable "api_gateway_error_threshold" {
-  type    = string
+  type = string
 }
 
-
 variable "api_gateway_min_invocations" {
-  type    = string
+  type = string
 }
 
 variable "api_gateway_max_invocations" {
-  type    = string
+  type = string
 }
 
 variable "api_gateway_max_latency" {
-  type    = string
+  type = string
 }
 
 variable "save_metrics_max_avg_duration" {
-  type    = string
+  type = string
+}
+
+variable "raw_metrics_dynamodb_wcu_max" {
+  type = string
+}
+
+variable "aggregate_metrics_dynamodb_wcu_max" {
+  type = string
+}
+
+variable "aggregate_metrics_max_avg_duration" {
+  type = string
+}
+
+variable "backoff_retry_max_avg_duration" {
+  type = string
 }

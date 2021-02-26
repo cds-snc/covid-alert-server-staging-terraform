@@ -99,6 +99,11 @@ enable_test_tools = true
 api_gateway_error_threshold = 100
 api_gateway_min_invocations = 100
 api_gateway_max_invocations = 10000
-api_gateway_max_latency = 5000
+api_gateway_max_latency     = 5000
 
-save_metrics_max_avg_duration = 3000
+raw_metrics_dynamodb_wcu_max       = 300
+aggregate_metrics_dynamodb_wcu_max = 300
+
+save_metrics_max_avg_duration      = 3000
+aggregate_metrics_max_avg_duration = 3000
+backoff_retry_max_avg_duration     = 3000
