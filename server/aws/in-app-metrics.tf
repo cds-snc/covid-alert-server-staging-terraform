@@ -8,7 +8,7 @@ module "in_app_metrics" {
   subnet_ids                         = aws_subnet.covidshield_private.*.id
   privatelink_sg                     = aws_security_group.privatelink.id
   warn_topic                         = aws_sns_topic.alert_warning.arn
-  crticial_topic                     = aws_sns_topic.alert_critical.arn
+  critical_topic                     = aws_sns_topic.alert_critical.arn
   raw_metrics_dynamodb_wcu_max       = var.raw_metrics_dynamodb_wcu_max
   aggregate_metrics_dynamodb_wcu_max = var.aggregate_metrics_dynamodb_wcu_max
   aggregate_metrics_max_avg_duration = var.aggregate_metrics_max_avg_duration
