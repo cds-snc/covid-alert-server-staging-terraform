@@ -108,6 +108,7 @@ function generatePayload(a) {
             #state = :state,
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
             #date = :date,
+            #duration = :duration,
             metricCount = if_not_exists(metricCount, :start) + :metricCount`,
         ExpressionAttributeValues: {
             ':metricCount' : a.metricCount,
@@ -125,6 +126,7 @@ function generatePayload(a) {
             ':date' : a.date || '',
             ':start': 0,
             ':manufacturer': a.manufacturer || '',
+            ':duration': a.duration || '',
             ':androidreleaseversion': a.androidreleaseversion || ''
         },
         ExpressionAttributeNames: {
@@ -132,6 +134,7 @@ function generatePayload(a) {
             '#count': 'count',
             '#state': 'state',
             '#date': 'date',
+            '#duration': 'duration'
         }
     };
 }
@@ -198,7 +201,7 @@ function aggregateEvents(event){
         } catch(err) {
             console.err(`issue parsing event sending to s3 bucket: ${err}`);
             //TODO: send to s3 bucket
-            console.err(`failed payload: ${JSON.stringify(record)}`);
+            console.error(`payload uuid: ${record.dynamodb.NewImage.uuid.S}`)
         }
     });
 
@@ -249,7 +252,6 @@ exports.handler =  (event, context, callback) => {
 
     } catch(err){
 
-        console.error(`Invalid event payload: ${JSON.stringify(event)}`);
         //TODO: send to s3 bucket
         console.error(`failed event: ${JSON.stringify(err)}`);
         callback(null, "Aggregator complete but failed to parse");

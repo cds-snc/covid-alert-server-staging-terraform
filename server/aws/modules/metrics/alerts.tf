@@ -64,7 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "backoff_retry_average_duration" {
   metric_name         = "Duration"
   namespace           = "AWS/Lambda"
   period              = "60"
-  statistic           = "Average"
+  extended_statistic  = "p99"
   threshold           = var.backoff_retry_max_avg_duration
   alarm_description   = "This metric monitors average duration for the backoff_retry lambda"
 
