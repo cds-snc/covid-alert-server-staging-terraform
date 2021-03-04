@@ -199,7 +199,7 @@ function aggregateEvents(event){
             }
 
         } catch(err) {
-            console.err(`issue parsing event sending to s3 bucket: ${err}`);
+            console.err(`issue parsing event: ${err}`);
             //TODO: send to s3 bucket
             console.error(`payload uuid: ${record.dynamodb.NewImage.uuid.S}`)
         }
