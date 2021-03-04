@@ -603,7 +603,7 @@ resource "aws_cloudwatch_metric_alarm" "save_metrics_average_duration" {
   metric_name         = "Duration"
   namespace           = "AWS/Lambda"
   period              = "60"
-  statistic           = "Average"
+  extended_statistic  = "p99"
   threshold           = var.save_metrics_max_avg_duration
   alarm_description   = "This metric monitors average duration for the save_metrics lambda"
 
