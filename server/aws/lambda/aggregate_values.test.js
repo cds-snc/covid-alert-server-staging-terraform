@@ -232,7 +232,6 @@ describe("generatePayload", () => {
 
 describe("pinDate", () => {
   it("rounds a unix timestamp to the current UTC date", () => {
-    expect(lambda.pinDate(0)).toStrictEqual("1969-12-31")
     expect(lambda.pinDate(1615231884409)).toStrictEqual("2021-03-08")
     expect(lambda.pinDate(2147483647000)).toStrictEqual("2038-01-18")
   })
