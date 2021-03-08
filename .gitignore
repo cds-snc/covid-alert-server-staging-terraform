@@ -32,3 +32,4 @@ override.tf.json
 # Staging environments 
 
 secrets.auto.tfvars
+node_modules
