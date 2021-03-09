@@ -1,0 +1,17 @@
+name: CI
+
+on: push
+
+jobs:
+  test_lambdas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Test lambdas
+        working-directory: ./server/aws/lambda
+        run: |
+          npm ci
+          npm test

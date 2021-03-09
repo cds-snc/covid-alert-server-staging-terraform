@@ -14,7 +14,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     }
 });
 
-function p(val) {
+const p = (val) => {
 
     if (val === ''){ 
         return '*';
@@ -23,11 +23,11 @@ function p(val) {
     return val || '*';
 }
 
-function createSK(date, appversion, appos, osversion, manufacturer, androidreleaseversion, pl) {
+const createSK = (date, appversion, appos, osversion, manufacturer, androidreleaseversion, pl) => {
     return `${pl.region}#${pl.identifier}#${date}#${appos}#${osversion}#${appversion}#${p(manufacturer)}#${p(androidreleaseversion)}#${p(pl.pushnotification)}#${p(pl.frameworkenabled)}#${p(pl.state)}#${p(pl.hoursSinceExposureDetectedAt)}#${p(pl.count)}#${p(pl.duration)}`;
 }
 
-function bucketCount(count) {
+const bucketCount = (count) => {
 
     if (count === undefined) {
         return undefined;
@@ -52,7 +52,7 @@ function bucketCount(count) {
     return '30+';
 }
 
-function bucketDuration(duration) {
+const bucketDuration = (duration) => {
     if (duration === undefined){
         return undefined;
     }
@@ -70,7 +70,7 @@ function bucketDuration(duration) {
         return '< 30';
     } else if (parsedDuration < 60) {
         return '30 - 59';
-    } else if (parsedDuration < 140) {
+    } else if (parsedDuration < 120) {
         return '1:00 min - 1:59 min';
     } else if (parsedDuration < 240) {
         return '2:00 min - 3:59 min';
@@ -86,7 +86,7 @@ function bucketDuration(duration) {
     return '> 10:00 min';
 }
 
-function generatePayload(a) {
+const generatePayload = (a) => {
     return {
         TableName: "aggregate_metrics",
         Key: {
@@ -139,14 +139,14 @@ function generatePayload(a) {
     };
 }
 
-function pinDate(timestamp) {
+const pinDate = (timestamp) => {
     let d = new Date();
     d.setTime(timestamp);
     d.setHours(0,0,0,0);
     return d.toISOString().split('T')[0];
 }
 
-function aggregateEvents(event){
+const aggregateEvents = (event) => {
     const aggregates = {}; 
     event.Records.forEach((record) => {
         try { 
@@ -208,7 +208,7 @@ function aggregateEvents(event){
     return aggregates;
 }
 
-function buildDeadLetterMsg(payload, err){
+const buildDeadLetterMsg = (payload, err) => {
     return {
         DelaySeconds : 1,
         MessageBody : JSON.stringify(payload),
@@ -226,7 +226,7 @@ function buildDeadLetterMsg(payload, err){
     };
 }
 
-function sendToDeadLetterQueue(payload, err) {
+const sendToDeadLetterQueue = (payload, err) => {
     const msg = buildDeadLetterMsg(payload, err);
     sqs.sendMessage(msg, (sqsErr, data) => {
         if (sqsErr) { 
@@ -235,8 +235,7 @@ function sendToDeadLetterQueue(payload, err) {
     });
 }
 
-exports.handler =  (event, context, callback) => {
-
+const handler = (event, context, callback) => {
     try {
 
         const aggregates = aggregateEvents(event);
@@ -260,3 +259,14 @@ exports.handler =  (event, context, callback) => {
 
     callback(null, "Aggregator is complete");
 };
+
+exports.p = p
+exports.createSK = createSK
+exports.bucketCount = bucketCount
+exports.bucketDuration = bucketDuration
+exports.generatePayload = generatePayload
+exports.pinDate = pinDate
+exports.aggregateEvents = aggregateEvents
+exports.buildDeadLetterMsg = buildDeadLetterMsg
+exports.sendToDeadLetterQueue = sendToDeadLetterQueue
+exports.handler = handler
