@@ -2,7 +2,7 @@
 
 const AWS = require("aws-sdk");
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
-const METRIC_VERSION = 3;
+const METRIC_VERSION = 4;
 const https = require('https');
 const agent = new https.Agent({
     keepAlive: true
@@ -23,8 +23,8 @@ const p = (val) => {
     return val || '*';
 }
 
-const createSK = (date, appversion, appos, osversion, manufacturer, androidreleaseversion, pl) => {
-    return `${pl.region}#${pl.identifier}#${date}#${appos}#${osversion}#${appversion}#${p(manufacturer)}#${p(androidreleaseversion)}#${p(pl.pushnotification)}#${p(pl.frameworkenabled)}#${p(pl.state)}#${p(pl.hoursSinceExposureDetectedAt)}#${p(pl.count)}#${p(pl.duration)}`;
+const createSK = (date, appversion, appos, osversion, manufacturer, model, androidreleaseversion, pl) => {
+    return `${pl.region}#${pl.identifier}#${date}#${appos}#${osversion}#${appversion}#${p(manufacturer)}#${p(model)}#${p(androidreleaseversion)}#${p(pl.pushnotification)}#${p(pl.frameworkenabled)}#${p(pl.state)}#${p(pl.hoursSinceExposureDetectedAt)}#${p(pl.count)}#${p(pl.duration)}`;
 }
 
 const bucketCount = (count) => {
@@ -100,6 +100,7 @@ const generatePayload = (a) => {
             identifier = :identifier,
             osversion = :osversion,
             manufacturer = :manufacturer,
+            model = :model,
             androidreleaseversion = :androidreleaseversion,
             version = :version,
             #count = :count,
@@ -126,9 +127,12 @@ const generatePayload = (a) => {
             ':date' : a.date || '',
             ':start': 0,
             ':manufacturer': a.manufacturer || '',
+            ':model': a.model || '',
             ':duration': a.duration || '',
             ':androidreleaseversion': a.androidreleaseversion || ''
         },
+        // Reserved Keywords need to be handled here see:
+        // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html
         ExpressionAttributeNames: {
             '#region': 'region',
             '#count': 'count',
@@ -163,6 +167,7 @@ const aggregateEvents = (event) => {
                     const osversion = raw.osversion || '';
                     const manufacturer = raw.manufacturer || '';
                     const androidreleaseversion = raw.androidreleaseversion || '';
+                    const model = raw.model || '';
 
                     const sk = createSK (
                             date,
@@ -170,6 +175,7 @@ const aggregateEvents = (event) => {
                             raw.appos,
                             osversion,
                             manufacturer,
+                            model,
                             androidreleaseversion,
                             pl
                         );
@@ -190,6 +196,7 @@ const aggregateEvents = (event) => {
                             osversion: osversion,
                             metricCount: 1,
                             manufacturer: manufacturer,
+                            model: model,
                             androidreleaseversion: androidreleaseversion
                         };
 
