@@ -13,5 +13,5 @@ jobs:
       - name: Test lambdas
         working-directory: ./server/aws/lambda
         run: |
-          npm install
+          npm ci
           npm test
