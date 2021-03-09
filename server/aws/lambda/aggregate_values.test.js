@@ -46,6 +46,7 @@ describe("createSK", () => {
     let appos = "c"
     let osversion = "d"
     let manufacturer = "e"
+    let model = "model"
     let androidreleaseversion = "f"
     let pl = {
       region: "g",
@@ -57,9 +58,9 @@ describe("createSK", () => {
       count: "m",
       duration: "n"
     }
-    const result = lambda.createSK(date, appversion, appos, osversion, manufacturer, androidreleaseversion, pl)
-    expect(result).toStrictEqual("g#h#a#c#d#b#e#f#i#j#k#l#m#n")
-    expect(result.split("#").length).toStrictEqual(14)
+    const result = lambda.createSK(date, appversion, appos, osversion, manufacturer, model, androidreleaseversion, pl)
+    expect(result).toStrictEqual("g#h#a#c#d#b#e#model#f#i#j#k#l#m#n")
+    expect(result.split("#").length).toStrictEqual(15)
   })
 
   it("replaces certain values with stars", () => {
@@ -68,6 +69,7 @@ describe("createSK", () => {
     let appos = "c"
     let osversion = "d"
     let manufacturer = undefined
+    let model = undefined
     let androidreleaseversion = undefined
     let pl = {
       region: "g",
@@ -79,9 +81,9 @@ describe("createSK", () => {
       count: undefined,
       duration: undefined
     }
-    const result = lambda.createSK(date, appversion, appos, osversion, manufacturer, androidreleaseversion, pl)
-    expect(result).toStrictEqual("g#h#a#c#d#b#*#*#*#*#*#*#*#*")
-    expect(result.split("#").length).toStrictEqual(14)
+    const result = lambda.createSK(date, appversion, appos, osversion, manufacturer, model, androidreleaseversion, pl)
+    expect(result).toStrictEqual("g#h#a#c#d#b#*#*#*#*#*#*#*#*#*")
+    expect(result.split("#").length).toStrictEqual(15)
   })
 })
 
@@ -161,6 +163,7 @@ describe("generatePayload", () => {
       appos: "c",
       osversion: "d",
       manufacturer: "e",
+      model: "model",
       androidreleaseversion: "f",
       region: "g",
       identifier: "h",
@@ -188,6 +191,7 @@ describe("generatePayload", () => {
             identifier = :identifier,
             osversion = :osversion,
             manufacturer = :manufacturer,
+            model = :model,
             androidreleaseversion = :androidreleaseversion,
             version = :version,
             #count = :count,
@@ -205,7 +209,7 @@ describe("generatePayload", () => {
         ':region': intialPayload.region,
         ':osversion': intialPayload.osversion,
         ':identifier': intialPayload.identifier,
-        ':version': 3,
+        ':version': 4,
         ':count': intialPayload.count,
         ':pushnotification': intialPayload.pushnotification,
         ':frameworkenabled': intialPayload.frameworkenabled,
@@ -214,6 +218,7 @@ describe("generatePayload", () => {
         ':date': intialPayload.date,
         ':start': 0,
         ':manufacturer': intialPayload.manufacturer,
+        ':model': intialPayload.model,
         ':duration': intialPayload.duration,
         ':androidreleaseversion': intialPayload.androidreleaseversion
       },
@@ -246,6 +251,7 @@ describe("aggregateEvents", () => {
     let payload = {
       osversion: "a",
       manufacturer: "b",
+      model: "model",
       androidreleaseversion: "c",
       appversion: "d",
       appos: "e",
@@ -271,7 +277,7 @@ describe("aggregateEvents", () => {
     }
 
     let expectedEvents = {
-      "g#h#2021-03-08#e#a#d#b#c#i#j#k#l#m#n": {
+      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n": {
         "androidreleaseversion": "c",
         "appos": "e",
         "appversion": "d",
@@ -282,12 +288,13 @@ describe("aggregateEvents", () => {
         "hoursSinceExposureDetectedAt": "l",
         "identifier": "h",
         "manufacturer": "b",
+        "model": "model",
         "metricCount": 1,
         "osversion": "a",
         "pk": "g",
         "pushnotification": "i",
         "region": "g",
-        "sk": "g#h#2021-03-08#e#a#d#b#c#i#j#k#l#m#n",
+        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n",
         "state": "k",
         "timestamp": 1615231884409,
       }
@@ -299,6 +306,7 @@ describe("aggregateEvents", () => {
     let payload = {
       osversion: "a",
       manufacturer: "b",
+      model: "model",
       androidreleaseversion: "c",
       appversion: "d",
       appos: "e",
@@ -327,7 +335,7 @@ describe("aggregateEvents", () => {
     }
 
     let expectedEvents = {
-      "g#h#2021-03-08#e#a#d#b#c#i#j#k#l#m#n": {
+      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n": {
         "androidreleaseversion": "c",
         "appos": "e",
         "appversion": "d",
@@ -338,12 +346,13 @@ describe("aggregateEvents", () => {
         "hoursSinceExposureDetectedAt": "l",
         "identifier": "h",
         "manufacturer": "b",
+        "model": "model",
         "metricCount": 2,
         "osversion": "a",
         "pk": "g",
         "pushnotification": "i",
         "region": "g",
-        "sk": "g#h#2021-03-08#e#a#d#b#c#i#j#k#l#m#n",
+        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n",
         "state": "k",
         "timestamp": 1615231884409,
       }
@@ -423,6 +432,7 @@ describe("handler", () => {
     let payload = {
       osversion: "a",
       manufacturer: "b",
+      model: "model",
       androidreleaseversion: "c",
       appversion: "d",
       appos: "e",
