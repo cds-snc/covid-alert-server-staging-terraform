@@ -25,6 +25,17 @@ jest.mock("aws-sdk", () => {
 
 jest.spyOn(console, 'error').mockImplementation(jest.fn());
 
+describe("c", () => {
+  it("returns a blank string if the value is undefined", () => {
+    expect(lambda.c(undefined)).toStrictEqual("")
+  })
+
+  it("returns the value if the value is defined", () => {
+    expect(lambda.c("foo")).toStrictEqual("foo")
+  })
+
+})
+
 describe("p", () => {
   it("returns a * if the value is an empty string", () => {
     expect(lambda.p("")).toStrictEqual("*")
@@ -37,10 +48,15 @@ describe("p", () => {
   it("returns * if the value is undefined", () => {
     expect(lambda.p(undefined)).toStrictEqual("*")
   })
+
+  it("returns false if the value strictly equals false", () => {
+    expect(lambda.p(false)).toStrictEqual(false)
+  })
+
 })
 
 describe("createSK", () => {
-  it("concats 14 values into a key joined by a #", () => {
+  it("concats attributes into a key joined by a #", () => {
     let date = "a"
     let appversion = "b"
     let appos = "c"
@@ -56,11 +72,14 @@ describe("createSK", () => {
       state: "k",
       hoursSinceExposureDetectedAt: "l",
       count: "m",
-      duration: "n"
+      duration: "n",
+      withDate: true,
+      isUserExposed: false,
+
     }
     const result = lambda.createSK(date, appversion, appos, osversion, manufacturer, model, androidreleaseversion, pl)
-    expect(result).toStrictEqual("g#h#a#c#d#b#e#model#f#i#j#k#l#m#n")
-    expect(result.split("#").length).toStrictEqual(15)
+    expect(result).toStrictEqual("g#h#a#c#d#b#e#model#f#i#j#k#l#m#n#true#false")
+    expect(result.split("#").length).toStrictEqual(17)
   })
 
   it("replaces certain values with stars", () => {
@@ -79,11 +98,13 @@ describe("createSK", () => {
       state: undefined,
       hoursSinceExposureDetectedAt: undefined,
       count: undefined,
-      duration: undefined
+      duration: undefined,
+      withDate: undefined,
+      isUserExposed: undefined
     }
     const result = lambda.createSK(date, appversion, appos, osversion, manufacturer, model, androidreleaseversion, pl)
-    expect(result).toStrictEqual("g#h#a#c#d#b#*#*#*#*#*#*#*#*#*")
-    expect(result.split("#").length).toStrictEqual(15)
+    expect(result).toStrictEqual("g#h#a#c#d#b#*#*#*#*#*#*#*#*#*#*#*")
+    expect(result.split("#").length).toStrictEqual(17)
   })
 })
 
@@ -157,7 +178,7 @@ describe("bucketDuration", () => {
 
 describe("generatePayload", () => {
   it("generates a DynamoDB payload from an object", () => {
-    let intialPayload = {
+    let initialPayload = {
       date: "a",
       appversion: "b",
       appos: "c",
@@ -175,14 +196,17 @@ describe("generatePayload", () => {
       duration: "n",
       metricCount: "o",
       pk: "p",
-      sk: "q"
+      sk: "q",
+      withDate: true,
+      isUserExposed: true
+
     }
 
     let expectedPayload = {
       TableName: "aggregate_metrics",
       Key: {
-        "pk": intialPayload.pk,
-        "sk": intialPayload.sk
+        "pk": initialPayload.pk,
+        "sk": initialPayload.sk
       },
       UpdateExpression: `
         SET appversion = :appversion,
@@ -201,26 +225,30 @@ describe("generatePayload", () => {
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
             #date = :date,
             #duration = :duration,
+            withDate = :withDate,
+            isUserExposed = :isUserExposed,
             metricCount = if_not_exists(metricCount, :start) + :metricCount`,
       ExpressionAttributeValues: {
-        ':metricCount': intialPayload.metricCount,
-        ':appversion': intialPayload.appversion,
-        ':appos': intialPayload.appos,
-        ':region': intialPayload.region,
-        ':osversion': intialPayload.osversion,
-        ':identifier': intialPayload.identifier,
+        ':metricCount': initialPayload.metricCount,
+        ':appversion': initialPayload.appversion,
+        ':appos': initialPayload.appos,
+        ':region': initialPayload.region,
+        ':osversion': initialPayload.osversion,
+        ':identifier': initialPayload.identifier,
         ':version': 4,
-        ':count': intialPayload.count,
-        ':pushnotification': intialPayload.pushnotification,
-        ':frameworkenabled': intialPayload.frameworkenabled,
-        ':state': intialPayload.state,
-        ':hoursSinceExposureDetectedAt': intialPayload.hoursSinceExposureDetectedAt,
-        ':date': intialPayload.date,
+        ':count': initialPayload.count,
+        ':pushnotification': initialPayload.pushnotification,
+        ':frameworkenabled': initialPayload.frameworkenabled,
+        ':state': initialPayload.state,
+        ':hoursSinceExposureDetectedAt': initialPayload.hoursSinceExposureDetectedAt,
+        ':date': initialPayload.date,
         ':start': 0,
-        ':manufacturer': intialPayload.manufacturer,
-        ':model': intialPayload.model,
-        ':duration': intialPayload.duration,
-        ':androidreleaseversion': intialPayload.androidreleaseversion
+        ':manufacturer': initialPayload.manufacturer,
+        ':model': initialPayload.model,
+        ':duration': initialPayload.duration,
+        ':androidreleaseversion': initialPayload.androidreleaseversion,
+        ':withDate': initialPayload.withDate,
+        ':isUserExposed': initialPayload.isUserExposed
       },
       ExpressionAttributeNames: {
         '#region': 'region',
@@ -231,7 +259,7 @@ describe("generatePayload", () => {
       }
     }
 
-    expect(lambda.generatePayload(intialPayload)).toStrictEqual(expectedPayload)
+    expect(lambda.generatePayload(initialPayload)).toStrictEqual(expectedPayload)
   })
 })
 
@@ -242,6 +270,15 @@ describe("pinDate", () => {
 })
 
 describe("aggregateEvents", () => {
+
+  it("ignores ExposureNotificationCheck events", () => {
+    const event = { Records: [ {
+        identifier: "ExposureNotificationCheck",
+      } ]
+    }
+    expect(lambda.aggregateEvents(event)).toStrictEqual({})
+  });
+
   it("returns an empty object if it fails to aggregate events", () => {
     let event = { Records: ["a"] }
     expect(lambda.aggregateEvents(event)).toStrictEqual({})
@@ -265,7 +302,9 @@ describe("aggregateEvents", () => {
           state: "k",
           hoursSinceExposureDetectedAt: "l",
           count: "m",
-          duration: "n"
+          duration: "n",
+          withDate: true,
+          isUserExposed: false
         }
       ]
     }
@@ -275,9 +314,8 @@ describe("aggregateEvents", () => {
         dynamodb: { NewImage: { raw: { S: JSON.stringify(payload) } } }
       }]
     }
-
     let expectedEvents = {
-      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n": {
+      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false" : {
         "androidreleaseversion": "c",
         "appos": "e",
         "appversion": "d",
@@ -294,9 +332,11 @@ describe("aggregateEvents", () => {
         "pk": "g",
         "pushnotification": "i",
         "region": "g",
-        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n",
+        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false",
         "state": "k",
         "timestamp": 1615231884409,
+        "withDate": true,
+        "isUserExposed": false,
       }
     }
     expect(lambda.aggregateEvents(event)).toStrictEqual(expectedEvents)
@@ -320,7 +360,9 @@ describe("aggregateEvents", () => {
           state: "k",
           hoursSinceExposureDetectedAt: "l",
           count: "m",
-          duration: "n"
+          duration: "n",
+          withDate: true,
+          isUserExposed: false
         }
       ]
     }
@@ -333,9 +375,8 @@ describe("aggregateEvents", () => {
         dynamodb: { NewImage: { raw: { S: JSON.stringify(payload) } } }
       }]
     }
-
     let expectedEvents = {
-      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n": {
+      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false": {
         "androidreleaseversion": "c",
         "appos": "e",
         "appversion": "d",
@@ -352,9 +393,11 @@ describe("aggregateEvents", () => {
         "pk": "g",
         "pushnotification": "i",
         "region": "g",
-        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n",
+        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false",
         "state": "k",
         "timestamp": 1615231884409,
+        "withDate": true,
+        "isUserExposed": false
       }
     }
     expect(lambda.aggregateEvents(event)).toStrictEqual(expectedEvents)
