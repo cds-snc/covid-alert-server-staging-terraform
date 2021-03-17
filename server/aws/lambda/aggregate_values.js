@@ -19,12 +19,17 @@ const p = (val) => {
     if (val === ''){ 
         return '*';
     }
+    if (val === false){ 
+        return false;
+    }
 
     return val || '*';
 }
 
 const createSK = (date, appversion, appos, osversion, manufacturer, model, androidreleaseversion, pl) => {
-    return `${pl.region}#${pl.identifier}#${date}#${appos}#${osversion}#${appversion}#${p(manufacturer)}#${p(model)}#${p(androidreleaseversion)}#${p(pl.pushnotification)}#${p(pl.frameworkenabled)}#${p(pl.state)}#${p(pl.hoursSinceExposureDetectedAt)}#${p(pl.count)}#${p(pl.duration)}`;
+    return `${pl.region}#${pl.identifier}#${date}#${appos}#${osversion}#${appversion}#${p(manufacturer)}#`+
+    `${p(model)}#${p(androidreleaseversion)}#${p(pl.pushnotification)}#${p(pl.frameworkenabled)}#` +
+    `${p(pl.state)}#${p(pl.hoursSinceExposureDetectedAt)}#${p(pl.count)}#${p(pl.duration)}#${p(pl.withDate)}#${p(pl.isUserExposed)}`;
 }
 
 const bucketCount = (count) => {
@@ -86,6 +91,11 @@ const bucketDuration = (duration) => {
     return '> 10:00 min';
 }
 
+// Null Coalesce for optional attributes
+const c = (val) => {
+    return val || '';
+}
+
 const generatePayload = (a) => {
     return {
         TableName: "aggregate_metrics",
@@ -110,26 +120,30 @@ const generatePayload = (a) => {
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
             #date = :date,
             #duration = :duration,
+            withDate = :withDate,
+            isUserExposed = :isUserExposed,
             metricCount = if_not_exists(metricCount, :start) + :metricCount`,
         ExpressionAttributeValues: {
             ':metricCount' : a.metricCount,
             ':appversion' : a.appversion,
+            ':identifier': a.identifier,
             ':appos': a.appos,
             ':region': a.region,
-            ':osversion': a.osversion || '',
-            ':identifier': a.identifier,
             ':version': METRIC_VERSION,
-            ':count': a.count || '',
-            ':pushnotification': a.pushnotification || '',
-            ':frameworkenabled': a.frameworkenabled || '',
-            ':state': a.state || '',
-            ':hoursSinceExposureDetectedAt': a.hoursSinceExposureDetectedAt || '',
-            ':date' : a.date || '',
             ':start': 0,
-            ':manufacturer': a.manufacturer || '',
-            ':model': a.model || '',
-            ':duration': a.duration || '',
-            ':androidreleaseversion': a.androidreleaseversion || ''
+            ':osversion': c(a.osversion),
+            ':count': c(a.count),
+            ':pushnotification': c(a.pushnotification),
+            ':frameworkenabled': c(a.frameworkenabled),
+            ':state': c(a.state),
+            ':hoursSinceExposureDetectedAt': c(a.hoursSinceExposureDetectedAt),
+            ':date' : c(a.date),
+            ':manufacturer': c(a.manufacturer),
+            ':model': c(a.model),
+            ':duration': c(a.duration),
+            ':androidreleaseversion': c(a.androidreleaseversion),
+            ':withDate': c(a.withDate),
+            ':isUserExposed': c(a.isUserExposed)
         },
         // Reserved Keywords need to be handled here see:
         // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html
@@ -158,6 +172,10 @@ const aggregateEvents = (event) => {
                 const raw = JSON.parse(record.dynamodb.NewImage.raw.S);
                 raw.payload.forEach((pl) => {
 
+                    // Skip Debug Events they currently aren't going to the aggregate_metrics table
+                    if (pl.identifier === "ExposureNotificationCheck") {
+                        return;
+                    }
                     // bucket values to reduce possible permutations
                     const date = pinDate(pl.timestamp);
                     pl.count = bucketCount(pl.count);
@@ -267,13 +285,14 @@ const handler = (event, context, callback) => {
     callback(null, "Aggregator is complete");
 };
 
-exports.p = p
-exports.createSK = createSK
-exports.bucketCount = bucketCount
-exports.bucketDuration = bucketDuration
-exports.generatePayload = generatePayload
-exports.pinDate = pinDate
-exports.aggregateEvents = aggregateEvents
-exports.buildDeadLetterMsg = buildDeadLetterMsg
-exports.sendToDeadLetterQueue = sendToDeadLetterQueue
-exports.handler = handler
+exports.p = p;
+exports.c = c;
+exports.createSK = createSK;
+exports.bucketCount = bucketCount;
+exports.bucketDuration = bucketDuration;
+exports.generatePayload = generatePayload;
+exports.pinDate = pinDate;
+exports.aggregateEvents = aggregateEvents;
+exports.buildDeadLetterMsg = buildDeadLetterMsg;
+exports.sendToDeadLetterQueue = sendToDeadLetterQueue;
+exports.handler = handler;
