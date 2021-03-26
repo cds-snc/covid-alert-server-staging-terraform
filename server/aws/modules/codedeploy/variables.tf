@@ -24,12 +24,12 @@ variable "ecs_service_name" {
 }
 
 variable "lb_listener_arns" {
-  type        = list
+  type        = list(any)
   description = "List of Amazon Resource Names (ARNs) of the load balancer listeners."
 }
 
 variable "test_lb_listener_arns" {
-  type        = list
+  type        = list(any)
   description = "List of Amazon Resource Names (ARNs) of the test load balancer listeners."
 }
 
