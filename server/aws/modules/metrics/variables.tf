@@ -49,3 +49,7 @@ variable "aggregate_metrics_max_avg_duration" {
 variable "backoff_retry_max_avg_duration" {
   type = string
 }
+
+variable "service_name" {
+  type = string
+}
