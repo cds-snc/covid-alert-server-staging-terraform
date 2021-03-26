@@ -42,49 +42,6 @@ POLICY
 }
 
 ###
-# AWS S3 bucket - Well known
-###
-resource "aws_s3_bucket" "well_known" {
-  bucket = "covid-shield-well-known-${var.environment}"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-
-  logging {
-    target_bucket = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
-    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-well-known-${var.environment}/"
-  }
-
-}
-
-resource "aws_s3_bucket_policy" "well_known" {
-  bucket = aws_s3_bucket.well_known.id
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "OnlyCloudfrontReadAccess",
-      "Principal": {
-        "AWS": "${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}"
-      },
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject"
-      ],
-      "Resource": "${aws_s3_bucket.well_known.arn}/*"
-    }
-  ]
-}
-POLICY
-}
-
-###
 # AWS S3 bucket - WAF log target
 ###
 
