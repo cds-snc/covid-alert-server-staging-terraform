@@ -34,15 +34,6 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
     }
   }
 
-  origin {
-    domain_name = aws_s3_bucket.well_known.bucket_regional_domain_name
-    origin_id   = "covid-shield-well-known-${var.environment}"
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
-    }
-  }
-
   enabled         = true
   is_ipv6_enabled = true
   web_acl_id      = aws_wafv2_web_acl.key_retrieval_cdn.arn
@@ -75,28 +66,6 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "covid-shield-exposure-config-${var.environment}"
-
-    forwarded_values {
-      query_string = false
-      headers      = ["Origin"]
-
-      cookies {
-        forward = "none"
-      }
-    }
-
-    viewer_protocol_policy = "https-only"
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
-    compress               = true
-  }
-
-  ordered_cache_behavior {
-    path_pattern     = "/.well-known/*"
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "covid-shield-well-known-${var.environment}"
 
     forwarded_values {
       query_string = false
