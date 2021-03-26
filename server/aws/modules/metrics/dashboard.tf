@@ -33,7 +33,7 @@ resource "aws_cloudwatch_dashboard" "metrics_ops_dashboard" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/ApiGateway", "4XXError", "ApiName", "${var.service_name}", "Resource", "/${var.service_name}, "Stage", "production", "Method", "POST" ],
+                    [ "AWS/ApiGateway", "4XXError", "ApiName", "${var.service_name}", "Resource", "/${var.service_name}", "Stage", "production", "Method", "POST" ],
                     [ ".", "Count", ".", ".", ".", ".", ".", ".", ".", ".", { "visible": false } ],
                     [ ".", "5XXError", ".", ".", ".", ".", ".", ".", ".", "." ]
                 ],
