@@ -235,7 +235,7 @@ describe("generatePayload", () => {
         ':region': initialPayload.region,
         ':osversion': initialPayload.osversion,
         ':identifier': initialPayload.identifier,
-        ':version': 5,
+        ':version': 6,
         ':count': initialPayload.count,
         ':pushnotification': initialPayload.pushnotification,
         ':frameworkenabled': initialPayload.frameworkenabled,

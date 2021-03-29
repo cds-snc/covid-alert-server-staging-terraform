@@ -2,7 +2,7 @@
 
 const AWS = require("aws-sdk");
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
-const METRIC_VERSION = 5;
+const METRIC_VERSION = 6;
 const https = require('https');
 const agent = new https.Agent({
     keepAlive: true
