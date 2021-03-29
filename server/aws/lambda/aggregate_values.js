@@ -43,11 +43,13 @@ const bucketCount = (count) => {
         return count;
     }
 
-    if (parsedCount <= 0) {
+    if (parsedCount < 0) {
         console.error(`parsedCount is negative: ${parsedCount}`);
     }
 
-    if (parsedCount < 6) {
+    if (parsedCount === 0) {
+        return '0';
+    } else if(parsedCount < 6) {
         return '1-6';
     } else if (parsedCount < 12) {
         return '7-12';
@@ -71,7 +73,9 @@ const bucketDuration = (duration) => {
         console.error(`parsedDuration is negative: ${parsedDuration}`);
     }
 
-    if (parsedDuration < 30) {
+    if (parsedDuration === 0) {
+        return '0';
+    } else if (parsedDuration < 30) {
         return '< 30';
     } else if (parsedDuration < 60) {
         return '30 - 59';

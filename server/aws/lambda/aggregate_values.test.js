@@ -117,8 +117,8 @@ describe("bucketCount", () => {
     expect(lambda.bucketCount("a")).toStrictEqual("a")
   })
 
-  it("returns 1-6 if the number is negative or zero", () => {
-    expect(lambda.bucketCount("0")).toStrictEqual("1-6")
+  it("returns 0 if the number is zero", () => {
+    expect(lambda.bucketCount("0")).toStrictEqual("0")
   })
 
   it("returns 7-12 if the number is 6", () => {
@@ -143,8 +143,8 @@ describe("bucketDuration", () => {
     expect(lambda.bucketDuration("a")).toStrictEqual("a")
   })
 
-  it("returns < 30 if the number is negative or zero", () => {
-    expect(lambda.bucketDuration("0")).toStrictEqual("< 30")
+  it("returns 0 if the number is zero", () => {
+    expect(lambda.bucketDuration("0")).toStrictEqual("0")
   })
 
   it("returns 30 - 59 if the number is 59", () => {
