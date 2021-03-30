@@ -37,7 +37,7 @@ variable "waf-description" {
 variable "apiKeyName" {
   type        = string
   description = "API Key Name"
-  default     = "Dev-Key"
+  default     = "in-app-metrics-key"
 }
 
 variable "api_gateway_rate" {
