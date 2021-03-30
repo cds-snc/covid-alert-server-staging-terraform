@@ -28,6 +28,10 @@ resource "aws_rds_cluster_instance" "covidshield_server_instances" {
     Name                  = "${var.rds_server_db_name}-instance"
     (var.billing_tag_key) = var.billing_tag_value
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_rds_cluster" "covidshield_server" {
@@ -40,6 +44,7 @@ resource "aws_rds_cluster" "covidshield_server" {
   backup_retention_period   = 1
   preferred_backup_window   = "07:00-09:00"
   db_subnet_group_name      = aws_db_subnet_group.covidshield.name
+  deletion_protection       = true
 
   # Ignore TFSEC rule as we are using managed KMS
   storage_encrypted = true #tfsec:ignore:AWS051
