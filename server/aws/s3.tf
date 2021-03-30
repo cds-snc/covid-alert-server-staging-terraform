@@ -13,7 +13,7 @@ resource "aws_s3_bucket" "exposure_config" {
 
   logging {
     target_bucket = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
-    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-exposure-config-staging/"
+    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-exposure-config-${var.environment}/"
   }
 
 }
@@ -65,7 +65,7 @@ resource "aws_s3_bucket" "firehose_waf_logs" {
 
   logging {
     target_bucket = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
-    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-staging-waf-logs/"
+    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-${var.environment}-waf-logs/"
   }
 }
 
@@ -99,7 +99,7 @@ resource "aws_s3_bucket" "cloudfront_logs" {
 
   logging {
     target_bucket = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
-    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-staging-cloudfront-logs/"
+    target_prefix = "${data.aws_caller_identity.current.account_id}/s3_access_logs/covid-shield-${var.environment}-cloudfront-logs/"
   }
 }
 
