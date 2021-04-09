@@ -121,6 +121,7 @@ const generatePayload = (a) => {
             pushnotification = :pushnotification,
             frameworkenabled = :frameworkenabled,
             #state = :state,
+            #status = :status,
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
             #date = :date,
             #duration = :duration,
@@ -140,6 +141,7 @@ const generatePayload = (a) => {
             ':pushnotification': c(a.pushnotification),
             ':frameworkenabled': c(a.frameworkenabled),
             ':state': c(a.state),
+            ':status': c(a.status),
             ':hoursSinceExposureDetectedAt': c(a.hoursSinceExposureDetectedAt),
             ':date' : c(a.date),
             ':manufacturer': c(a.manufacturer),
@@ -155,6 +157,7 @@ const generatePayload = (a) => {
             '#region': 'region',
             '#count': 'count',
             '#state': 'state',
+            '#status': 'status',
             '#date': 'date',
             '#duration': 'duration'
         }
@@ -183,7 +186,7 @@ const aggregateEvents = (event) => {
                     // bucket values to reduce possible permutations
                     const date = pinDate(pl.timestamp);
                     pl.count = bucketCount(pl.count);
-                    pl.duration = bucketDuration(pl.duration);
+                    pl.duration = bucketDuration(pl.durationInSeconds);
 
                     // deal with potentially missing data
                     const osversion = raw.osversion || '';

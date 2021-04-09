@@ -191,6 +191,7 @@ describe("generatePayload", () => {
       pushnotification: "i",
       frameworkenabled: "j",
       state: "k",
+      status: "status",
       hoursSinceExposureDetectedAt: "l",
       count: "m",
       duration: "n",
@@ -222,6 +223,7 @@ describe("generatePayload", () => {
             pushnotification = :pushnotification,
             frameworkenabled = :frameworkenabled,
             #state = :state,
+            #status = :status,
             hoursSinceExposureDetectedAt = :hoursSinceExposureDetectedAt,
             #date = :date,
             #duration = :duration,
@@ -240,6 +242,7 @@ describe("generatePayload", () => {
         ':pushnotification': initialPayload.pushnotification,
         ':frameworkenabled': initialPayload.frameworkenabled,
         ':state': initialPayload.state,
+        ':status': initialPayload.status,
         ':hoursSinceExposureDetectedAt': initialPayload.hoursSinceExposureDetectedAt,
         ':date': initialPayload.date,
         ':start': 0,
@@ -254,6 +257,7 @@ describe("generatePayload", () => {
         '#region': 'region',
         '#count': 'count',
         '#state': 'state',
+        '#status': 'status',
         '#date': 'date',
         '#duration': 'duration'
       }
@@ -300,9 +304,10 @@ describe("aggregateEvents", () => {
           pushnotification: "i",
           frameworkenabled: "j",
           state: "k",
+          status: "status",
           hoursSinceExposureDetectedAt: "l",
           count: "m",
-          duration: "n",
+          durationInSeconds: "1.1",
           withDate: true,
           isUserExposed: false
         }
@@ -315,13 +320,14 @@ describe("aggregateEvents", () => {
       }]
     }
     let expectedEvents = {
-      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false" : {
+      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false" : {
         "androidreleaseversion": "c",
         "appos": "e",
         "appversion": "d",
         "count": "m",
         "date": "2021-03-08",
-        "duration": "n",
+        "duration": "< 30",
+        "durationInSeconds": "1.1",
         "frameworkenabled": "j",
         "hoursSinceExposureDetectedAt": "l",
         "identifier": "h",
@@ -332,8 +338,9 @@ describe("aggregateEvents", () => {
         "pk": "g",
         "pushnotification": "i",
         "region": "g",
-        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false",
+        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false",
         "state": "k",
+        "status": "status",
         "timestamp": 1615231884409,
         "withDate": true,
         "isUserExposed": false,
@@ -360,7 +367,7 @@ describe("aggregateEvents", () => {
           state: "k",
           hoursSinceExposureDetectedAt: "l",
           count: "m",
-          duration: "n",
+          durationInSeconds: "1.1",
           withDate: true,
           isUserExposed: false
         }
@@ -376,13 +383,14 @@ describe("aggregateEvents", () => {
       }]
     }
     let expectedEvents = {
-      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false": {
+      "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false": {
         "androidreleaseversion": "c",
         "appos": "e",
         "appversion": "d",
         "count": "m",
         "date": "2021-03-08",
-        "duration": "n",
+        "duration": "< 30",
+        "durationInSeconds": "1.1",
         "frameworkenabled": "j",
         "hoursSinceExposureDetectedAt": "l",
         "identifier": "h",
@@ -393,7 +401,7 @@ describe("aggregateEvents", () => {
         "pk": "g",
         "pushnotification": "i",
         "region": "g",
-        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#n#true#false",
+        "sk": "g#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false",
         "state": "k",
         "timestamp": 1615231884409,
         "withDate": true,
