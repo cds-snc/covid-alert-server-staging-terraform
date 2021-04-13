@@ -210,6 +210,10 @@ variable "feature_shield" {
   type = bool
 }
 
+variable "feature_count_alarms" {
+  type = bool
+}
+
 
 ###
 # Testing Tools

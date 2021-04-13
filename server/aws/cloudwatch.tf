@@ -558,6 +558,7 @@ resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_min_invocations_thre
 }
 
 resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_max_invocations_threshold" {
+  count               = var.feature_count_alarms ? 1 : 0
   alarm_name          = "metrics-api-gateway-above-maximum-invocations"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
