@@ -3,6 +3,7 @@
 ###
 
 resource "aws_cloudwatch_metric_alarm" "raw_metrics_dynamodb_wcu" {
+  count               = var.feature_count_alarms ? 1 : 0
   alarm_name          = "raw-metrics-dynamodb-wcu"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -20,6 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "raw_metrics_dynamodb_wcu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "aggregate_metrics_dynamodb_wcu" {
+  count               = var.feature_count_alarms ? 1 : 0
   alarm_name          = "aggregate-metrics-dynamodb-wcu"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"

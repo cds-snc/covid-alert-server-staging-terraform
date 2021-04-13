@@ -14,4 +14,5 @@ module "in_app_metrics" {
   aggregate_metrics_max_avg_duration = var.aggregate_metrics_max_avg_duration
   backoff_retry_max_avg_duration     = var.backoff_retry_max_avg_duration
   service_name                       = var.service_name
+  feature_count_alarms               = var.feature_count_alarms
 }

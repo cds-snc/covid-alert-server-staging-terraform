@@ -53,3 +53,7 @@ variable "backoff_retry_max_avg_duration" {
 variable "service_name" {
   type = string
 }
+
+variable "feature_count_alarms" {
+  type = bool
+}
