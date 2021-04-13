@@ -2,6 +2,10 @@
 # AWS S3 bucket - Exposure config
 ###
 resource "aws_s3_bucket" "exposure_config" {
+
+  # Versioning on this resource is handled through git
+  # tfsec:ignore:AWS077
+
   bucket = "covid-shield-exposure-config-${var.environment}"
   server_side_encryption_configuration {
     rule {
@@ -46,6 +50,10 @@ POLICY
 ###
 
 resource "aws_s3_bucket" "firehose_waf_logs" {
+
+  # Don't need to version these they should expire and are ephemeral
+  # tfsec:ignore:AWS077
+
   bucket = "covid-shield-${var.environment}-waf-logs"
   acl    = "private"
   server_side_encryption_configuration {
@@ -73,6 +81,10 @@ resource "aws_s3_bucket" "firehose_waf_logs" {
 # AWS S3 bucket - cloudfront log target
 ###
 resource "aws_s3_bucket" "cloudfront_logs" {
+
+  # Don't need to version these they should expire and are ephemeral
+  # tfsec:ignore:AWS077
+
   bucket = "covid-shield-${var.environment}-cloudfront-logs"
   server_side_encryption_configuration {
     rule {
