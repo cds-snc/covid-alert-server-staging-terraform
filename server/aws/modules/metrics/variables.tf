@@ -57,3 +57,8 @@ variable "service_name" {
 variable "feature_count_alarms" {
   type = bool
 }
+
+
+variable "create_csv_image" { 
+  type = string
+}
