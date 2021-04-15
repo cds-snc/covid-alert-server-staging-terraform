@@ -17,4 +17,5 @@ module "in_app_metrics" {
   feature_count_alarms               = var.feature_count_alarms
   create_csv_image                   = var.create_csv_image
   s3_endpoint                        = aws_vpc_endpoint.s3.prefix_list_id
+  environment                        = var.environment
 }

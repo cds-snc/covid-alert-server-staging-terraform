@@ -65,3 +65,7 @@ variable "create_csv_image" {
 variable "s3_endpoint" { 
   type = string
 }
+
+variable "environment" { 
+  type = string
+}
