@@ -2,6 +2,7 @@ resource "random_string" "bucket_random_id" {
   length = 5
 }
 
+data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "masked_metrics" {
 
