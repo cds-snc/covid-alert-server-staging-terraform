@@ -16,4 +16,5 @@ module "in_app_metrics" {
   service_name                       = var.service_name
   feature_count_alarms               = var.feature_count_alarms
   create_csv_image                   = var.create_csv_image
+  s3_endpoint                        = aws_vpc_endpoint.s3.prefix_list_id
 }
