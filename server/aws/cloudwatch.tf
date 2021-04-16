@@ -582,7 +582,7 @@ resource "aws_cloudwatch_metric_alarm" "metrics_api_gateway_max_latency_threshol
   metric_name         = "Latency"
   namespace           = "AWS/ApiGateway"
   period              = "60"
-  statistic           = "Sum"
+  extended_statistic  = "p95"
   threshold           = var.api_gateway_max_latency
   alarm_description   = "This metric monitors maximum API gateway latency for the metrics API gateway"
 
