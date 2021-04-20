@@ -15,6 +15,7 @@ resource "aws_lambda_function" "unmasked_metrics" {
   environment {
     variables = {
       MASK_DATA = false
+      BUCKET_NAME = aws_s3_bucket.unmasked_metrics.id
     }
   }
 }
@@ -34,6 +35,7 @@ resource "aws_lambda_function" "masked_metrics" {
   environment {
     variables = {
       MASK_DATA = true
+      BUCKET_NAME = aws_s3_bucket.masked_metrics.id
     }
   }
 }
