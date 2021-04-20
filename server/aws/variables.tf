@@ -229,6 +229,6 @@ variable "enable_test_tools" {
 ###
 
 ## This variable will be read from TF_VAR_CREATE_CSV_IMAGE in github actions
-variable "create_csv_image" { 
+variable "create_csv_image" {
   type = string
 }
