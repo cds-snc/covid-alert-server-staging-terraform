@@ -1,7 +1,8 @@
-resource "random_string" "bucket_random_id" { 
-  length = 5
-  upper  = false
-  number = false
+resource "random_string" "bucket_random_id" {
+  length  = 5
+  upper   = false
+  number  = false
+  special = false
 }
 
 data "aws_caller_identity" "current" {}

@@ -58,14 +58,14 @@ variable "feature_count_alarms" {
   type = bool
 }
 
-variable "create_csv_image" { 
+variable "create_csv_image" {
   type = string
 }
 
-variable "s3_endpoint" { 
+variable "s3_endpoint" {
   type = string
 }
 
-variable "environment" { 
+variable "environment" {
   type = string
 }
