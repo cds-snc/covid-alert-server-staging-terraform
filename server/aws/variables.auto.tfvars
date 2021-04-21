@@ -108,3 +108,9 @@ aggregate_metrics_dynamodb_wcu_max = 300
 save_metrics_max_avg_duration      = 3000
 aggregate_metrics_max_avg_duration = 60000
 backoff_retry_max_avg_duration     = 3000
+
+###
+# Create CSV Lambda Variables
+###
+
+create_csv_image = "public.ecr.aws/cds-snc/covid-alert-server-metrics-csv-extract:latest"

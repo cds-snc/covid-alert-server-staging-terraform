@@ -15,4 +15,7 @@ module "in_app_metrics" {
   backoff_retry_max_avg_duration     = var.backoff_retry_max_avg_duration
   service_name                       = var.service_name
   feature_count_alarms               = var.feature_count_alarms
+  create_csv_image                   = var.create_csv_image
+  s3_endpoint                        = aws_vpc_endpoint.s3.prefix_list_id
+  environment                        = var.environment
 }

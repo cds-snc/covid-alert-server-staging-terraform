@@ -137,6 +137,31 @@ resource "aws_iam_policy" "raw_metrics_stream_processor" {
   policy = data.aws_iam_policy_document.raw_metrics_stream_processor.json
 }
 
+data "aws_iam_policy_document" "aggregate_metrics_stream_processor" {
+  statement {
+
+    effect = "Allow"
+    actions = [
+      "dynamodb:DescribeStream",
+      "dynamodb:GetRecords",
+      "dynamodb:GetShardIterator",
+      "dynamodb:ListStreams",
+      "dyanmodb:ListShards"
+    ]
+    resources = [
+      aws_dynamodb_table.aggregate_metrics.arn
+    ]
+
+  }
+
+}
+
+resource "aws_iam_policy" "aggregate_metrics_stream_processor" {
+  name   = "CovidAlertAggregateMetricsStreamProcessor"
+  path   = "/"
+  policy = data.aws_iam_policy_document.aggregate_metrics_stream_processor.json
+}
+
 # Write an encrypt to SQS deadletter queue
 
 data "aws_iam_policy_document" "write_and_encrypt_deadletter_queue" {
@@ -191,4 +216,28 @@ resource "aws_iam_policy" "read_write_and_encrypt_deadletter_queue" {
   name   = "CovidAlertReadWriteAndEncryptDeadletterQueue"
   path   = "/"
   policy = data.aws_iam_policy_document.read_write_and_encrypt_deadletter_queue.json
+}
+
+# Write to S3
+data "aws_iam_policy_document" "write_s3_metrics_csv_buckets" {
+  statement {
+
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+    ]
+    resources = [
+      aws_s3_bucket.unmasked_metrics.arn,
+      aws_s3_bucket.masked_metrics.arn
+    ]
+
+  }
+
+}
+
+resource "aws_iam_policy" "write_s3_metrics_csv_buckets" {
+  name   = "CovidAlertWriteS3CSVBuckets"
+  path   = "/"
+  policy = data.aws_iam_policy_document.write_s3_metrics_csv_buckets.json
 }
