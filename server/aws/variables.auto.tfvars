@@ -113,4 +113,4 @@ backoff_retry_max_avg_duration     = 3000
 # Create CSV Lambda Variables
 ###
 
-create_csv_image = "public.ecr.aws/cds-snc/covid-alert-server-metrics-csv-extract:latest"
+create_csv_tag = "latest"
