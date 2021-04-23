@@ -22,3 +22,8 @@ resource "aws_iam_role_policy_attachment" "metrics_csv_s3_write" {
   role       = aws_iam_role.metrics_csv.name
   policy_arn = aws_iam_policy.write_s3_metrics_csv_buckets.arn
 }
+
+resource "aws_iam_role_policy_attachment" "metrics_csv_pull_create_csv_image" {
+  role       = aws_iam_role.metrics_csv.name
+  policy_arn = aws_iam_policy.pull_create_csv_image_policy.arn
+}

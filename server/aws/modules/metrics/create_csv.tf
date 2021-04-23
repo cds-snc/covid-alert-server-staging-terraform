@@ -1,8 +1,11 @@
 
+locals {
+  image_uri = "${var.create_csv_repository_url}:${var.create_csv_tag}"
+}
 resource "aws_lambda_function" "unmasked_metrics" {
   function_name = "unmasked_metrics"
 
-  image_uri = var.create_csv_image
+  image_uri = local.image_uri
 
   runtime = var.lambda_function_runtime
   role    = aws_iam_role.backoff.arn
@@ -22,7 +25,7 @@ resource "aws_lambda_function" "unmasked_metrics" {
 resource "aws_lambda_function" "masked_metrics" {
   function_name = "masked_metrics"
 
-  image_uri = var.create_csv_image
+  image_uri = local.image_uri
 
   runtime = var.lambda_function_runtime
   role    = aws_iam_role.backoff.arn
@@ -58,7 +61,6 @@ resource "aws_security_group" "metrics_csv_sg" {
     security_groups = [var.privatelink_sg]
   }
 }
-
 
 resource "aws_security_group_rule" "privatelink_metrics_csv" {
   description              = "Security group rule for metrics CSV export"

@@ -241,3 +241,26 @@ resource "aws_iam_policy" "write_s3_metrics_csv_buckets" {
   path   = "/"
   policy = data.aws_iam_policy_document.write_s3_metrics_csv_buckets.json
 }
+
+
+# read from private ECR repository 
+
+data "aws_iam_policy_document" "pull_create_csv_image" {
+  statement {
+    sid    = "Pull create_csv image"
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForlayer",
+      "ecr:BatchGetImage"
+    ]
+    resources = [
+      aws_ecr_repository.create_csv.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "pull_create_csv_image_policy" {
+  name   = "PullCreateCSVImage"
+  path   = "/"
+  policy = data.aws_iam_policy_document.pull_create_csv_image.json
+}
