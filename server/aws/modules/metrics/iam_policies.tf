@@ -247,7 +247,6 @@ resource "aws_iam_policy" "write_s3_metrics_csv_buckets" {
 
 data "aws_iam_policy_document" "pull_create_csv_image" {
   statement {
-    sid    = "Pull create_csv image"
     effect = "Allow"
     actions = [
       "ecr:GetDownloadUrlForlayer",
