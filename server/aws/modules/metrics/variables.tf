@@ -58,7 +58,7 @@ variable "feature_count_alarms" {
   type = bool
 }
 
-variable "create_csv_image" {
+variable "create_csv_tag" {
   type = string
 }
 
