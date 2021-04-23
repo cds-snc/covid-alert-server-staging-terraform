@@ -1,6 +1,6 @@
 
 locals {
-  image_uri = "${var.create_csv_repository_url}:${var.create_csv_tag}"
+  image_uri = "${aws_ecr_repository.create_csv.repository_url}:${var.create_csv_tag}"
 }
 resource "aws_lambda_function" "unmasked_metrics" {
   function_name = "unmasked_metrics"
