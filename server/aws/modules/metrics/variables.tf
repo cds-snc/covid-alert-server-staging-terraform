@@ -62,10 +62,6 @@ variable "create_csv_tag" {
   type = string
 }
 
-variable "create_csv_repository_url" {
-  type = string
-}
-
 variable "s3_endpoint" {
   type = string
 }
