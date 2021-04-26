@@ -5,10 +5,10 @@ locals {
 resource "aws_lambda_function" "unmasked_metrics" {
   function_name = "unmasked_metrics"
 
-  image_uri = local.image_uri
+  package_type = "Image"
+  image_uri    = local.image_uri
 
-  runtime = var.lambda_function_runtime
-  role    = aws_iam_role.backoff.arn
+  role = aws_iam_role.backoff.arn
 
   vpc_config {
     security_group_ids = [aws_security_group.metrics_csv_sg.id]
@@ -25,10 +25,10 @@ resource "aws_lambda_function" "unmasked_metrics" {
 resource "aws_lambda_function" "masked_metrics" {
   function_name = "masked_metrics"
 
-  image_uri = local.image_uri
+  package_type = "Image"
+  image_uri    = local.image_uri
 
-  runtime = var.lambda_function_runtime
-  role    = aws_iam_role.backoff.arn
+  role = aws_iam_role.backoff.arn
 
   vpc_config {
     security_group_ids = [aws_security_group.metrics_csv_sg.id]
