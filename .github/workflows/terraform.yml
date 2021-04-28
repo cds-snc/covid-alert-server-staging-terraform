@@ -41,9 +41,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Terraform security scan
-        uses: triat/terraform-security-scan@5f54224e1192fa468b93bcaecb5253679b828c8e
+        uses: triat/terraform-security-scan@v2.2.1
         with:
-          tfsec_version: "v0.39.21"
+          tfsec_version: "v0.39.26"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: false
