@@ -1,6 +1,5 @@
 resource "aws_default_network_acl" "default" {
   default_network_acl_id = aws_vpc.main.default_network_acl_id
-  subnet_ids             = [aws_subnet.public.id]
 
   tags = {
     Name = "${var.name}_default_nacl"
