@@ -72,6 +72,10 @@ resource "aws_security_group" "lambda" {
   tags = {
     Name = "${var.name}_lambda_sg"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group_rule" "inet_egress" {
