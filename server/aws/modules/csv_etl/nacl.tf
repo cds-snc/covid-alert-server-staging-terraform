@@ -16,16 +16,16 @@ resource "aws_default_network_acl" "default" {
 
   }
 
-  # ingress {
+  ingress {
 
-  #   rule_no    = 101
-  #   protocol   = "tcp"
-  #   action     = "allow"
-  #   cidr_block = "0.0.0.0/0"
-  #   from_port  = 1024
-  #   to_port    = 65535
+    rule_no    = 101
+    protocol   = "tcp"
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1024
+    to_port    = 65535
 
-  # }
+  }
 
   egress {
 
