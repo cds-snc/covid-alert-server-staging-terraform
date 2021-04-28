@@ -218,48 +218,4 @@ resource "aws_iam_policy" "read_write_and_encrypt_deadletter_queue" {
   policy = data.aws_iam_policy_document.read_write_and_encrypt_deadletter_queue.json
 }
 
-# Write to S3
-data "aws_iam_policy_document" "write_s3_metrics_csv_buckets" {
-  statement {
 
-    effect = "Allow"
-    actions = [
-      "s3:PutObject",
-      "s3:PutObjectAcl",
-    ]
-    resources = [
-      aws_s3_bucket.unmasked_metrics.arn,
-      aws_s3_bucket.masked_metrics.arn
-    ]
-
-  }
-
-}
-
-resource "aws_iam_policy" "write_s3_metrics_csv_buckets" {
-  name   = "CovidAlertWriteS3CSVBuckets"
-  path   = "/"
-  policy = data.aws_iam_policy_document.write_s3_metrics_csv_buckets.json
-}
-
-
-# read from private ECR repository 
-
-data "aws_iam_policy_document" "pull_create_csv_image" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecr:GetDownloadUrlForlayer",
-      "ecr:BatchGetImage"
-    ]
-    resources = [
-      aws_ecr_repository.create_csv.arn
-    ]
-  }
-}
-
-resource "aws_iam_policy" "pull_create_csv_image_policy" {
-  name   = "PullCreateCSVImage"
-  path   = "/"
-  policy = data.aws_iam_policy_document.pull_create_csv_image.json
-}

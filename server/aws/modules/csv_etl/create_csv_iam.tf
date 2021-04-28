@@ -15,7 +15,7 @@ resource "aws_iam_role_policy_attachment" "metrics_csv_vpc_networking" {
 
 resource "aws_iam_role_policy_attachment" "metrics_csv_aggregate_streams" {
   role       = aws_iam_role.metrics_csv.name
-  policy_arn = aws_iam_policy.aggregate_metrics_stream_processor.arn
+  policy_arn = aws_iam_policy.aggregate_metrics_read.arn
 }
 
 resource "aws_iam_role_policy_attachment" "metrics_csv_s3_write" {
