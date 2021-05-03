@@ -102,11 +102,10 @@ jobs:
             })
 
       - name: Check Success
-        if:  ${{ ( success()  ||  failure() ) && ( steps.fmt.outputs.exit_code  == 1 || steps.plan.outputs.exit_code == 1 ) }}
+        if: ${{ steps.fmt.outcome == 'failure' || steps.plan.outcome == 'failure'  }}
         run: |
-          echo steps.fmt.outcome ${{ steps.fmt.outcome }}
-          echo steps.plan.outcome ${{ steps.plan.outcome }}
-          echo "(${{ steps.fmt.outcome }} == failure || ${{ steps.plan.outcome }} == failure)"
+          echo "steps.fmt.outcome == ${{ steps.fmt.outcome }}"
+          echo "steps.plan.outcome == ${{ steps.plan.outcome }}"
           exit 1
 
   terraform-apply:
