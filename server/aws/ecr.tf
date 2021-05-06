@@ -5,7 +5,7 @@ locals {
 resource "aws_ecr_repository" "repository" {
   for_each             = toset(local.image_names)
   name                 = "covid-server/${each.value}"
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "MUTABLE" # tfsec:ignore:AWS078  latest tags are used in Staging
 
   image_scanning_configuration {
     scan_on_push = true

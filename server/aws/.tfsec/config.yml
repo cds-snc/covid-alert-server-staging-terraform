@@ -1,0 +1,3 @@
+---
+exclude:
+  - AWS079  # Data VM will be removed once CSV ETL Lambda PR lands
