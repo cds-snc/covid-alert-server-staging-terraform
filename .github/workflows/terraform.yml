@@ -59,6 +59,7 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Init
+        id: init
         run: |
           terraform init \
             -backend-config="bucket=${BACKEND_BUCKET}" \
@@ -69,9 +70,13 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
+      - name: Terraform Refresh
+        id: refresh
+        run: terraform refresh
+
       - name: Terraform Plan
         id: plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -refresh=false -input=false -no-color
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
