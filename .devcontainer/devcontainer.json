@@ -4,21 +4,17 @@
 		"dockerfile": "Dockerfile",
 		"context": "..",
 		"args": {
-			"ASDF_VERSION": "v0.8.0",
+			"TERRAFORM_VERSION": "0.14.2",
+			"TERRAFORM_CHECKSUM": "6f380c0c7a846f9e0aedb98a2073d2cbd7d1e2dc0e070273f9325f1b69e668b2",
+			"TERRAGRUNT_VERSION": "0.29.2",
+			"TERRAGRUNT_CHECKSUM": "1e2fbd9b2eb200223e028e4497aa13725315adce4ab2a374a12d2ca6dcead334",
+			"TFSEC_VERSION": "0.39.29",
+			"TFSEC_CHECKSUM": "d499ab73633b737aa9b52d1ff8c319ff4cebe36e82a26ca0dfe6a1bbb30bcb66"
 		}
 	},
-	"runArgs": ["--init"],
-	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
-	"overrideCommand": false,
-	
-	// Use this environment variable if you need to bind mount your local source code into a new container.
-	"remoteEnv": {
-		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
-	},
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": { 
-		"terminal.integrated.shell.linux": "/bin/zsh"
+	"containerEnv": {
+		"SHELL": "/bin/zsh"
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
@@ -26,9 +22,6 @@
 		"hashicorp.terraform",
 		"ms-azuretools.vscode-docker"
 	],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ".devcontainer/library-scripts/asdf-terraform.sh",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
