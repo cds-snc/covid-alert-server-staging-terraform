@@ -73,7 +73,6 @@ rds_server_instance_class    = "db.t3.small"
 ###
 # Feature Flags
 ###
-feature_redis        = true
 feature_shield       = true
 feature_count_alarms = false
 
