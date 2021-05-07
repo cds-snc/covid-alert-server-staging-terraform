@@ -248,17 +248,6 @@ resource "aws_security_group_rule" "covidshield_key_retrieval_egress_database" {
   source_security_group_id = aws_security_group.covidshield_database.id
 }
 
-resource "aws_security_group_rule" "covidshield_key_retrieval_egress_redis" {
-  count                    = var.feature_redis ? 1 : 0
-  description              = "Security group rule for Retrieval Redis egress through privatelink"
-  type                     = "egress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.covidshield_key_retrieval.id
-  source_security_group_id = aws_security_group.covidshield_redis[0].id
-}
-
 resource "aws_security_group" "covidshield_key_submission" {
   name        = "covidshield-key-submission"
   description = "Ingress - CovidShield Key Submission App"
@@ -309,17 +298,6 @@ resource "aws_security_group_rule" "covidshield_key_submission_egress_database" 
   protocol                 = "tcp"
   security_group_id        = aws_security_group.covidshield_key_submission.id
   source_security_group_id = aws_security_group.covidshield_database.id
-}
-
-resource "aws_security_group_rule" "covidshield_key_submission_egress_redis" {
-  count                    = var.feature_redis ? 1 : 0
-  description              = "Security group rule for Submission Redis egress through privatelink"
-  type                     = "egress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.covidshield_key_submission.id
-  source_security_group_id = aws_security_group.covidshield_redis[0].id
 }
 
 resource "aws_security_group" "covidshield_load_balancer" {
@@ -386,27 +364,6 @@ resource "aws_security_group" "covidshield_database" {
     protocol  = "tcp"
     from_port = 3306
     to_port   = 3306
-    security_groups = [
-      aws_security_group.covidshield_key_retrieval.id,
-      aws_security_group.covidshield_key_submission.id
-    ]
-  }
-
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-  }
-}
-
-resource "aws_security_group" "covidshield_redis" {
-  count       = var.feature_redis ? 1 : 0
-  name        = "covidshield-redis"
-  description = "Ingress - CovidShield Redis"
-  vpc_id      = aws_vpc.covidshield.id
-
-  ingress {
-    protocol  = "tcp"
-    from_port = 6379
-    to_port   = 6379
     security_groups = [
       aws_security_group.covidshield_key_retrieval.id,
       aws_security_group.covidshield_key_submission.id
