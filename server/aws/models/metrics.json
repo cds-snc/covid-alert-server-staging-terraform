@@ -23,7 +23,7 @@
     "appversion": {
       "type": "string",
       "minLength": 0,
-      "maxLength": 5,
+      "maxLength": 10,
       "title": "App Version Schema",
       "default": "null"
     },
