@@ -16,7 +16,7 @@ resource "aws_cloudwatch_metric_alarm" "raw_metrics_dynamodb_wcu" {
 
   alarm_actions = [var.critical_topic]
   dimensions = {
-    TableName = aws_dynamodb_table.raw_metrics.name
+    TableName = data.aws_dynamodb_table.raw_metrics.name
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "aggregate_metrics_dynamodb_wcu" {
 
   alarm_actions = [var.critical_topic]
   dimensions = {
-    TableName = aws_dynamodb_table.aggregate_metrics.name
+    TableName = data.aws_dynamodb_table.aggregate_metrics.name
   }
 }
 

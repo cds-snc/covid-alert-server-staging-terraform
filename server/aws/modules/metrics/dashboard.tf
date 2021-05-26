@@ -12,8 +12,8 @@ resource "aws_cloudwatch_dashboard" "metrics_ops_dashboard" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${aws_dynamodb_table.aggregate_metrics.name}" ],
-                    [ ".", "ConsumedReadCapacityUnits", ".", "${aws_dynamodb_table.raw_metrics.name}" ],
+                    [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${data.aws_dynamodb_table.aggregate_metrics.name}" ],
+                    [ ".", "ConsumedReadCapacityUnits", ".", "${data.aws_dynamodb_table.raw_metrics.name}" ],
                     [ ".", "ConsumedWriteCapacityUnits", ".", "." ],
                     [ "AWS/ApiGateway", "Count", "ApiName", "${var.service_name}", "Resource", "/${var.service_name}", "Stage", "production", "Method", "POST" ]
                 ],

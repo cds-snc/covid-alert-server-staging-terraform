@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "aggregate_metrics_update" {
     ]
 
     resources = [
-      aws_dynamodb_table.aggregate_metrics.arn
+      data.aws_dynamodb_table.aggregate_metrics.arn
     ]
   }
 
@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "raw_metrics_put" {
     ]
 
     resources = [
-      aws_dynamodb_table.raw_metrics.arn
+      data.aws_dynamodb_table.raw_metrics.arn
     ]
   }
 
@@ -124,7 +124,7 @@ data "aws_iam_policy_document" "raw_metrics_stream_processor" {
       "dyanmodb:ListShards"
     ]
     resources = [
-      aws_dynamodb_table.raw_metrics.stream_arn
+      data.aws_dynamodb_table.raw_metrics.stream_arn
     ]
 
   }
@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "aggregate_metrics_stream_processor" {
       "dyanmodb:ListShards"
     ]
     resources = [
-      aws_dynamodb_table.aggregate_metrics.arn
+      data.aws_dynamodb_table.aggregate_metrics.arn
     ]
 
   }
