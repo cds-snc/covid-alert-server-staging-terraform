@@ -21,13 +21,13 @@ resource "aws_lambda_function" "backoff_retry" {
 
   environment {
     variables = {
-      DEAD_LETTER_QUEUE_URL = aws_sqs_queue.aggregation_lambda_dead_letter.id
+      DEAD_LETTER_QUEUE_URL = data.aws_sqs_queue.aggregation_lambda_dead_letter.id
     }
   }
 }
 
 resource "aws_lambda_event_source_mapping" "dead_letters" {
-  event_source_arn = aws_sqs_queue.aggregation_lambda_dead_letter.arn
+  event_source_arn = data.aws_sqs_queue.aggregation_lambda_dead_letter.arn
   function_name    = aws_lambda_function.backoff_retry.arn
 }
 

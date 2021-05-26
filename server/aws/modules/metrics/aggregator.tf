@@ -23,7 +23,7 @@ resource "aws_lambda_function" "aggregate_metrics" {
 
   environment {
     variables = {
-      DEAD_LETTER_QUEUE_URL = aws_sqs_queue.aggregation_lambda_dead_letter.id
+      DEAD_LETTER_QUEUE_URL = data.aws_sqs_queue.aggregation_lambda_dead_letter.id
     }
   }
 }

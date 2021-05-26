@@ -1,6 +1,7 @@
-resource "aws_sqs_queue" "aggregation_lambda_dead_letter" {
-  name                              = "aggregation-lambda-dead-letter-queue"
-  kms_master_key_id                 = aws_kms_key.metrics_key.arn
-  kms_data_key_reuse_period_seconds = 86400
-  message_retention_seconds         = 1209600
+data "aws_sqs_queue" "aggregation_lambda_dead_letter" {
+  name = "aggregation-lambda-dead-letter-queue"
+}
+
+data "aws_kms_key" "metrics_key" {
+  key_id = "arn:aws:kms:ca-central-1:005133826942:key/47379609-95bb-4691-a3d0-7e70bb8d8684"
 }
