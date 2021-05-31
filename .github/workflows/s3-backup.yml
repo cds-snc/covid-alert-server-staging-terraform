@@ -22,7 +22,8 @@ jobs:
     - name: Get ZIP bundle
       run: |
         mkdir -p ${{ github.repository }}
-        wget -O ${{ github.repository }}/`basename ${{ github.repository }}`-`date '+%Y-%m-%d'`.zip https://github.com/${{ github.repository }}/archive/${{ env.BACKUP_BRANCH }}.zip
+        curl -Lo ${{ github.repository }}/`basename ${{ github.repository }}`-`date '+%Y-%m-%d'`.zip \
+          https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}/archive/${{ env.BACKUP_BRANCH }}.zip
 
     - name: Upload to S3 bucket
       run: |
