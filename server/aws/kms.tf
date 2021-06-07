@@ -46,6 +46,11 @@ resource "aws_kms_key" "cw" {
 EOF
 }
 
+resource "aws_kms_alias" "cloudwatch" {
+  name          = "alias/cloudwatch"
+  target_key_id = aws_kms_key.cw.key_id
+}
+
 resource "aws_kms_key" "cw_us_east" {
   provider = aws.us-east-1
 
@@ -93,4 +98,11 @@ resource "aws_kms_key" "cw_us_east" {
   ]
 }
 EOF
+}
+
+resource "aws_kms_alias" "cloudwatch_us_east" {
+  provider = aws.us-east-1
+
+  name          = "alias/cloudwatch"
+  target_key_id = aws_kms_key.cw_us_east.key_id
 }
