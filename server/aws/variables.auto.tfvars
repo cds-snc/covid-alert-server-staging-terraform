@@ -99,9 +99,9 @@ enable_test_tools = true
 raw_metrics_dynamodb_wcu_max       = 300
 aggregate_metrics_dynamodb_wcu_max = 300
 
-save_metrics_max_avg_duration      = 3000
+save_metrics_max_avg_duration      = 10000
 aggregate_metrics_max_avg_duration = 60000
-backoff_retry_max_avg_duration     = 3000
+backoff_retry_max_avg_duration     = 10000
 
 ###
 # Create CSV Lambda Variables
