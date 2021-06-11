@@ -146,7 +146,7 @@ resource "aws_api_gateway_usage_plan_key" "main" {
   usage_plan_id = aws_api_gateway_usage_plan.metrics_usage_plan.id
 }
 
-resource "aws_api_gateway_account" "demo" {
+resource "aws_api_gateway_account" "main" {
   cloudwatch_role_arn = aws_iam_role.api_gatway_cloudwatch_role.arn
 }
 
