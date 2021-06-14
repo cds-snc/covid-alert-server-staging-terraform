@@ -188,6 +188,10 @@ const aggregateEvents = (event) => {
                     pl.count = bucketCount(pl.count);
                     pl.duration = bucketDuration(pl.durationInSeconds);
 
+                    if (pl.region === '' || typeof pl.region === "undefined"){
+                        pl.region = "None";
+                    }
+
                     // deal with potentially missing data
                     const osversion = raw.osversion || '';
                     const manufacturer = raw.manufacturer || '';
@@ -248,7 +252,7 @@ const buildDeadLetterMsg = (payload, err) => {
         MessageAttributes : {
             ErrorMsg: {
                 DataType : "String",
-                StringValue : err
+                StringValue : JSON.stringify(err)
             },
             DelaySeconds: {
                 DataType : "Number",
@@ -261,7 +265,7 @@ const buildDeadLetterMsg = (payload, err) => {
 const sendToDeadLetterQueue = (payload, err) => {
     const msg = buildDeadLetterMsg(payload, err);
     sqs.sendMessage(msg, (sqsErr, data) => {
-        if (sqsErr) { 
+        if (sqsErr) {
             console.error(`Failed sending to Dead Letter Queue: ${sqsErr}, failed msg: ${msg}`);
         }
     });

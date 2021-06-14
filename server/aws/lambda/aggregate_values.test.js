@@ -177,6 +177,7 @@ describe("bucketDuration", () => {
 })
 
 describe("generatePayload", () => {
+
   it("generates a DynamoDB payload from an object", () => {
     let initialPayload = {
       date: "a",
@@ -275,6 +276,15 @@ describe("pinDate", () => {
 
 describe("aggregateEvents", () => {
 
+  if("handles blank regions", () => { 
+    const event = {
+      Records: [ {
+        region: "",
+      }]
+    }
+    lambda.aggregateEvents(event);
+  });
+
   it("ignores ExposureNotificationCheck events", () => {
     const event = { Records: [ {
         identifier: "ExposureNotificationCheck",
@@ -286,6 +296,194 @@ describe("aggregateEvents", () => {
   it("returns an empty object if it fails to aggregate events", () => {
     let event = { Records: ["a"] }
     expect(lambda.aggregateEvents(event)).toStrictEqual({})
+  })
+
+  it("handles undefined pk", () => { 
+
+
+    let payload = {
+      osversion: "a",
+      manufacturer: "b",
+      model: "model",
+      androidreleaseversion: "c",
+      appversion: "d",
+      appos: "e",
+      payload: [
+        {
+          timestamp: 1615231884409,
+          region: "",
+          identifier: "h",
+          pushnotification: "i",
+          frameworkenabled: "j",
+          state: "k",
+          status: "status",
+          hoursSinceExposureDetectedAt: "l",
+          count: "m",
+          durationInSeconds: "1.1",
+          withDate: true,
+          isUserExposed: false
+        }
+      ]
+    }
+    let event = {
+      Records: [{
+        eventName: "INSERT",
+        dynamodb: { NewImage: { raw: { S: JSON.stringify(payload) } } }
+      }]
+    }
+    let expectedEvents = {
+      "None#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false" : {
+        "androidreleaseversion": "c",
+        "appos": "e",
+        "appversion": "d",
+        "count": "m",
+        "date": "2021-03-08",
+        "duration": "< 30",
+        "durationInSeconds": "1.1",
+        "frameworkenabled": "j",
+        "hoursSinceExposureDetectedAt": "l",
+        "identifier": "h",
+        "manufacturer": "b",
+        "model": "model",
+        "metricCount": 1,
+        "osversion": "a",
+        "pk": "None",
+        "pushnotification": "i",
+        "region": "None",
+        "sk": "None#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false",
+        "state": "k",
+        "status": "status",
+        "timestamp": 1615231884409,
+        "withDate": true,
+        "isUserExposed": false,
+      }
+    }
+    expect(lambda.aggregateEvents(event)).toStrictEqual(expectedEvents)
+  })
+
+  it("handles empty PK", () => {
+
+    let payload = {
+      osversion: "a",
+      manufacturer: "b",
+      model: "model",
+      androidreleaseversion: "c",
+      appversion: "d",
+      appos: "e",
+      payload: [
+        {
+          timestamp: 1615231884409,
+          region: "",
+          identifier: "h",
+          pushnotification: "i",
+          frameworkenabled: "j",
+          state: "k",
+          status: "status",
+          region: "",
+          hoursSinceExposureDetectedAt: "l",
+          count: "m",
+          durationInSeconds: "1.1",
+          withDate: true,
+          isUserExposed: false
+        }
+      ]
+    }
+    let event = {
+      Records: [{
+        eventName: "INSERT",
+        dynamodb: { NewImage: { raw: { S: JSON.stringify(payload) } } }
+      }]
+    }
+    let expectedEvents = {
+      "None#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false" : {
+        "androidreleaseversion": "c",
+        "appos": "e",
+        "appversion": "d",
+        "count": "m",
+        "date": "2021-03-08",
+        "duration": "< 30",
+        "durationInSeconds": "1.1",
+        "frameworkenabled": "j",
+        "hoursSinceExposureDetectedAt": "l",
+        "identifier": "h",
+        "manufacturer": "b",
+        "model": "model",
+        "metricCount": 1,
+        "osversion": "a",
+        "pk": "None",
+        "pushnotification": "i",
+        "region": "None",
+        "sk": "None#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false",
+        "state": "k",
+        "status": "status",
+        "timestamp": 1615231884409,
+        "withDate": true,
+        "isUserExposed": false,
+      }
+    }
+    expect(lambda.aggregateEvents(event)).toStrictEqual(expectedEvents)
+  })
+
+  it("handles empty PK", () => {
+
+    let payload = {
+      osversion: "a",
+      manufacturer: "b",
+      model: "model",
+      androidreleaseversion: "c",
+      appversion: "d",
+      appos: "e",
+      payload: [
+        {
+          timestamp: 1615231884409,
+          region: "",
+          identifier: "h",
+          pushnotification: "i",
+          frameworkenabled: "j",
+          state: "k",
+          status: "status",
+          hoursSinceExposureDetectedAt: "l",
+          count: "m",
+          durationInSeconds: "1.1",
+          withDate: true,
+          isUserExposed: false
+        }
+      ]
+    }
+    let event = {
+      Records: [{
+        eventName: "INSERT",
+        dynamodb: { NewImage: { raw: { S: JSON.stringify(payload) } } }
+      }]
+    }
+    let expectedEvents = {
+      "None#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false" : {
+        "androidreleaseversion": "c",
+        "appos": "e",
+        "appversion": "d",
+        "count": "m",
+        "date": "2021-03-08",
+        "duration": "< 30",
+        "durationInSeconds": "1.1",
+        "frameworkenabled": "j",
+        "hoursSinceExposureDetectedAt": "l",
+        "identifier": "h",
+        "manufacturer": "b",
+        "model": "model",
+        "metricCount": 1,
+        "osversion": "a",
+        "pk": "None",
+        "pushnotification": "i",
+        "region": "None",
+        "sk": "None#h#2021-03-08#e#a#d#b#model#c#i#j#k#l#m#< 30#true#false",
+        "state": "k",
+        "status": "status",
+        "timestamp": 1615231884409,
+        "withDate": true,
+        "isUserExposed": false,
+      }
+    }
+    expect(lambda.aggregateEvents(event)).toStrictEqual(expectedEvents)
   })
 
   it("aggregates event records and returns them as an object", () => {
@@ -414,10 +612,11 @@ describe("aggregateEvents", () => {
 
 describe("buildDeadLetterMsg", () => {
   it("returns an object interpolating various data", () => {
+
     process.env.DEAD_LETTER_QUEUE_URL = "foo"
 
     let payload = {a: true}
-    let err = "ouch"
+    let err = {"foo": "bar"}
 
     let expectedReturn = {
       DelaySeconds: 1,
@@ -426,7 +625,7 @@ describe("buildDeadLetterMsg", () => {
       MessageAttributes: {
         ErrorMsg: {
           DataType: "String",
-          StringValue: err
+          StringValue: JSON.stringify(err)
         },
         DelaySeconds: {
           DataType: "Number",
