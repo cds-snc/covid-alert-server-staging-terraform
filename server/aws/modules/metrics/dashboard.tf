@@ -1,3 +1,4 @@
+# Reference lambda dynamically when this is moved to new repo; ${aws_lambda_function.aggregate_metrics.function_name}
 resource "aws_cloudwatch_dashboard" "metrics_ops_dashboard" {
   dashboard_name = "MetricsOps"
 
@@ -102,7 +103,7 @@ resource "aws_cloudwatch_dashboard" "metrics_ops_dashboard" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/Lambda", "Errors", "FunctionName", "${aws_lambda_function.aggregate_metrics.function_name}" ],
+                    [ "AWS/Lambda", "Errors", "FunctionName", "aggregate_metrics" ],
                     [ "...", "${var.service_name}"]
                 ],
                 "view": "timeSeries",
