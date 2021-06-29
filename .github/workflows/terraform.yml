@@ -55,14 +55,14 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform plan
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@eaa3ff433c871ad8093943666863860f7068aafc
         with:
           directory: ./server/aws
           comment-delete: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           terraform-init: |
-            -backend-config="bucket=${{ env.BACKEND_BUCKET }}" \
-            -backend-config="key=aws/backend/default.tfstate" \
+            -backend-config="bucket=${{ env.BACKEND_BUCKET }}"
+            -backend-config="key=aws/backend/default.tfstate"
             -backend-config="region=ca-central-1"
 
   terraform-apply:
