@@ -55,7 +55,7 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform plan
-        uses: cds-snc/terraform-plan@75496d5b5fd5b4611551b8cdae2438f79c8fc63e
+        uses: cds-snc/terraform-plan@v1.0.4
         with:
           directory: ./server/aws
           comment-delete: true
