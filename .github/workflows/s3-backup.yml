@@ -5,7 +5,7 @@ on:
     - cron: "0 6 * * *"
 
 env:
-  BACKUP_BRANCH: master
+  BACKUP_BRANCH: main
 
 jobs:
   s3-backup:
