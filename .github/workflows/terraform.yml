@@ -3,7 +3,7 @@ name: "Terraform"
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     paths:
       - "server/aws/**"
@@ -34,7 +34,7 @@ env:
 jobs:
 
   terraform-plan-security-scan:
-    if: github.ref != 'refs/heads/master'
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -55,7 +55,7 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform plan
-        uses: cds-snc/terraform-plan@v1.0.4
+        uses: cds-snc/terraform-plan@v1
         with:
           directory: ./server/aws
           comment-delete: true
@@ -66,7 +66,7 @@ jobs:
             -backend-config="region=ca-central-1"
 
   terraform-apply:
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
 
