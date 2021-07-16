@@ -105,6 +105,12 @@ resource "aws_vpc_endpoint" "monitoring" {
   subnet_ids = aws_subnet.covidshield_private.*.id
 }
 
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id            = aws_vpc.covidshield.id
+  vpc_endpoint_type = "Gateway"
+  service_name      = "com.amazonaws.${var.region}.dynamodb"
+  route_table_ids   = [aws_vpc.covidshield.main_route_table_id]
+}
 ###
 # AWS Internet Gateway
 ###
