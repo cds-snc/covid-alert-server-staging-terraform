@@ -518,24 +518,3 @@ resource "aws_cloudwatch_metric_alarm" "route53_submission_health_check" {
     HealthCheckId = aws_route53_health_check.covidshield_key_submission_healthcheck.id
   }
 }
-
-###
-# AWS Lambda
-###
-
-resource "aws_cloudwatch_metric_alarm" "save_metrics_average_duration" {
-  alarm_name          = "save-metrics-average-duration"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Duration"
-  namespace           = "AWS/Lambda"
-  period              = "60"
-  extended_statistic  = "p99"
-  threshold           = var.save_metrics_max_avg_duration
-  alarm_description   = "This metric monitors average duration for the save_metrics lambda"
-
-  alarm_actions = [aws_sns_topic.alert_critical.arn]
-  dimensions = {
-    FunctionName = aws_lambda_function.metrics.function_name
-  }
-}
