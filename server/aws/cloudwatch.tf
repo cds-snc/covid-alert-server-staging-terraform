@@ -435,27 +435,6 @@ resource "aws_cloudwatch_metric_alarm" "ddos_detected_route53" {
 # AWS Route53 Metrics - Health check
 ###
 
-resource "aws_cloudwatch_metric_alarm" "route53_retrieval_health_check" {
-  provider = aws.us-east-1
-
-  alarm_name          = "Route53RetrievalHealthCheck"
-  alarm_description   = "Check that the Retrieval server is in alarm"
-  comparison_operator = "LessThanThreshold"
-  metric_name         = "HealthCheckStatus"
-  namespace           = "AWS/Route53"
-  period              = "60"
-  evaluation_periods  = "2"
-  statistic           = "Average"
-  threshold           = "1"
-  treat_missing_data  = "breaching"
-
-  alarm_actions = [aws_sns_topic.alert_warning_us_east.arn, aws_sns_topic.alert_critical_us_east.arn]
-
-  dimensions = {
-    HealthCheckId = aws_route53_health_check.covidshield_key_retrieval_healthcheck.id
-  }
-}
-
 resource "aws_cloudwatch_metric_alarm" "route53_retrieval_health_check_ca_json" {
   provider = aws.us-east-1
 
@@ -495,26 +474,5 @@ resource "aws_cloudwatch_metric_alarm" "route53_retrieval_health_check_region_js
 
   dimensions = {
     HealthCheckId = aws_route53_health_check.covidshield_key_retrieval_healthcheck_region_json.id
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "route53_submission_health_check" {
-  provider = aws.us-east-1
-
-  alarm_name          = "Route53SubmissionHealthCheck"
-  alarm_description   = "Check that the Submission server is in alarm"
-  comparison_operator = "LessThanThreshold"
-  metric_name         = "HealthCheckStatus"
-  namespace           = "AWS/Route53"
-  period              = "60"
-  evaluation_periods  = "2"
-  statistic           = "Average"
-  threshold           = "1"
-  treat_missing_data  = "breaching"
-
-  alarm_actions = [aws_sns_topic.alert_warning_us_east.arn, aws_sns_topic.alert_critical_us_east.arn]
-
-  dimensions = {
-    HealthCheckId = aws_route53_health_check.covidshield_key_submission_healthcheck.id
   }
 }
