@@ -12,6 +12,13 @@
           "drop": ["ALL"]
         }
       },
+      "ulimits": [
+        {
+          "name": "nofile",
+          "softLimit": 65535,
+          "hardLimit": 65535
+        }
+      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
