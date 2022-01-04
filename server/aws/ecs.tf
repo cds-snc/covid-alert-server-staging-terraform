@@ -37,7 +37,7 @@ data "template_file" "covidshield_key_retrieval_task" {
     retrieve_hmac_key     = aws_secretsmanager_secret_version.key_retrieval_env_hmac_key.arn
     key_claim_token       = aws_secretsmanager_secret_version.key_submission_env_key_claim_token.arn
     ecdsa_key             = aws_secretsmanager_secret_version.key_retrieval_env_ecdsa_key.arn
-    database_url          = aws_secretsmanager_secret_version.server_database_url.arn
+    database_url          = aws_secretsmanager_secret_version.server_database_read_only_url.arn
     metric_provider       = var.metric_provider
     tracer_provider       = var.tracer_provider
     env                   = var.environment
