@@ -7,6 +7,15 @@ resource "aws_secretsmanager_secret_version" "server_database_url" {
   secret_string = "${var.rds_server_db_user}:${var.rds_server_db_password}@tcp(${aws_rds_cluster.covidshield_server.endpoint})/${var.rds_server_db_name}"
 }
 
+resource "aws_secretsmanager_secret" "server_database_read_only_url" {
+  name = "server-database-read-only-url-${random_string.random.result}"
+}
+
+resource "aws_secretsmanager_secret_version" "server_database_read_only_url" {
+  secret_id     = aws_secretsmanager_secret.server_database_read_only_url.id
+  secret_string = "${var.rds_server_db_user}:${var.rds_server_db_password}@tcp(${aws_rds_cluster.covidshield_server.reader_endpoint})/${var.rds_server_db_name}"
+}
+
 ###
 # AWS Secret Manager - Key Retrieval
 ###
