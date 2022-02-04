@@ -64,9 +64,9 @@
     ],
     "ulimits": [
       {
+        "hardLimit": 1000000,
         "name": "nofile",
-        "softLimit": 1000000,
-        "hardLimit": 1000000
+        "softLimit": 1000000        
       }
     ]
   }
