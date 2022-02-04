@@ -97,3 +97,4 @@ enable_test_tools = true
 ###
 
 create_csv_tag = "latest"
+cbs_satellite_bucket_name_prefix = "cbs-satellite-"

@@ -1,3 +1,9 @@
+locals {
+  cbs_satellite_bucket_name   = "${var.cbs_satellite_bucket_name_prefix}${data.aws_caller_identity.current.account_id}"
+  cbs_satellite_bucket_arn    = "arn:aws:s3:::${local.cbs_satellite_bucket_name}"
+  cbs_satellite_bucket_prefix = "waf_acl_logs/AWSLogs/${data.aws_caller_identity.current.account_id}/"
+}
+
 ###
 # AWS Kinesis Firehose - IAM Role
 ###
@@ -43,8 +49,8 @@ resource "aws_iam_role_policy" "firehose_waf_logs" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.firehose_waf_logs.arn}",
-        "${aws_s3_bucket.firehose_waf_logs.arn}/*"
+        "${local.cbs_satellite_bucket_arn}",
+        "${local.cbs_satellite_bucket_arn}/*"
       ]
     },
     {
@@ -61,29 +67,45 @@ EOF
 # AWS Kinesis Firehose - Delivery Stream
 ###
 resource "aws_kinesis_firehose_delivery_stream" "firehose_waf_logs" {
-  name        = "aws-waf-logs-covid-shield"
-  destination = "s3"
+  name        = "aws-waf-logs-covid-shield-ca-central-1"
+  destination = "extended_s3"
+
   server_side_encryption {
     enabled = true
   }
 
-  s3_configuration {
-    role_arn   = aws_iam_role.firehose_waf_logs.arn
-    bucket_arn = aws_s3_bucket.firehose_waf_logs.arn
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.firehose_waf_logs.arn
+    prefix             = local.cbs_satellite_bucket_prefix
+    bucket_arn         = local.cbs_satellite_bucket_arn
+    compression_format = "GZIP"
+  }
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = true
   }
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "firehose_waf_logs_us_east" {
   provider = aws.us-east-1
 
-  name        = "aws-waf-logs-covid-shield-us-east"
-  destination = "s3"
+  name        = "aws-waf-logs-covid-shield-us-east-1"
+  destination = "extended_s3"
+
   server_side_encryption {
     enabled = true
   }
 
-  s3_configuration {
-    role_arn   = aws_iam_role.firehose_waf_logs.arn
-    bucket_arn = aws_s3_bucket.firehose_waf_logs.arn
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.firehose_waf_logs.arn
+    prefix             = local.cbs_satellite_bucket_prefix
+    bucket_arn         = local.cbs_satellite_bucket_arn
+    compression_format = "GZIP"
+  }
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = true
   }
 }

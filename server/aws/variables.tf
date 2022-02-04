@@ -228,3 +228,8 @@ variable "enable_test_tools" {
 variable "create_csv_tag" {
   type = string
 }
+
+variable "cbs_satellite_bucket_name_prefix" {
+  desdescription = "Name prefix for the Cloud Based Sensor satellite bucket"
+  type           = string
+}

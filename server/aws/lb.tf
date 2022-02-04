@@ -58,9 +58,9 @@ resource "aws_lb" "covidshield_key_retrieval" {
   subnets = aws_subnet.covidshield_public.*.id
 
   access_logs {
-    bucket  = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
+    bucket  = local.cbs_satellite_bucket_name
     enabled = true
-    prefix  = "${data.aws_caller_identity.current.account_id}/elb_logs_v2"
+    prefix  = "lb_logs"
   }
 
   tags = {
@@ -181,9 +181,9 @@ resource "aws_lb" "covidshield_key_submission" {
   ]
   subnets = aws_subnet.covidshield_public.*.id
   access_logs {
-    bucket  = "cbs-satellite-account-bucket${data.aws_caller_identity.current.account_id}"
+    bucket  = local.cbs_satellite_bucket_name
     enabled = true
-    prefix  = "${data.aws_caller_identity.current.account_id}/elb_logs_v2"
+    prefix  = "lb_logs"
   }
   tags = {
     Name                  = "covidshield-key-submission"
