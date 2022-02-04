@@ -96,4 +96,5 @@ enable_test_tools = true
 # Create CSV Lambda Variables
 ###
 
-create_csv_tag = "latest"
+create_csv_tag                   = "latest"
+cbs_satellite_bucket_name_prefix = "cbs-satellite-"
