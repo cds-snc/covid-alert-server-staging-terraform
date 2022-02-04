@@ -1,61 +1,61 @@
 [
-    {
-      "environment": [
-        {
-          "name": "METRIC_PROVIDER",
-          "value": "${metric_provider}"
-        },
-        {
-          "name": "TRACER_PROVIDER",
-          "value": "${tracer_provider}"
-        },
-        {
-          "name": "ENV",
-          "value": "${env}"
-        },
-        {
-          "name": "ENABLE_TEST_TOOLS",
-          "value": "${enable_test_tools}"
-        }
-      ],
-      "image": "${image}",
-      "linuxParameters": {
-        "capabilities": {
-          "drop": [
-            "ALL"
-          ]
-        }
+  {
+    "environment": [
+      {
+        "name": "METRIC_PROVIDER",
+        "value": "${metric_provider}"
       },
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "${awslogs-group}",
-          "awslogs-region": "${awslogs-region}",
-          "awslogs-stream-prefix": "${awslogs-stream-prefix}"
-        }
+      {
+        "name": "TRACER_PROVIDER",
+        "value": "${tracer_provider}"
       },
-      "name": "key-submission",
-      "portMappings": [
-        {
-          "containerPort": 8000
-        }
-      ],
-      "secrets": [
-        {
-          "name": "KEY_CLAIM_TOKEN",
-          "valueFrom": "${key_claim_token}"
-        },
-        {
-          "name": "DATABASE_URL",
-          "valueFrom": "${database_url}"
-        }
-      ],
-      "ulimits": [
-        {
-          "hardLimit": 1000000,
-          "name": "nofile",
-          "softLimit": 1000000
-        }
-      ]
-    }
+      {
+        "name": "ENV",
+        "value": "${env}"
+      },
+      {
+        "name": "ENABLE_TEST_TOOLS",
+        "value": "${enable_test_tools}"
+      }
+    ],
+    "image": "${image}",
+    "linuxParameters": {
+      "capabilities": {
+        "drop": [
+          "ALL"
+        ]
+      }
+    },
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${awslogs-group}",
+        "awslogs-region": "${awslogs-region}",
+        "awslogs-stream-prefix": "${awslogs-stream-prefix}"
+      }
+    },
+    "name": "key-submission",
+    "portMappings": [
+      {
+        "containerPort": 8000
+      }
+    ],
+    "secrets": [
+      {
+        "name": "KEY_CLAIM_TOKEN",
+        "valueFrom": "${key_claim_token}"
+      },
+      {
+        "name": "DATABASE_URL",
+        "valueFrom": "${database_url}"
+      }
+    ],
+    "ulimits": [
+      {
+        "hardLimit": 1000000,
+        "name": "nofile",
+        "softLimit": 1000000
+      }
+    ]
+  }
 ]
