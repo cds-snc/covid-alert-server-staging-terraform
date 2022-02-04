@@ -1,73 +1,73 @@
 [
-  {
-    "environment": [
-      {
-        "name": "METRIC_PROVIDER",
-        "value": "${metric_provider}"
+    {
+      "environment": [
+        {
+          "name": "METRIC_PROVIDER",
+          "value": "${metric_provider}"
+        },
+        {
+          "name": "TRACER_PROVIDER",
+          "value": "${tracer_provider}"
+        },
+        {
+          "name": "ENV",
+          "value": "${env}"
+        },
+        {
+          "name": "METRICS_USERNAME",
+          "value": "${metrics_username}"
+        }
+      ],
+      "image": "${image}",
+      "linuxParameters": {
+        "capabilities": {
+          "drop": [
+            "ALL"
+          ]
+        }
       },
-      {
-        "name": "TRACER_PROVIDER",
-        "value": "${tracer_provider}"
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${awslogs-group}",
+          "awslogs-region": "${awslogs-region}",
+          "awslogs-stream-prefix": "${awslogs-stream-prefix}"
+        }
       },
-      {
-        "name": "ENV",
-        "value": "${env}"
-      },
-      {
-        "name": "METRICS_USERNAME",
-        "value": "${metrics_username}"
-      }
-    ],
-    "image": "${image}",
-    "linuxParameters": {
-      "capabilities": {
-        "drop": [
-          "ALL"
-        ]
-      }
-    },
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${awslogs-group}",
-        "awslogs-region": "${awslogs-region}",
-        "awslogs-stream-prefix": "${awslogs-stream-prefix}"
-      }
-    },
-    "name": "key-retrieval",
-    "portMappings": [
-      {
-        "containerPort": 8001
-      }
-    ],
-    "secrets": [
-      {
-        "name": "KEY_CLAIM_TOKEN",
-        "valueFrom": "${key_claim_token}"
-      },
-      {
-        "name": "RETRIEVE_HMAC_KEY",
-        "valueFrom": "${retrieve_hmac_key}"
-      },
-      {
-        "name": "ECDSA_KEY",
-        "valueFrom": "${ecdsa_key}"
-      },
-      {
-        "name": "DATABASE_URL",
-        "valueFrom": "${database_url}"
-      },
-      {
-        "name": "METRICS_PASSWORD",
-        "valueFrom": "${metrics_password}"
-      }
-    ],
-    "ulimits": [
-      {
-        "hardLimit": 1000000,
-        "name": "nofile",
-        "softLimit": 1000000        
-      }
-    ]
-  }
+      "name": "key-retrieval",
+      "portMappings": [
+        {
+          "containerPort": 8001
+        }
+      ],
+      "secrets": [
+        {
+          "name": "KEY_CLAIM_TOKEN",
+          "valueFrom": "${key_claim_token}"
+        },
+        {
+          "name": "RETRIEVE_HMAC_KEY",
+          "valueFrom": "${retrieve_hmac_key}"
+        },
+        {
+          "name": "ECDSA_KEY",
+          "valueFrom": "${ecdsa_key}"
+        },
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "${database_url}"
+        },
+        {
+          "name": "METRICS_PASSWORD",
+          "valueFrom": "${metrics_password}"
+        }
+      ],
+      "ulimits": [
+        {
+          "hardLimit": 1000000,
+          "name": "nofile",
+          "softLimit": 1000000
+        }
+      ]
+    }
 ]
