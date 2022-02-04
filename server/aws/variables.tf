@@ -230,6 +230,6 @@ variable "create_csv_tag" {
 }
 
 variable "cbs_satellite_bucket_name_prefix" {
-  desdescription = "Name prefix for the Cloud Based Sensor satellite bucket"
-  type           = string
+  description = "Name prefix for the Cloud Based Sensor satellite bucket"
+  type        = string
 }
