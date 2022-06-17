@@ -2,6 +2,8 @@
 
 # COVID Shield server staging terraform
 
+> **COVID Alert is now retired**: For more information, visit the [Government of Canada COVID Alert home page](https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19/covid-alert.html).
+
 This is main terraform repository for the Covid Shield server staging service.
 
 ## Bootstrap folder
@@ -17,6 +19,8 @@ The server folder contains the main Terraform files for the Covid Shield server.
 ---
 
 # Référentiel Terraform du serveur de simulation COVID Shield
+
+> **Alerte COVID a été mis hors service** : Pour en savoir davantage, visitez la [page d'accueil d’Alerte COVID du gouvernement du Canada](https://www.canada.ca/fr/sante-publique/services/maladies/maladie-coronavirus-covid-19/alerte-covid.html).
 
 Référentiel principal du service Terraform pour le serveur de simulation Covid Shield.
 
