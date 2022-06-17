@@ -22,7 +22,7 @@ resource "aws_rds_cluster_instance" "covidshield_server_instances" {
   db_subnet_group_name = aws_db_subnet_group.covidshield.name
 
   # we are using managed key so safe to ignore this rule
-  performance_insights_enabled = true #tfsec:ignore:AWS053
+  performance_insights_enabled = false #tfsec:ignore:AWS053
 
   tags = {
     Name                  = "${var.rds_server_db_name}-instance"
