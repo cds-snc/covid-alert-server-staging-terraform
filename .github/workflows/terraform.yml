@@ -48,11 +48,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: false
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 0.14.2
-          terraform_wrapper: false
+      - name: Setup terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
+        env:
+            TERRAFORM_VERSION: 0.14.2
 
       - name: Terraform plan
         uses: cds-snc/terraform-plan@v2
@@ -73,10 +72,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-          terraform_version: 0.14.2
+    - name: Setup terraform tools
+      uses: cds-snc/terraform-tools-setup@v1
+      env:
+          TERRAFORM_VERSION: 0.14.2
 
     - name: Terraform Format
       run: terraform fmt -check
