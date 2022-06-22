@@ -11,16 +11,3 @@ resource "aws_shield_protection" "route53_covidshield" {
   name         = "route53_covidshield"
   resource_arn = "arn:aws:route53:::hostedzone/${aws_route53_zone.covidshield.zone_id}"
 }
-
-# Enable shield on ALBs
-resource "aws_shield_protection" "alb_covidshield_key_retrieval" {
-  count        = var.feature_shield ? 1 : 0
-  name         = "alb_covidshield_key_retrieval"
-  resource_arn = aws_lb.covidshield_key_retrieval.arn
-}
-
-resource "aws_shield_protection" "alb_covidshield_key_submission" {
-  count        = var.feature_shield ? 1 : 0
-  name         = "alb_covidshield_key_submission"
-  resource_arn = aws_lb.covidshield_key_submission.arn
-}

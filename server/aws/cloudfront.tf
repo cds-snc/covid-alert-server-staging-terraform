@@ -8,24 +8,6 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 
 resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
   origin {
-    domain_name = aws_lb.covidshield_key_retrieval.dns_name
-    origin_id   = aws_lb.covidshield_key_retrieval.name
-
-
-    custom_header {
-      name  = "covidshield"
-      value = var.cloudfront_custom_header
-    }
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
-  }
-
-  origin {
     domain_name = aws_s3_bucket.exposure_config.bucket_regional_domain_name
     origin_id   = "covid-shield-exposure-config-${var.environment}"
 
@@ -41,28 +23,6 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
   aliases = ["retrieval.${var.route53_zone_name}"]
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_lb.covidshield_key_retrieval.name
-
-    forwarded_values {
-      query_string = true
-      headers      = ["Host"]
-
-      cookies {
-        forward = "all"
-      }
-    }
-
-    viewer_protocol_policy = "https-only"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 7200
-    compress               = true
-  }
-
-  ordered_cache_behavior {
-    path_pattern     = "/exposure-configuration/*"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "covid-shield-exposure-config-${var.environment}"
@@ -82,30 +42,6 @@ resource "aws_cloudfront_distribution" "key_retrieval_distribution" {
     max_ttl                = 31536000
     compress               = true
   }
-
-  ordered_cache_behavior { // We don't want to cache the events endpoint just pass through 
-    path_pattern     = "/events/*"
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_lb.covidshield_key_retrieval.name
-
-    forwarded_values {
-      query_string = true
-      headers      = ["Host", "Authorization"]
-
-      cookies {
-        forward = "all"
-      }
-    }
-
-    viewer_protocol_policy = "https-only"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-    compress               = true
-
-  }
-
 
   price_class = "PriceClass_100"
 
